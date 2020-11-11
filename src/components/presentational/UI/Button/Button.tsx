@@ -11,6 +11,9 @@ library.add(fas);
 type StateProps = {
   displayText: string;
 
+  /** the tooltip to display when the mouse is over the button */
+  tooltip?: string;
+
   /** The button style used. The corresponding styles are:
    * "default": for any type of button,
    * "add": for actions related to adding or saving,
@@ -28,7 +31,7 @@ type Props = StateProps & DispatchProps;
 
 export const Button: React.FC<Props> = (props: Props) => {
 	return (
-    <button className={`${props.buttonStyle}`} onClick={props.onClick}>
+    <button title={props.tooltip || ''} className={`${props.buttonStyle}`} onClick={props.onClick}>
       <span>{props.displayText}</span>
       {props.iconName && <FontAwesomeIcon icon={props.iconName} />}
     </button>
