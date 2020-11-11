@@ -1,0 +1,29 @@
+@import 'src/assets/styles/colors';
+
+@mixin button($color) {
+  padding: 0.4em;
+  background-color: $color;
+  border: solid 0.2em darken($color, 5);
+  border-radius: 0.5em;
+  font-size: 0.9em;
+  cursor: pointer;
+
+  svg {
+    margin-left: 0.3em;
+  }
+}
+
+.default {
+  @include button($default-color);
+  color: #fff;
+}
+
+.add {
+  @include button($add-color);
+  color: #000;
+}
+
+.dismiss {
+  @include button($dismiss-color);
+  color: #fff;
+}

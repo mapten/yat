@@ -1,0 +1,33 @@
+.header {
+  margin-bottom: 1em;
+
+  h1 {
+    font-size: 1.3em;
+  }
+}
+
+.formRow {
+  margin-bottom: 0.9em;
+}
+
+.formLabel {
+  display: inline-block;
+}
+
+.formControl {
+  width: 100%;
+  padding: 0.3em;
+  border: 0.2em solid #ccc;
+  border-radius: 0.4em;
+  box-sizing: border-box;
+  resize: vertical;
+}
+
+.danger {
+  border-color: red;
+}
+
+.buttonGroup {
+  display: flex;
+  justify-content: space-between;
+}
