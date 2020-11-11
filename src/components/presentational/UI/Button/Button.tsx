@@ -15,9 +15,9 @@ type StateProps = {
   tooltip?: string;
 
   /** The button style used. The corresponding styles are:
-   * "default": for any type of button,
-   * "add": for actions related to adding or saving,
-   * "dismiss": to actions related to delete or cancel,
+   * 'default': for any type of button,
+   * 'add': for actions related to adding or saving,
+   * 'dismiss': to actions related to delete or cancel,
    */
   buttonStyle: BUTTON_STYLE;
   iconName?: IconName;
