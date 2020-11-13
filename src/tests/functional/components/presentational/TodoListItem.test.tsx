@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, cleanup, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import { TodoListItem } from '../../../components/presentational/TodoList/TodoListItem/TodoListItem';
+import { TodoListItem } from '../../../../components/presentational/TodoList/TodoListItem/TodoListItem';
 
 type Props = React.ComponentProps<typeof TodoListItem>;
 

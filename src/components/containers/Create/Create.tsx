@@ -70,13 +70,13 @@ export const Create: React.FC<Props> = (props: Props) => {
           </form>
           <div className={styles.buttonGroup}>
             <Button
-              tooltip='Cancel changes and go to todo list'
+              tooltip='Cancel changes and go to task list'
               displayText='Cancel'
               buttonStyle='dismiss'
               iconName='arrow-left'
               onClick={props.onCancel} />
             <Button
-              tooltip='Save changes and go to todo list'
+              tooltip='Save changes and go to task list'
               displayText='Save'
               buttonStyle='add'
               iconName='save'

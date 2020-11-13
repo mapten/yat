@@ -27,8 +27,8 @@ export const TodoListItem: React.FC<Props> = (props: Props) => {
   }
 
 	return (
-    <div style={{borderLeftColor: props.taskPriorityColor}} className={styles.wrapper}>
-      <span className={`${taskDone ? styles.crossed : ''}`}>{props.taskName}</span>
+    <div data-testid="todo-item" style={{borderLeftColor: props.taskPriorityColor}} className={styles.wrapper}>
+      <span className={`${styles.task} ${taskDone ? styles.crossed : ''}`}>{props.taskName}</span>
       <input className={styles.checkbox} type='checkbox' checked={taskDone} onChange={checkboxChangeHandler} />
     </div>
   );

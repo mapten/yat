@@ -1,12 +1,12 @@
 import React from 'react';
 import { render, cleanup, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import { Create } from '../../../components/containers/Create/Create';
+import { Create } from '../../../../components/containers/Create/Create';
 import * as toastify from 'react-toastify';
-import { Priority } from '../../../models/priority.model';
+import { Priority } from '../../../../models/priority.model';
 
 const mockPriorityLevelsValueGetter = jest.fn();
-jest.mock('../../../constants/priorityLevels.constant', () => ({
+jest.mock('../../../../constants/priorityLevels.constant', () => ({
   get PRIORITY_LEVELS() {
     return mockPriorityLevelsValueGetter();
   },
