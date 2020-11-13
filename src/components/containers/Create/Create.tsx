@@ -2,13 +2,12 @@ import React, { Fragment, useState } from 'react';
 import { toast } from 'react-toastify';
 import { PRIORITY_LEVELS, PRIORITY_ORDER_TYPE } from '../../../constants/priorityLevels.constant';
 import { Priority } from '../../../models/priority.model';
-import { Todo } from '../../../models/todo.model';
 import { Button } from '../../presentational/UI/Button/Button';
 import styles from './Create.module.scss';
 
 type DispatchProps = {
   onCancel: () => void;
-  onSave: (todo: Todo) => void;
+  onSave: (displayName: string, priority: PRIORITY_ORDER_TYPE) => void;
 }
 
 type Props = DispatchProps;
@@ -27,7 +26,7 @@ export const Create: React.FC<Props> = (props: Props) => {
       setErrorOnName(true);
     } else {
       setErrorOnName(false);
-      props.onSave({name, priority});
+      props.onSave(name, priority);
     }
   }
 
@@ -52,7 +51,7 @@ export const Create: React.FC<Props> = (props: Props) => {
                 onBlur={() => setErrorOnName(false)}
                 onChange={(e) => setName(e.target.value)}
                 value={name}
-                type="text"
+                type='text'
                 className={`${styles.formControl} ${errorOnName ? styles.danger : ''}`} />
             </div>
             <div className={styles.formRow}>
@@ -71,16 +70,16 @@ export const Create: React.FC<Props> = (props: Props) => {
           </form>
           <div className={styles.buttonGroup}>
             <Button
-              tooltip="Cancel changes and go to todo list"
-              displayText="Cancel"
-              buttonStyle="dismiss"
-              iconName="arrow-left"
+              tooltip='Cancel changes and go to task list'
+              displayText='Cancel'
+              buttonStyle='dismiss'
+              iconName='arrow-left'
               onClick={props.onCancel} />
             <Button
-              tooltip="Save changes and go to todo list"
-              displayText="Save"
-              buttonStyle="add"
-              iconName="save"
+              tooltip='Save changes and go to task list'
+              displayText='Save'
+              buttonStyle='add'
+              iconName='save'
               onClick={saveHandler} />
           </div>
         </section>

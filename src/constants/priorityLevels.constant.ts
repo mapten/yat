@@ -15,7 +15,7 @@ export const PRIORITY_LEVELS: Priority[] = [
   },
   {
     order: 2,
-    displayText: 'It is needed to be done, you should put on a todo list or in a postit (I recommend the second one)',
+    displayText: 'It is needed to be done, you should put on a task list or in a postit (I recommend the second one)',
     displayColor: '#0079fa',
     isDefaultSelected: false,
   },

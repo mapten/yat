@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, cleanup } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import { Button } from '../../../components/presentational/UI/Button/Button';
+import { Button } from '../../../../components/presentational/UI/Button/Button';
 
 type Props = React.ComponentProps<typeof Button>;
 

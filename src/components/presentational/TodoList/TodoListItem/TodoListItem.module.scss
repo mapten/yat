@@ -1,0 +1,21 @@
+.wrapper {
+  display: flex;
+  justify-content: space-between;
+  font-size: 1.2em;
+  border-left-width: 0.2em;
+  border-left-style: solid;
+  padding-left: 0.6em;
+  border-bottom: 0.1em solid lighten(#000, 90);
+}
+
+.task {
+  margin-top: 0.2em;
+}
+
+.crossed {
+  text-decoration: line-through;
+}
+
+.checkbox {
+  zoom: 1.5;
+}
