@@ -1,6 +1,10 @@
 import React, { Fragment, useEffect, useState } from 'react';
+import { connect } from 'react-redux';
+import { Dispatch } from 'redux';
 import { PRIORITY_LEVELS } from '../../../constants/priorityLevels.constant';
 import { Task } from '../../../models/task.model';
+import { RootState } from '../../../store/models/rootState.model';
+import { TodoAction } from '../../../store/reducers/todo.reducer';
 import { TodoListHeader } from '../../presentational/TodoList/TodoListHeader/TodoListHeader';
 import { TodoListItem } from '../../presentational/TodoList/TodoListItem/TodoListItem';
 
@@ -60,3 +64,25 @@ export const TodoList: React.FC<Props> = (props: Props) => {
     </Fragment>
   );
 }
+
+const mapStateToProps = (state: RootState): StateProps => {
+  return {
+    taskList: [],
+  };
+};
+
+const mapDispatchToProps = (dispatch: Dispatch<TodoAction>): DispatchProps => {
+  return {
+    onCreateNewTask: () => null,
+    onTaskChangeStatus: (taskId: string, done: boolean) => null,
+  };
+};
+
+
+/**
+ * {@link TodoList} component connected to Redux.
+ * 
+ * @example
+ * <ConnectedTodoList />
+ */
+export const ConnectedTodoList = connect(mapStateToProps, mapDispatchToProps)(TodoList);
