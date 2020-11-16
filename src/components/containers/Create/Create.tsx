@@ -1,7 +1,10 @@
 import React, { Fragment, useState } from 'react';
+import { connect } from 'react-redux';
 import { toast } from 'react-toastify';
+import { Dispatch } from 'redux';
 import { PRIORITY_LEVELS, PRIORITY_ORDER_TYPE } from '../../../constants/priorityLevels.constant';
 import { Priority } from '../../../models/priority.model';
+import { TodoAction } from '../../../store/reducers/todo.reducer';
 import { Button } from '../../presentational/UI/Button/Button';
 import styles from './Create.module.scss';
 
@@ -87,3 +90,19 @@ export const Create: React.FC<Props> = (props: Props) => {
     </Fragment>
   );
 }
+
+const mapDispatchToProps = (dispatch: Dispatch<TodoAction>): DispatchProps => {
+  return {
+    onCancel: () => null,
+    onSave: (displayName: string, priority: PRIORITY_ORDER_TYPE) => null,
+  };
+};
+
+
+/**
+ * {@link Create} component connected to Redux.
+ * 
+ * @example
+ * <ConnectedCreate />
+ */
+export const ConnectedTodoList = connect(null, mapDispatchToProps)(Create);
