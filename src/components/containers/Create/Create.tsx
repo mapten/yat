@@ -1,4 +1,5 @@
 import React, { Fragment, useState } from 'react';
+import styles from './Create.module.scss';
 import { connect } from 'react-redux';
 import { toast } from 'react-toastify';
 import { Dispatch } from 'redux';
@@ -6,22 +7,27 @@ import { PRIORITY_LEVELS, PRIORITY_ORDER_TYPE } from '../../../constants/priorit
 import { Priority } from '../../../models/priority.model';
 import { TodoAction } from '../../../store/reducers/todo.reducer';
 import { Button } from '../../presentational/UI/Button/Button';
-import styles from './Create.module.scss';
+import { useHistory } from 'react-router-dom';
 
 type DispatchProps = {
-  onCancel: () => void;
   onSave: (displayName: string, priority: PRIORITY_ORDER_TYPE) => void;
 }
 
 type Props = DispatchProps;
 
 export const Create: React.FC<Props> = (props: Props) => {
+  const history = useHistory();
+
   const defaultPriorityLevel =
     PRIORITY_LEVELS.find((priorityLevel) => priorityLevel.isDefaultSelected === true) as Priority;
 
   const [name, setName] = useState<string>('');
   const [errorOnName, setErrorOnName] = useState<boolean>(false);
   const [priority, setPriority] = useState<PRIORITY_ORDER_TYPE>(defaultPriorityLevel.order);
+
+  const cancelHandler = () => {
+    history.push('/todolist');
+  }
 
   const saveHandler = () => {
     if (!name) {
@@ -30,6 +36,7 @@ export const Create: React.FC<Props> = (props: Props) => {
     } else {
       setErrorOnName(false);
       props.onSave(name, priority);
+      history.push('/todolist');
     }
   }
 
@@ -77,7 +84,7 @@ export const Create: React.FC<Props> = (props: Props) => {
               displayText='Cancel'
               buttonStyle='dismiss'
               iconName='arrow-left'
-              onClick={props.onCancel} />
+              onClick={cancelHandler} />
             <Button
               tooltip='Save changes and go to task list'
               displayText='Save'
@@ -93,7 +100,6 @@ export const Create: React.FC<Props> = (props: Props) => {
 
 const mapDispatchToProps = (dispatch: Dispatch<TodoAction>): DispatchProps => {
   return {
-    onCancel: () => null,
     onSave: (displayName: string, priority: PRIORITY_ORDER_TYPE) => null,
   };
 };
@@ -105,4 +111,4 @@ const mapDispatchToProps = (dispatch: Dispatch<TodoAction>): DispatchProps => {
  * @example
  * <ConnectedCreate />
  */
-export const ConnectedTodoList = connect(null, mapDispatchToProps)(Create);
+export const ConnectedCreate = connect(null, mapDispatchToProps)(Create);

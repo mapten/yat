@@ -1,14 +1,15 @@
 import React from 'react';
 import { Button } from '../../UI/Button/Button';
 import styles from './TodoListHeader.module.scss';
+import { useHistory } from 'react-router-dom';
 
-type DispatchProps = {
-  onCreateNewTask: () => void;
-}
+export const TodoListHeader: React.FC = () => {
+  const history = useHistory();
 
-type Props = DispatchProps;
+  function clickHandler() {
+    history.push('/create');
+  }
 
-export const TodoListHeader: React.FC<Props> = (props: Props) => {
 	return (
     <header className={styles.wrapper}>
       <h1>Task list</h1>
@@ -17,7 +18,7 @@ export const TodoListHeader: React.FC<Props> = (props: Props) => {
         displayText='New'
         buttonStyle='add'
         iconName='plus'
-        onClick={props.onCreateNewTask} />
+        onClick={clickHandler} />
     </header>
   );
 }
