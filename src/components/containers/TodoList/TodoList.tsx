@@ -13,7 +13,6 @@ type StateProps = {
 }
 
 type DispatchProps = {
-  onCreateNewTask: () => void;
   onTaskChangeStatus: (taskId: string, done: boolean) => void;
 }
 
@@ -39,7 +38,7 @@ export const TodoList: React.FC<Props> = (props: Props) => {
 
 	return (
     <Fragment>
-      <TodoListHeader onCreateNewTask={props.onCreateNewTask} />
+      <TodoListHeader />
       {taskList
         .sort((taskA, taskB) =>
           (taskA.priority - taskB.priority)
@@ -73,7 +72,6 @@ const mapStateToProps = (state: RootState): StateProps => {
 
 const mapDispatchToProps = (dispatch: Dispatch<TodoAction>): DispatchProps => {
   return {
-    onCreateNewTask: () => null,
     onTaskChangeStatus: (taskId: string, done: boolean) => null,
   };
 };
