@@ -1,5 +1,5 @@
-import { TodoState } from '../reducers/todo.reducer';
+import { TaskState } from '../reducers/task.reducer';
 
 export interface RootState {
-  todo: TodoState;
+  todo: TaskState;
 }

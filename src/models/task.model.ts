@@ -1,4 +1,4 @@
-import { PRIORITY_ORDER_TYPE } from "../constants/priorityLevels.constant";
+import { PRIORITY_ORDER_TYPE } from "../constants/priorityLevels.constants";
 
 export interface Task {
   id: string;

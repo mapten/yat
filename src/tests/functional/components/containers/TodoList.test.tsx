@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, cleanup, fireEvent, waitFor } from '@testing-library/react';
+import { render, cleanup } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { TodoList } from '../../../../components/containers/TodoList/TodoList';
 
@@ -18,7 +18,6 @@ describe(`<TodoList/>`, () => {
         {id: '5', displayName: 'Learn to play ukelele', priority: 1, done: false},
         {id: '6', displayName: 'Sell ukelele', priority: 1, done: true},
       ],
-      onCreateNewTask: jest.fn(),
       onTaskChangeStatus: jest.fn(),
     };
   });

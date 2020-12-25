@@ -3,14 +3,17 @@ import styles from './Create.module.scss';
 import { connect } from 'react-redux';
 import { toast } from 'react-toastify';
 import { Dispatch } from 'redux';
-import { PRIORITY_LEVELS, PRIORITY_ORDER_TYPE } from '../../../constants/priorityLevels.constant';
+import { PRIORITY_LEVELS, PRIORITY_ORDER_TYPE } from '../../../constants/priorityLevels.constants';
 import { Priority } from '../../../models/priority.model';
-import { TodoAction } from '../../../store/reducers/todo.reducer';
+import { TaskActionPartial } from '../../../store/reducers/task.reducer';
 import { Button } from '../../presentational/UI/Button/Button';
 import { useHistory } from 'react-router-dom';
+import * as actions from '../../../store/actions';
+import { Task } from '../../../models/task.model';
+import { NEW_TASK_ID } from '../../../constants/common';
 
 type DispatchProps = {
-  onSave: (displayName: string, priority: PRIORITY_ORDER_TYPE) => void;
+  onSave: (newTask: Task) => void;
 }
 
 type Props = DispatchProps;
@@ -35,7 +38,15 @@ export const Create: React.FC<Props> = (props: Props) => {
       setErrorOnName(true);
     } else {
       setErrorOnName(false);
-      props.onSave(name, priority);
+
+      const newTask: Task = {
+        id: NEW_TASK_ID,
+        displayName: name,
+        priority,
+        done: false,
+      }
+      props.onSave(newTask);
+
       history.push('/todolist');
     }
   }
@@ -80,12 +91,14 @@ export const Create: React.FC<Props> = (props: Props) => {
           </form>
           <div className={styles.buttonGroup}>
             <Button
+              data-testid="create-button-cancel"
               tooltip='Cancel changes and go to task list'
               displayText='Cancel'
               buttonStyle='dismiss'
               iconName='arrow-left'
               onClick={cancelHandler} />
             <Button
+              data-testid="create-button-save"
               tooltip='Save changes and go to task list'
               displayText='Save'
               buttonStyle='add'
@@ -98,9 +111,9 @@ export const Create: React.FC<Props> = (props: Props) => {
   );
 }
 
-const mapDispatchToProps = (dispatch: Dispatch<TodoAction>): DispatchProps => {
+const mapDispatchToProps = (dispatch: Dispatch<TaskActionPartial>): DispatchProps => {
   return {
-    onSave: (displayName: string, priority: PRIORITY_ORDER_TYPE) => null,
+    onSave: (newTask) => dispatch(actions.task.taskCreate(newTask)),
   };
 };
 
