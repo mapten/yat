@@ -1,12 +1,13 @@
 import React, { Fragment, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
-import { PRIORITY_LEVELS } from '../../../constants/priorityLevels.constant';
+import { PRIORITY_LEVELS } from '../../../constants/priorityLevels.constants';
 import { Task } from '../../../models/task.model';
 import { RootState } from '../../../store/models/rootState.model';
-import { TodoAction } from '../../../store/reducers/todo.reducer';
+import { getTaskList, TaskActionPartial } from '../../../store/reducers/task.reducer';
 import { TodoListHeader } from '../../presentational/TodoList/TodoListHeader/TodoListHeader';
 import { TodoListItem } from '../../presentational/TodoList/TodoListItem/TodoListItem';
+import * as actions from '../../../store/actions';
 
 type StateProps = {
   taskList: Task[];
@@ -66,13 +67,13 @@ export const TodoList: React.FC<Props> = (props: Props) => {
 
 const mapStateToProps = (state: RootState): StateProps => {
   return {
-    taskList: [],
+    taskList: getTaskList(state.todo),
   };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<TodoAction>): DispatchProps => {
+const mapDispatchToProps = (dispatch: Dispatch<TaskActionPartial>): DispatchProps => {
   return {
-    onTaskChangeStatus: (taskId: string, done: boolean) => null,
+    onTaskChangeStatus: (taskId: string, done: boolean) => dispatch(actions.task.taskChangeStatus(taskId, done)),
   };
 };
 

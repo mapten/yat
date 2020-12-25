@@ -21,6 +21,9 @@
   "testURL": "http://localhost/",
   "collectCoverageFrom": [
     "src/**/*.{ts,tsx}",
+    "!src/store/**/index.ts",
+    "!src/reportWebVitals.ts",
+    "!src/react-app-env.d.ts",
     "!src/index.tsx",
     "!src/typings/**",
     "!src/**/*.stories.tsx",

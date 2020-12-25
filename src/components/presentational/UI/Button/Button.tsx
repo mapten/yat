@@ -1,7 +1,7 @@
 import React from 'react';
 import './Button.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { BUTTON_STYLE } from '../../../../constants/buttonStyles.constant';
+import { BUTTON_STYLE } from '../../../../constants/buttonStyles.constants';
 import { IconName } from '@fortawesome/fontawesome-svg-core';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { fas } from '@fortawesome/free-solid-svg-icons';

@@ -1,5 +1,5 @@
-import { TodoAction } from '../reducers/todo.reducer';
+import { TaskAction } from '../reducers/task.reducer';
 
 export interface RootAction {
-  todo: TodoAction;
+  todo: TaskAction;
 }
