@@ -1,11 +1,11 @@
 .wrapper {
-  display: flex;
-  justify-content: space-between;
-  font-size: 1.2em;
-  border-left-width: 0.2em;
-  border-left-style: solid;
-  padding-left: 0.6em;
   border-bottom: 0.1em solid lighten(#000, 90);
+  border-left-style: solid;
+  border-left-width: 0.2em;
+  display: flex;
+  font-size: 1.2em;
+  justify-content: space-between;
+  padding-left: 0.6em;
 }
 
 .task {

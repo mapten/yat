@@ -1,25 +1,24 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import { ConnectedTodoList } from './components/containers/TodoList/TodoList';
-import { ConnectedCreate } from './components/containers/Create/Create';
 
-function App() {
+// Components
+import TodoList from './components/containers/TodoList/TodoList';
+import Create from './components/containers/Create/Create';
+
+export const App: React.FC = () => {
   return (
     <Router>
       <Switch>
         <Route exact path="/">
-          <ConnectedTodoList />
+          <TodoList />
         </Route>
         <Route path="/create">
-          <ConnectedCreate />
+          <Create />
         </Route>
         <Route path="/todolist">
-          <ConnectedTodoList />
+          <TodoList />
         </Route>
       </Switch>
     </Router>
-
   );
-}
-
-export default App;
+};

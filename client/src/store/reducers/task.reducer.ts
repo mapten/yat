@@ -1,8 +1,15 @@
-import { Task } from '../../models/task.model';
+/* eslint-disable indent */
+import { Selector } from 'reselect';
+
+// Store
 import { TaskActionType } from '../../typings/task.types';
 import * as actionTypes from '../../constants/redux-action-types.constants';
+
+// Utils
 import { updateObject } from '../../utils/common';
-import { Selector } from 'reselect';
+
+// Models
+import { Task } from '../../models/task.model';
 
 type TaskPayload = {
   taskId: string;
@@ -51,11 +58,11 @@ export const taskReducer = (state: TaskState = taskInitialState, action: TaskAct
       return state;
     }
   }
-}
+};
 
 /**
  * Selector to get all the task in store
  */
 export const getTaskList: Selector<TaskState, Task[]> = (state: TaskState): Task[] => {
   return state.taskList;
-}
+};

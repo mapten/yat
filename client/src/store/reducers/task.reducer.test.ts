@@ -1,6 +1,9 @@
-import { Task } from '../../models/task.model';
+// Store
 import { getTaskList, TaskAction, taskInitialState, taskReducer, TaskState } from './task.reducer';
 import * as actionTypes from '../../constants/redux-action-types.constants';
+
+// Models
+import { Task } from '../../models/task.model';
 
 describe('redux reducers - task', () => {
   let initialState: TaskState;
@@ -13,6 +16,7 @@ describe('redux reducers - task', () => {
     it('should return the initial state', () => {
       // arrange
       // act
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       const result = taskReducer(undefined, {});
 

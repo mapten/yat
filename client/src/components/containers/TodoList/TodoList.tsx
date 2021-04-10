@@ -1,13 +1,21 @@
 import React, { Fragment, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
-import { PRIORITY_LEVELS } from '../../../constants/priorityLevels.constants';
-import { Task } from '../../../models/task.model';
+
+// Store
+import * as actions from '../../../store/actions';
 import { RootState } from '../../../store/models/rootState.model';
 import { getTaskList, TaskActionPartial } from '../../../store/reducers/task.reducer';
+
+// Constants
+import { PRIORITY_LEVELS } from '../../../constants/priorityLevels.constants';
+
+// Models
+import { Task } from '../../../models/task.model';
+
+// Components
 import { TodoListHeader } from '../../presentational/TodoList/TodoListHeader/TodoListHeader';
 import { TodoListItem } from '../../presentational/TodoList/TodoListItem/TodoListItem';
-import * as actions from '../../../store/actions';
 
 type StateProps = {
   taskList: Task[];
@@ -23,7 +31,7 @@ export const TodoList: React.FC<Props> = (props: Props) => {
   const [taskList, setTaskList] = useState<Task[]>([]);
 
   useEffect(() => {
-    setTaskList(props.taskList)
+    setTaskList(props.taskList);
   }, [props.taskList]);
 
   const taskChangeStatusHandler = (taskId: string, done: boolean) => {
@@ -35,9 +43,9 @@ export const TodoList: React.FC<Props> = (props: Props) => {
     }));
 
     props.onTaskChangeStatus(taskId, done);
-  }
+  };
 
-	return (
+  return (
     <Fragment>
       <TodoListHeader />
       {taskList
@@ -58,12 +66,12 @@ export const TodoList: React.FC<Props> = (props: Props) => {
             taskDone={task.done}
             taskPriorityColor={priorityColor}
             onTaskChangeStatus={taskChangeStatusHandler}
-          />
+          />;
         })
       }
     </Fragment>
   );
-}
+};
 
 const mapStateToProps = (state: RootState): StateProps => {
   return {
@@ -77,11 +85,5 @@ const mapDispatchToProps = (dispatch: Dispatch<TaskActionPartial>): DispatchProp
   };
 };
 
-
-/**
- * {@link TodoList} component connected to Redux.
- * 
- * @example
- * <ConnectedTodoList />
- */
-export const ConnectedTodoList = connect(mapStateToProps, mapDispatchToProps)(TodoList);
+const connector = connect(mapStateToProps, mapDispatchToProps);
+export default connector(TodoList);

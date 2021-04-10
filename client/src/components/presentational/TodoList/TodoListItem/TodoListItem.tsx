@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react';
+
+// Styles
 import styles from './TodoListItem.module.scss';
 
 type StateProps = {
@@ -24,12 +26,12 @@ export const TodoListItem: React.FC<Props> = (props: Props) => {
   const checkboxChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     setTaskDone(event.target.checked);
     props.onTaskChangeStatus(props.taskId, event.target.checked);
-  }
+  };
 
-	return (
+  return (
     <div data-testid="todo-item" style={{borderLeftColor: props.taskPriorityColor}} className={styles.wrapper}>
       <span className={`${styles.task} ${taskDone ? styles.crossed : ''}`}>{props.taskName}</span>
       <input className={styles.checkbox} type='checkbox' checked={taskDone} onChange={checkboxChangeHandler} />
     </div>
   );
-}
+};

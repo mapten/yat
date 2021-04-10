@@ -1,6 +1,10 @@
 import * as actionTypes from '../../constants/redux-action-types.constants';
-import { Task } from '../../models/task.model';
+
+// Store
 import { TaskActionPartial } from '../reducers/task.reducer';
+
+// Models
+import { Task } from '../../models/task.model';
 
 export const taskFetch = (): TaskActionPartial => {
   return {
