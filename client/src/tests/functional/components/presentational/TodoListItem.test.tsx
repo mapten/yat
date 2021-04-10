@@ -1,6 +1,8 @@
 import React from 'react';
 import { render, cleanup, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
+
+// Components
 import { TodoListItem } from '../../../../components/presentational/TodoList/TodoListItem/TodoListItem';
 
 type Props = React.ComponentProps<typeof TodoListItem>;
@@ -20,7 +22,7 @@ describe(`<TaskListItem/>`, () => {
 
   const renderUI = (props: Partial<Props> = {}) => {
     return render(<TodoListItem {...baseProps} {...props} />);
-  }
+  };
 
   afterEach(() => {
     cleanup();

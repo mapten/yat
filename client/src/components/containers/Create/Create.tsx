@@ -1,16 +1,26 @@
 import React, { Fragment, useState } from 'react';
-import styles from './Create.module.scss';
-import { connect } from 'react-redux';
 import { toast } from 'react-toastify';
-import { Dispatch } from 'redux';
-import { PRIORITY_LEVELS, PRIORITY_ORDER_TYPE } from '../../../constants/priorityLevels.constants';
-import { Priority } from '../../../models/priority.model';
-import { TaskActionPartial } from '../../../store/reducers/task.reducer';
-import { Button } from '../../presentational/UI/Button/Button';
 import { useHistory } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { Dispatch } from 'redux';
+
+// Styles
+import styles from './Create.module.scss';
+
+// Store
 import * as actions from '../../../store/actions';
-import { Task } from '../../../models/task.model';
+import { TaskActionPartial } from '../../../store/reducers/task.reducer';
+
+// Constants
+import { PRIORITY_LEVELS, PRIORITY_ORDER_TYPE } from '../../../constants/priorityLevels.constants';
 import { NEW_TASK_ID } from '../../../constants/common';
+
+// Models
+import { Priority } from '../../../models/priority.model';
+import { Task } from '../../../models/task.model';
+
+// Components
+import { Button } from '../../presentational/UI/Button/Button';
 
 type DispatchProps = {
   onSave: (newTask: Task) => void;
@@ -30,7 +40,7 @@ export const Create: React.FC<Props> = (props: Props) => {
 
   const cancelHandler = () => {
     history.push('/todolist');
-  }
+  };
 
   const saveHandler = () => {
     if (!name) {
@@ -44,19 +54,19 @@ export const Create: React.FC<Props> = (props: Props) => {
         displayName: name,
         priority,
         done: false,
-      }
+      };
       props.onSave(newTask);
 
       history.push('/todolist');
     }
-  }
+  };
 
   const priorityChangeHandler = (event: React.SyntheticEvent<HTMLSelectElement, Event>) => {
     const priorityOrder = Number((event.target as HTMLSelectElement).value);
     setPriority(priorityOrder);
-  }
+  };
 
-	return (
+  return (
     <Fragment>
       <header className={styles.header}>
         <h1>Create task</h1>
@@ -84,12 +94,12 @@ export const Create: React.FC<Props> = (props: Props) => {
                 onChange={(e) => priorityChangeHandler(e)}
                 value={priority}>
                 {PRIORITY_LEVELS.map((priorityLevel) => {
-                  return <option key={priorityLevel.order} value={priorityLevel.order}>{priorityLevel.displayText}</option>
+                  return <option key={priorityLevel.order} value={priorityLevel.order}>{priorityLevel.displayText}</option>;
                 })}
               </select>
             </div>
           </form>
-          <div className={styles.buttonGroup}>
+          <div className={styles.buttongroup}>
             <Button
               data-testid="create-button-cancel"
               tooltip='Cancel changes and go to task list'
@@ -109,7 +119,7 @@ export const Create: React.FC<Props> = (props: Props) => {
       </main>
     </Fragment>
   );
-}
+};
 
 const mapDispatchToProps = (dispatch: Dispatch<TaskActionPartial>): DispatchProps => {
   return {
@@ -118,10 +128,5 @@ const mapDispatchToProps = (dispatch: Dispatch<TaskActionPartial>): DispatchProp
 };
 
 
-/**
- * {@link Create} component connected to Redux.
- * 
- * @example
- * <ConnectedCreate />
- */
-export const ConnectedCreate = connect(null, mapDispatchToProps)(Create);
+const connector = connect(null, mapDispatchToProps);
+export default connector(Create);

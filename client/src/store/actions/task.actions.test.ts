@@ -1,7 +1,11 @@
 import * as actionTypes from '../../constants/redux-action-types.constants';
-import { Task } from '../../models/task.model';
+
+// Store
 import { TaskActionPartial } from '../reducers/task.reducer';
 import * as action from './task.actions';
+
+// Models
+import { Task } from '../../models/task.model';
 
 describe('redux actions - task', () => {
   describe('taskFetch', () => {

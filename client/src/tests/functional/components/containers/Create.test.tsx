@@ -1,16 +1,24 @@
 import React from 'react';
 import { render, cleanup, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import { ConnectedCreate, Create } from '../../../../components/containers/Create/Create';
 import * as toastify from 'react-toastify';
-import { Priority } from '../../../../models/priority.model';
-import { Task } from '../../../../models/task.model';
-import { NEW_TASK_ID } from '../../../../constants/common';
+import { Provider } from 'react-redux';
 import createSagaMiddleware from 'redux-saga';
 import configureStore, { MockStoreEnhanced } from 'redux-mock-store';
+
+// Store
 import * as taskReducer from '../../../../store/reducers/task.reducer';
-import { Provider } from 'react-redux';
+
+// Constants
+import { NEW_TASK_ID } from '../../../../constants/common';
 import { TASK_CREATE } from '../../../../constants/redux-action-types.constants';
+
+// Models
+import { Priority } from '../../../../models/priority.model';
+import { Task } from '../../../../models/task.model';
+
+// Components
+import ConnectedCreate, { Create } from '../../../../components/containers/Create/Create';
 
 const mockPriorityLevelsValueGetter = jest.fn();
 jest.mock('../../../../constants/priorityLevels.constants', () => ({
@@ -108,7 +116,7 @@ describe('Create', () => {
         displayName: 'foo',
         priority: 1,
         done: false,
-      }
+      };
 
       const todoNameInput = renderResult.container.querySelector('input') as HTMLInputElement;
       fireEvent.change(todoNameInput, {target: {value: 'foo'}});
@@ -141,13 +149,11 @@ describe('Create', () => {
     });
   });
   describe('<ConnectedCreate>', () => {
-    let store: MockStoreEnhanced<unknown, {}>;
+    let store: MockStoreEnhanced<unknown, unknown>;
     const middlewares = [createSagaMiddleware()];
     const mockStore = configureStore(middlewares);
 
-    const renderUI =
-      (partialState: Partial<taskReducer.TaskState> = {}) => {
-
+    const renderUI = (partialState: Partial<taskReducer.TaskState> = {}) => {
       store = mockStore({
         task: {...taskReducer, ...partialState},
       });
@@ -158,7 +164,7 @@ describe('Create', () => {
       </Provider>;
 
       return render(component);
-    }
+    };
 
     it(`should call to onSave when the save button is clicked`, () => {
       // arrange
@@ -182,7 +188,7 @@ describe('Create', () => {
         displayName: 'foo',
         priority: 1,
         done: false,
-      }
+      };
 
       // assert
       expect(store.dispatch).toHaveBeenCalledWith({

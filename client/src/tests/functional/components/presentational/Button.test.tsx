@@ -1,6 +1,8 @@
 import React from 'react';
 import { render, cleanup } from '@testing-library/react';
 import '@testing-library/jest-dom';
+
+// Components
 import { Button } from '../../../../components/presentational/UI/Button/Button';
 
 type Props = React.ComponentProps<typeof Button>;
@@ -18,7 +20,7 @@ describe(`<Button/>`, () => {
 
   const renderUI = (props: Partial<Props> = {}) => {
     return render(<Button {...baseProps} {...props} />);
-  }
+  };
 
   afterEach(() => {
     cleanup();

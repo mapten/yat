@@ -1,10 +1,14 @@
 import React from 'react';
-import './Button.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { BUTTON_STYLE } from '../../../../constants/buttonStyles.constants';
 import { IconName } from '@fortawesome/fontawesome-svg-core';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { fas } from '@fortawesome/free-solid-svg-icons';
+
+// Styles
+import './Button.scss';
+
+// Constants
+import { BUTTON_STYLE } from '../../../../constants/buttonStyles.constants';
 
 library.add(fas);
 
@@ -30,10 +34,10 @@ type DispatchProps = {
 type Props = StateProps & DispatchProps;
 
 export const Button: React.FC<Props> = (props: Props) => {
-	return (
+  return (
     <button title={props.tooltip || ''} className={`${props.buttonStyle}`} onClick={props.onClick}>
       <span>{props.displayText}</span>
       {props.iconName && <FontAwesomeIcon icon={props.iconName} />}
     </button>
   );
-}
+};

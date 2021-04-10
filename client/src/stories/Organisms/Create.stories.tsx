@@ -11,9 +11,9 @@ export default {
 type Props = React.ComponentProps<typeof Create>;
 
 const Template: Story<Props> = (args) =>
-<Fragment>
-  <ToastContainer />
-  <Create {...args} />
-</Fragment>;
+  <Fragment>
+    <ToastContainer />
+    <Create {...args} />
+  </Fragment>;
 
 export const CreateDefault = Template.bind({});

@@ -1,7 +1,9 @@
 import React from 'react';
 import { Button } from '../../UI/Button/Button';
-import styles from './TodoListHeader.module.scss';
 import { useHistory } from 'react-router-dom';
+
+// Styles
+import styles from './TodoListHeader.module.scss';
 
 export const TodoListHeader: React.FC = () => {
   const history = useHistory();
@@ -10,7 +12,7 @@ export const TodoListHeader: React.FC = () => {
     history.push('/create');
   }
 
-	return (
+  return (
     <header className={styles.wrapper}>
       <h1>Task list</h1>
       <Button
@@ -21,4 +23,4 @@ export const TodoListHeader: React.FC = () => {
         onClick={clickHandler} />
     </header>
   );
-}
+};
