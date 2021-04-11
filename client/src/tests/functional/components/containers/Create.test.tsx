@@ -1,10 +1,10 @@
 import React from 'react';
 import { render, cleanup, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import * as toastify from 'react-toastify';
 import { Provider } from 'react-redux';
 import createSagaMiddleware from 'redux-saga';
 import configureStore, { MockStoreEnhanced } from 'redux-mock-store';
+import { toast } from 'react-toastify';
 
 // Store
 import * as taskReducer from '../../../../store/reducers/task.reducer';
@@ -19,6 +19,7 @@ import { Task } from '../../../../models/task.model';
 
 // Components
 import ConnectedCreate, { Create } from '../../../../components/containers/Create/Create';
+
 
 const mockPriorityLevelsValueGetter = jest.fn();
 jest.mock('../../../../constants/priorityLevels.constants', () => ({
@@ -89,7 +90,7 @@ describe('Create', () => {
 
     it(`should display a toast error and the input border in red when saving changes but the todo name is empty`, () => {
       // arrange
-      const mockToastifyError = jest.spyOn(toastify.toast, 'warning');
+      const mockToastifyWarning = jest.spyOn(toast, 'warning');
 
       const renderResult = renderUI();
 
@@ -101,13 +102,13 @@ describe('Create', () => {
 
       // assert
       expect(todoNameInput).toHaveClass('danger');
-      expect(mockToastifyError).toHaveBeenCalledTimes(1);
+      expect(mockToastifyWarning).toHaveBeenCalledTimes(1);
       expect(baseProps.onSave).not.toHaveBeenCalled();
     });
 
     it(`should call to save prop when clicking on save and the form is valid`, () => {
       // arrange
-      const mockToastifyError = jest.spyOn(toastify.toast, 'warning');
+      const mockToastifyWarning = jest.spyOn(toast, 'warning');
 
       const renderResult = renderUI();
 
@@ -130,7 +131,7 @@ describe('Create', () => {
 
       // assert
       expect(todoNameInput).not.toHaveClass('danger');
-      expect(mockToastifyError).not.toHaveBeenCalled();
+      expect(mockToastifyWarning).not.toHaveBeenCalled();
       expect(baseProps.onSave).toHaveBeenCalledWith(createTask);
       expect(mockHistoryPush).toHaveBeenCalledWith('/todolist');
     });
