@@ -1,8 +1,8 @@
 import React, { Fragment, useState } from 'react';
-import { toast } from 'react-toastify';
 import { useHistory } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
+import { toast } from 'react-toastify';
 
 // Styles
 import styles from './Create.module.scss';
