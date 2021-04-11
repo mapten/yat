@@ -1,5 +1,11 @@
 export const TASK_CHANGE_STATUS = '[task] change status';
+export const TASK_CHANGE_STATUS_START = '[task] change status start';
+export const TASK_CHANGE_STATUS_SUCCESS = '[task] change status success';
+export const TASK_CHANGE_STATUS_ERROR = '[task] change status error';
 export const TASK_CREATE = '[task] create';
+export const TASK_CREATE_START = '[task] create start';
+export const TASK_CREATE_SUCCESS = '[task] create success';
+export const TASK_CREATE_ERROR = '[task] create error';
 export const TASK_FETCH = '[task] fetch';
 export const TASK_FETCH_START = '[task] fetch start';
 export const TASK_FETCH_SUCCESS = '[task] fetch success';

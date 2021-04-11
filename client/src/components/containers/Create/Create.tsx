@@ -99,16 +99,16 @@ export const Create: React.FC<Props> = (props: Props) => {
               </select>
             </div>
           </form>
-          <div className={styles.buttongroup}>
+          <div className={styles.buttonGroup}>
             <Button
-              data-testid="create-button-cancel"
+              data-testid='create-button-cancel'
               tooltip='Cancel changes and go to task list'
               displayText='Cancel'
               buttonStyle='dismiss'
               iconName='arrow-left'
               onClick={cancelHandler} />
             <Button
-              data-testid="create-button-save"
+              data-testid='create-button-save'
               tooltip='Save changes and go to task list'
               displayText='Save'
               buttonStyle='add'

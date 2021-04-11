@@ -6,28 +6,36 @@
   }
 }
 
-.form-row {
-  margin-bottom: 0.9em;
-}
-
-.form-label {
-  display: inline-block;
-}
-
-.form-control {
-  border: 0.2em solid #ccc;
-  border-radius: 0.4em;
-  box-sizing: border-box;
-  padding: 0.3em;
-  resize: vertical;
-  width: 100%;
+.form {
+  &Row {
+    margin-bottom: 0.9em;
+  }
+  
+  &Label {
+    display: inline-block;
+  }
+  
+  &Control {
+    border: 0.2em solid #ccc;
+    border-radius: 0.4em;
+    box-sizing: border-box;
+    padding: 0.3em;
+    resize: vertical;
+    width: 100%;
+  }
 }
 
 .danger {
   border-color: #f00;
 }
 
-.buttongroup {
-  display: flex;
-  justify-content: space-between;
+.button {
+  &Group {
+    display: flex;
+    justify-content: space-between;
+  }
 }
+
+
+
+

@@ -7,7 +7,7 @@ import { TodoList } from '../../../../components/containers/TodoList/TodoList';
 
 type Props = React.ComponentProps<typeof TodoList>;
 
-describe(`<TodoList/>`, () => {
+describe('<TodoList/>', () => {
   let baseProps: Props;
 
   beforeEach(() => {
@@ -20,6 +20,7 @@ describe(`<TodoList/>`, () => {
         {id: '5', displayName: 'Learn to play ukelele', priority: 1, done: false},
         {id: '6', displayName: 'Sell ukelele', priority: 1, done: true},
       ],
+      fetchTasks: jest.fn(),
       onTaskChangeStatus: jest.fn(),
     };
   });
@@ -33,12 +34,12 @@ describe(`<TodoList/>`, () => {
     cleanup();
   });
 
-  it(`should sort the task, displaying first the task with more priority (lowest number), then the lowest, and at the bottom the task marked as done`, async() => {
+  it('should sort the task, displaying first the task with more priority (lowest number), then the lowest, and at the bottom the task marked as done', async() => {
     // arrange
     // act
     const renderResult = renderUI();
 
-    const todoItemList = await renderResult.findAllByTestId("todo-item") as HTMLDivElement[];
+    const todoItemList = await renderResult.findAllByTestId('todo-item') as HTMLDivElement[];
 
     // assert
     expect(todoItemList[0].querySelector('span')).toHaveTextContent('Learn to play ukelele');
@@ -49,11 +50,11 @@ describe(`<TodoList/>`, () => {
     expect(todoItemList[5].querySelector('span')).toHaveTextContent('Sell ukelele');
   });
 
-  it(`should call to onTaskChangeStatus when a task is marked as done/undone`, async() => {
+  it('should call to onTaskChangeStatus when a task is marked as done/undone', async() => {
     // arrange
     const renderResult = renderUI();
 
-    const todoItemList = await renderResult.findAllByTestId("todo-item") as HTMLDivElement[];
+    const todoItemList = await renderResult.findAllByTestId('todo-item') as HTMLDivElement[];
 
     const lastTaskCheckBox = todoItemList[5].querySelector('input[type="checkbox"]') as HTMLInputElement;
 
@@ -64,18 +65,18 @@ describe(`<TodoList/>`, () => {
     expect(baseProps.onTaskChangeStatus).toHaveBeenCalledWith('6', false);
   });
 
-  it(`should reorder the list when a task is marked as done/undone`, async() => {
+  it('should reorder the list when a task is marked as done/undone', async() => {
     // arrange
     const renderResult = renderUI();
 
-    const todoItemList = await renderResult.findAllByTestId("todo-item") as HTMLDivElement[];
+    const todoItemList = await renderResult.findAllByTestId('todo-item') as HTMLDivElement[];
 
     const buyUkeleleCheckbox = todoItemList[4].querySelector('input[type="checkbox"]') as HTMLInputElement;
 
     // act
     buyUkeleleCheckbox.click();
 
-    const updatedTodoItemList = await renderResult.findAllByTestId("todo-item") as HTMLDivElement[];
+    const updatedTodoItemList = await renderResult.findAllByTestId('todo-item') as HTMLDivElement[];
 
     // assert
     expect(updatedTodoItemList[0].querySelector('span')).toHaveTextContent('Buy an ukelele');
@@ -84,5 +85,19 @@ describe(`<TodoList/>`, () => {
     expect(updatedTodoItemList[3].querySelector('span')).toHaveTextContent('Paint the wall');
     expect(updatedTodoItemList[4].querySelector('span')).toHaveTextContent('Create a todoList demo application');
     expect(updatedTodoItemList[5].querySelector('span')).toHaveTextContent('Sell ukelele');
+  });
+
+  it('should fetch the task list the first time the component is loaded', async() => {
+    // arrange
+    // act
+    const renderResult = renderUI();
+
+    // do some changes in the component state
+    const todoItemList = await renderResult.findAllByTestId('todo-item') as HTMLDivElement[];
+    const buyUkeleleCheckbox = todoItemList[4].querySelector('input[type="checkbox"]') as HTMLInputElement;
+    buyUkeleleCheckbox.click();
+
+    // assert
+    expect(baseProps.fetchTasks).toHaveBeenCalledTimes(1);
   });
 });
