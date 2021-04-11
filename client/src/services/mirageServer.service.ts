@@ -26,7 +26,7 @@ export function makeServer({ environment = 'development' } = {}): Server<AnyRegi
     environment,
 
     models: {
-      task: Model.extend(TaskObject), 
+      task: Model.extend(TaskObject),
     },
 
     /** Creates predefined data for the application. In this case, random quote information */
@@ -40,7 +40,7 @@ export function makeServer({ environment = 'development' } = {}): Server<AnyRegi
         {id: uuidv4(), displayName: 'Sell ukelele', priority: 1, done: true},
       ];
 
-      taskList.map((task) => {
+      taskList.forEach((task) => {
         server.create('task', task);
       });
     },
