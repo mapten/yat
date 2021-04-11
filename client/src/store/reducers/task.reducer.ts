@@ -31,7 +31,7 @@ export const taskInitialState: TaskState = {
 
 export const taskReducer = (state: TaskState = taskInitialState, action: TaskAction): TaskState => {
   switch (action.type) {
-    case actionTypes.TASK_CHANGE_STATUS: {
+    case actionTypes.TASK_CHANGE_STATUS_SUCCESS: {
       return updateObject(state, {
         taskList: state.taskList.map((todoItem) => {
           if (todoItem.id === action.taskId) {
@@ -44,7 +44,7 @@ export const taskReducer = (state: TaskState = taskInitialState, action: TaskAct
         }),
       });
     }
-    case actionTypes.TASK_CREATE: {
+    case actionTypes.TASK_CREATE_SUCCESS: {
       return updateObject(state, {
         taskList: [...state.taskList, action.newTask],
       });

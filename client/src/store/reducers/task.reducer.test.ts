@@ -24,7 +24,7 @@ describe('redux reducers - task', () => {
       expect(result).toEqual(initialState);
     });
 
-    it('should handle TASK_CHANGE_STATUS', () => {
+    it('should handle TASK_CHANGE_STATUS_SUCCESS', () => {
       // arrange
       const initialTaskList: Task[] = [
         {id: '1', displayName: 'task 1', priority: 1, done: false},
@@ -44,7 +44,7 @@ describe('redux reducers - task', () => {
       };
 
       const action = {
-        type: actionTypes.TASK_CHANGE_STATUS,
+        type: actionTypes.TASK_CHANGE_STATUS_SUCCESS,
         taskId: '1',
         done: true,
       } as TaskAction;
@@ -56,7 +56,7 @@ describe('redux reducers - task', () => {
       expect(result).toEqual(expectedState);
     });
 
-    it('should handle TASK_CREATE', () => {
+    it('should handle TASK_CREATE_SUCCESS', () => {
       // arrange
       const initialTaskList: Task[] = [
         {id: '1', displayName: 'task 1', priority: 1, done: false},
@@ -79,7 +79,7 @@ describe('redux reducers - task', () => {
       const newTask: Task = {id: '3', displayName: 'task 3', priority: 2, done: false};
 
       const action = {
-        type: actionTypes.TASK_CREATE,
+        type: actionTypes.TASK_CREATE_SUCCESS,
         newTask,
       } as TaskAction;
 

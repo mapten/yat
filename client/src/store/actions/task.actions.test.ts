@@ -22,6 +22,7 @@ describe('redux actions - task', () => {
       expect(result).toEqual(expectedAction);
     });
   });
+
   describe('taskFetchStart', () => {
     it('should create an action', () => {
       // arrange
@@ -36,6 +37,7 @@ describe('redux actions - task', () => {
       expect(result).toEqual(expectedAction);
     });
   });
+
   describe('taskFetchSuccess', () => {
     it('should create an action', () => {
       // arrange
@@ -56,6 +58,7 @@ describe('redux actions - task', () => {
       expect(result).toEqual(expectedAction);
     });
   });
+
   describe('taskFetchError', () => {
     it('should create an action', () => {
       // arrange
@@ -80,11 +83,61 @@ describe('redux actions - task', () => {
       const expectedAction: TaskActionPartial = {
         type: actionTypes.TASK_CHANGE_STATUS,
         taskId,
-        done,
+        done
       };
 
       // act
       const result = action.taskChangeStatus(taskId, done);
+
+      // assert
+      expect(result).toEqual(expectedAction);
+    });
+  });
+
+  describe('taskChangeStatusStart', () => {
+    it('should create an action', () => {
+      // arrange
+      const expectedAction: TaskActionPartial = {
+        type: actionTypes.TASK_CHANGE_STATUS_START
+      };
+
+      // act
+      const result = action.taskChangeStatusStart();
+
+      // assert
+      expect(result).toEqual(expectedAction);
+    });
+  });
+
+  describe('taskChangeStatusSuccess', () => {
+    it('should create an action', () => {
+      // arrange
+      const taskId = '1';
+      const done = true;
+
+      const expectedAction: TaskActionPartial = {
+        type: actionTypes.TASK_CHANGE_STATUS_SUCCESS,
+        taskId,
+        done,
+      };
+
+      // act
+      const result = action.taskChangeStatusSuccess(taskId, done);
+
+      // assert
+      expect(result).toEqual(expectedAction);
+    });
+  });
+
+  describe('taskChangeStatusStartError', () => {
+    it('should create an action', () => {
+      // arrange
+      const expectedAction: TaskActionPartial = {
+        type: actionTypes.TASK_CHANGE_STATUS_ERROR
+      };
+
+      // act
+      const result = action.taskChangeStatusError();
 
       // assert
       expect(result).toEqual(expectedAction);
@@ -98,7 +151,7 @@ describe('redux actions - task', () => {
 
       const expectedAction: TaskActionPartial = {
         type: actionTypes.TASK_CREATE,
-        newTask
+        newTask,
       };
 
       // act
@@ -107,5 +160,53 @@ describe('redux actions - task', () => {
       // assert
       expect(result).toEqual(expectedAction);
     });
+  });
+});
+
+describe('taskCreateStart', () => {
+  it('should create an action', () => {
+    // arrange
+    const expectedAction: TaskActionPartial = {
+      type: actionTypes.TASK_CREATE_START
+    };
+
+    // act
+    const result = action.taskCreateStart();
+
+    // assert
+    expect(result).toEqual(expectedAction);
+  });
+});
+
+describe('taskCreateSuccess', () => {
+  it('should create an action', () => {
+    // arrange
+    const newTask = {id: '2', displayName: 'task 2', priority: 0, done: true};
+
+    const expectedAction: TaskActionPartial = {
+      type: actionTypes.TASK_CREATE_SUCCESS,
+      newTask
+    };
+
+    // act
+    const result = action.taskCreateSuccess(newTask);
+
+    // assert
+    expect(result).toEqual(expectedAction);
+  });
+});
+
+describe('taskCreateError', () => {
+  it('should create an action', () => {
+    // arrange
+    const expectedAction: TaskActionPartial = {
+      type: actionTypes.TASK_CREATE_ERROR
+    };
+
+    // act
+    const result = action.taskCreateError();
+
+    // assert
+    expect(result).toEqual(expectedAction);
   });
 });

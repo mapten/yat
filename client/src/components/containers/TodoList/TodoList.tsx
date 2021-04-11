@@ -22,6 +22,7 @@ type StateProps = {
 }
 
 type DispatchProps = {
+  fetchTasks: () => void;
   onTaskChangeStatus: (taskId: string, done: boolean) => void;
 }
 
@@ -29,6 +30,10 @@ type Props = DispatchProps & StateProps;
 
 export const TodoList: React.FC<Props> = (props: Props) => {
   const [taskList, setTaskList] = useState<Task[]>([]);
+
+  useEffect(() => {
+    props.fetchTasks();
+  }, []);
 
   useEffect(() => {
     setTaskList(props.taskList);
@@ -75,12 +80,13 @@ export const TodoList: React.FC<Props> = (props: Props) => {
 
 const mapStateToProps = (state: RootState): StateProps => {
   return {
-    taskList: getTaskList(state.todo),
+    taskList: getTaskList(state.task),
   };
 };
 
 const mapDispatchToProps = (dispatch: Dispatch<TaskActionPartial>): DispatchProps => {
   return {
+    fetchTasks: () => dispatch(actions.task.taskFetch()),
     onTaskChangeStatus: (taskId: string, done: boolean) => dispatch(actions.task.taskChangeStatus(taskId, done)),
   };
 };
