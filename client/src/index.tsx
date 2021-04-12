@@ -4,7 +4,7 @@ import { Provider } from 'react-redux';
 import createSagaMiddleware from 'redux-saga';
 
 // Style
-import './index.css';
+import './index.scss';
 
 // Components
 import { App } from './App';

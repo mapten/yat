@@ -6,6 +6,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 // Models
 import { Task } from '../models/task.model';
+import DbCollection from 'miragejs/db-collection';
 
 /**
  * Mirage.js requires objects for the model, and as Task is an interface,
@@ -58,6 +59,14 @@ export function makeServer({ environment = 'development' } = {}): Server<AnyRegi
 
       this.get(`${API_ENDPOINT}/task`, (schema) => {
         return schema.db.tasks;
+      });
+
+      this.delete(`${API_ENDPOINT}/task/:id`, (schema, request) => {
+        const id = request.params.id;
+
+        schema.db.tasks.remove(id);
+
+        return new Response(200);
       });
 
       this.patch(`${API_ENDPOINT}/task/:id`, (schema, request) => {

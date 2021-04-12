@@ -194,7 +194,7 @@ describe('Create', () => {
       // assert
       expect(store.dispatch).toHaveBeenCalledWith({
         type: TASK_CREATE,
-        newTask: createdTask,
+        editTask: createdTask,
       } as taskReducer.TaskActionPartial);
     });
   });

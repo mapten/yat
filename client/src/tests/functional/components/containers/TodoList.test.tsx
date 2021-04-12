@@ -20,8 +20,11 @@ describe('<TodoList/>', () => {
         {id: '5', displayName: 'Learn to play ukelele', priority: 1, done: false},
         {id: '6', displayName: 'Sell ukelele', priority: 1, done: true},
       ],
-      fetchTasks: jest.fn(),
+      onFetchTasks: jest.fn(),
       onTaskChangeStatus: jest.fn(),
+      onSetTaskEditId: jest.fn(),
+      onEditTask: jest.fn(),
+      onDeleteTask: jest.fn()
     };
   });
 
@@ -39,7 +42,7 @@ describe('<TodoList/>', () => {
     // act
     const renderResult = renderUI();
 
-    const todoItemList = await renderResult.findAllByTestId('todo-item') as HTMLDivElement[];
+    const todoItemList = await renderResult.findAllByTestId('todoItemDisplay') as HTMLDivElement[];
 
     // assert
     expect(todoItemList[0].querySelector('span')).toHaveTextContent('Learn to play ukelele');
@@ -50,33 +53,18 @@ describe('<TodoList/>', () => {
     expect(todoItemList[5].querySelector('span')).toHaveTextContent('Sell ukelele');
   });
 
-  it('should call to onTaskChangeStatus when a task is marked as done/undone', async() => {
-    // arrange
-    const renderResult = renderUI();
-
-    const todoItemList = await renderResult.findAllByTestId('todo-item') as HTMLDivElement[];
-
-    const lastTaskCheckBox = todoItemList[5].querySelector('input[type="checkbox"]') as HTMLInputElement;
-
-    // act
-    lastTaskCheckBox.click();
-
-    // assert
-    expect(baseProps.onTaskChangeStatus).toHaveBeenCalledWith('6', false);
-  });
-
   it('should reorder the list when a task is marked as done/undone', async() => {
     // arrange
     const renderResult = renderUI();
 
-    const todoItemList = await renderResult.findAllByTestId('todo-item') as HTMLDivElement[];
+    const todoItemList = await renderResult.findAllByTestId('todoItemDisplay') as HTMLDivElement[];
 
     const buyUkeleleCheckbox = todoItemList[4].querySelector('input[type="checkbox"]') as HTMLInputElement;
 
     // act
     buyUkeleleCheckbox.click();
 
-    const updatedTodoItemList = await renderResult.findAllByTestId('todo-item') as HTMLDivElement[];
+    const updatedTodoItemList = await renderResult.findAllByTestId('todoItemDisplay') as HTMLDivElement[];
 
     // assert
     expect(updatedTodoItemList[0].querySelector('span')).toHaveTextContent('Buy an ukelele');
@@ -93,11 +81,106 @@ describe('<TodoList/>', () => {
     const renderResult = renderUI();
 
     // do some changes in the component state
-    const todoItemList = await renderResult.findAllByTestId('todo-item') as HTMLDivElement[];
+    const todoItemList = await renderResult.findAllByTestId('todoItemDisplay') as HTMLDivElement[];
     const buyUkeleleCheckbox = todoItemList[4].querySelector('input[type="checkbox"]') as HTMLInputElement;
     buyUkeleleCheckbox.click();
 
     // assert
-    expect(baseProps.fetchTasks).toHaveBeenCalledTimes(1);
+    expect(baseProps.onFetchTasks).toHaveBeenCalledTimes(1);
+  });
+
+  it('should render a TodoListItemEdit when editTaskId equals that task id', async() => {
+    // arrange
+    const props: Partial<Props> = {editTaskId: '3'};
+
+    // act
+    const renderResult = renderUI(props);
+
+    // do some changes in the component state
+    const todoItemDetailsComponents = await renderResult.findAllByTestId('todoItemDisplay') as HTMLDivElement[];
+    const todoItemEditComponents = await renderResult.findAllByTestId('todoItemEdit') as HTMLDivElement[];
+
+    // assert
+    expect(todoItemDetailsComponents).toHaveLength(5);
+    expect(todoItemEditComponents).toHaveLength(1);
+  });
+
+  it('should trigger onTaskChangeStatus when a task is marked as done/undone', async() => {
+    // arrange
+    const renderResult = renderUI();
+
+    const todoItemList = await renderResult.findAllByTestId('todoItemDisplay') as HTMLDivElement[];
+
+    const lastTaskCheckBox = todoItemList[5].querySelector('input[type="checkbox"]') as HTMLInputElement;
+
+    // act
+    lastTaskCheckBox.click();
+
+    // assert
+    expect(baseProps.onTaskChangeStatus).toHaveBeenCalledWith('6', false);
+  });
+
+  it('should trigger onSetTaskEditId when button edit is clicked on TodoListItemDisplay', async() => {
+    // arrange
+    const renderResult = renderUI();
+
+    const todoItemList = await renderResult.findAllByTestId('todoItemDisplay') as HTMLDivElement[];
+
+    const buttonEdit = todoItemList[3].querySelector('button:nth-child(1)') as HTMLButtonElement;
+
+    // act
+    buttonEdit.click();
+
+    // assert
+    expect(baseProps.onSetTaskEditId).toHaveBeenCalledWith('2');
+  });
+
+  it('should trigger onDelete when button delete is clicked on TodoListItemDisplay', async() => {
+    // arrange
+    const renderResult = renderUI();
+
+    const todoItemList = await renderResult.findAllByTestId('todoItemDisplay') as HTMLDivElement[];
+
+    const buttonDelete = todoItemList[3].querySelector('button:nth-child(2)') as HTMLButtonElement;
+
+    // act
+    buttonDelete.click();
+
+    // assert
+    expect(baseProps.onDeleteTask).toHaveBeenCalledWith('2');
+  });
+
+  it(`should trigger onSetTaskEditId with 'undefined' value when button cancel is clicked on TodoListItemEdit`, async() => {
+    // arrange
+    const props: Partial<Props> = {editTaskId: '4'};
+
+    const renderResult = renderUI(props);
+
+    const todoItemEdit = await renderResult.findAllByTestId('todoItemEdit') as HTMLDivElement[];
+
+    const buttonDelete = todoItemEdit[0].querySelector('button:nth-child(1)') as HTMLButtonElement;
+
+    // act
+    buttonDelete.click();
+
+    // assert
+    expect(baseProps.onSetTaskEditId).toHaveBeenCalledWith(undefined);
+  });
+
+  it(`should trigger onEditTask when button save is clicked on TodoListItemEdit`, async() => {
+    // arrange
+    const props: Partial<Props> = {editTaskId: '4'};
+
+    const renderResult = renderUI(props);
+
+    const todoItemEdit = await renderResult.findAllByTestId('todoItemEdit') as HTMLDivElement[];
+
+    const buttonSave = todoItemEdit[0].querySelector('button:nth-child(2)') as HTMLButtonElement;
+
+    // act
+    buttonSave.click();
+
+    // assert
+    expect(baseProps.onEditTask).toHaveBeenCalledTimes(1);
   });
 });

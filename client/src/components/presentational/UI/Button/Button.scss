@@ -27,3 +27,22 @@
   @include button($dismiss-color);
   color: #fff;
 }
+
+@mixin size($percent) {
+  border-radius: 0.5em * $percent;
+  border-width: 0.2em * $percent;
+  font-size: 0.9em * $percent;
+  padding: 0.4em * $percent;
+}
+
+.small {
+  @include size(0.65);
+}
+
+.medium {
+  @include size(0.85);
+}
+
+.big {
+  @include size(1);
+}

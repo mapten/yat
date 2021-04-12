@@ -14,7 +14,7 @@ import { Task } from '../../models/task.model';
 type TaskPayload = {
   taskId: string;
   done: boolean;
-  newTask: Task;
+  editTask: Task;
   taskList: Task[];
 };
 
@@ -23,6 +23,7 @@ export type TaskAction = { type: TaskActionType } & TaskPayload;
 
 export type TaskState = Readonly<{
   taskList: Task[],
+  editingTaskId?: string
 }>;
 
 export const taskInitialState: TaskState = {
@@ -44,14 +45,35 @@ export const taskReducer = (state: TaskState = taskInitialState, action: TaskAct
         }),
       });
     }
+    case actionTypes.TASK_EDIT_SUCCESS: {
+      return updateObject(state, {
+        editingTaskId: undefined,
+        taskList: state.taskList.map((task) => {
+          if (task.id === action.editTask.id) {
+            return {...task, ...action.editTask};
+          }
+          return task;
+        }),
+      });
+    }
+    case actionTypes.TASK_SET_EDIT_ID: {
+      return updateObject(state, {
+        editingTaskId: action.taskId,
+      });
+    }
     case actionTypes.TASK_CREATE_SUCCESS: {
       return updateObject(state, {
-        taskList: [...state.taskList, action.newTask],
+        taskList: [...state.taskList, action.editTask],
       });
     }
     case actionTypes.TASK_FETCH_SUCCESS: {
       return updateObject(state, {
         taskList: action.taskList,
+      });
+    }
+    case actionTypes.TASK_DELETE_SUCCESS: {
+      return updateObject(state, {
+        taskList: state.taskList.filter((task) => task.id !== action.taskId),
       });
     }
     default: {
@@ -60,9 +82,10 @@ export const taskReducer = (state: TaskState = taskInitialState, action: TaskAct
   }
 };
 
-/**
- * Selector to get all the task in store
- */
 export const getTaskList: Selector<TaskState, Task[]> = (state: TaskState): Task[] => {
   return state.taskList;
+};
+
+export const getEditingTaskId: Selector<TaskState, string | undefined> = (state: TaskState): string | undefined => {
+  return state.editingTaskId;
 };
