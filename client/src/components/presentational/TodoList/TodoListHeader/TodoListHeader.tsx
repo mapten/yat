@@ -20,6 +20,7 @@ export const TodoListHeader: React.FC = () => {
         displayText='New'
         buttonStyle='add'
         iconName='plus'
+        size='medium'
         onClick={clickHandler} />
     </header>
   );

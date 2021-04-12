@@ -106,6 +106,7 @@ export const Create: React.FC<Props> = (props: Props) => {
               displayText='Cancel'
               buttonStyle='dismiss'
               iconName='arrow-left'
+              size='big'
               onClick={cancelHandler} />
             <Button
               data-testid='create-button-save'
@@ -113,6 +114,7 @@ export const Create: React.FC<Props> = (props: Props) => {
               displayText='Save'
               buttonStyle='add'
               iconName='save'
+              size='big'
               onClick={saveHandler} />
           </div>
         </section>

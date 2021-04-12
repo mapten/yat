@@ -44,7 +44,7 @@ export function* createTaskSaga(action: TaskAction) {
     const apiEndpoint = `${API_ENDPOINT}/task`;
 
     const response: AxiosResponse<Task> =
-      yield call(getAxiosApiInstance(apiEndpoint).post, '', action.newTask);
+      yield call(getAxiosApiInstance(apiEndpoint).post, '', action.editTask);
 
     yield put(actions.task.taskCreateSuccess(response.data));
     toast.success('Task created successfully');
@@ -72,6 +72,40 @@ export function* changeStatusSaga(action: TaskAction) {
   } catch (error) {
     yield put(actions.task.taskChangeStatusError());
     toast.error('Error changing the task status');
+    console.log(error);
+  }
+}
+
+export function* editTaskSaga(action: TaskAction) {
+  yield put(actions.task.taskEditStart());
+
+  try {
+    const apiEndpoint = `${API_ENDPOINT}/task`;
+
+    yield call(getAxiosApiInstance(apiEndpoint).patch, `/${action.editTask.id}`, action.editTask);
+
+    yield put(actions.task.taskEditSuccess(action.editTask));
+    toast.success(`Edited '${action.editTask.displayName}' task`);
+  } catch (error) {
+    yield put(actions.task.taskEditError());
+    toast.error('Error editing task');
+    console.log(error);
+  }
+}
+
+export function* deleteTaskSaga(action: TaskAction) {
+  yield put(actions.task.taskDeleteStart());
+
+  try {
+    const apiEndpoint = `${API_ENDPOINT}/task`;
+
+    yield call(getAxiosApiInstance(apiEndpoint).delete, `/${action.taskId}`);
+
+    yield put(actions.task.taskDeleteSuccess(action.taskId));
+    toast.success('Deleted task');
+  } catch (error) {
+    yield put(actions.task.taskDeleteError());
+    toast.error('Error deleting task');
     console.log(error);
   }
 }

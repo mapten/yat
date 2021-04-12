@@ -151,7 +151,7 @@ describe('redux actions - task', () => {
 
       const expectedAction: TaskActionPartial = {
         type: actionTypes.TASK_CREATE,
-        newTask,
+        editTask: newTask,
       };
 
       // act
@@ -176,37 +176,184 @@ describe('taskCreateStart', () => {
     // assert
     expect(result).toEqual(expectedAction);
   });
+
+  describe('taskCreateSuccess', () => {
+    it('should create an action', () => {
+      // arrange
+      const newTask = {id: '2', displayName: 'task 2', priority: 0, done: true};
+
+      const expectedAction: TaskActionPartial = {
+        type: actionTypes.TASK_CREATE_SUCCESS,
+        editTask: newTask
+      };
+
+      // act
+      const result = action.taskCreateSuccess(newTask);
+
+      // assert
+      expect(result).toEqual(expectedAction);
+    });
+  });
+
+  describe('taskCreateError', () => {
+    it('should create an action', () => {
+      // arrange
+      const expectedAction: TaskActionPartial = {
+        type: actionTypes.TASK_CREATE_ERROR
+      };
+
+      // act
+      const result = action.taskCreateError();
+
+      // assert
+      expect(result).toEqual(expectedAction);
+    });
+  });
+
+  describe('taskSetEditId', () => {
+    it('should create an action', () => {
+      // arrange
+      const expectedAction: TaskActionPartial = {
+        type: actionTypes.TASK_SET_EDIT_ID
+      };
+
+      // act
+      const result = action.taskSetEditId();
+
+      // assert
+      expect(result).toEqual(expectedAction);
+    });
+  });
+
+  describe('taskEdit', () => {
+    it('should create an action', () => {
+      // arrange
+      const taskToEdit = {id: '2', displayName: 'task 2', priority: 0, done: true};
+
+      const expectedAction: TaskActionPartial = {
+        type: actionTypes.TASK_EDIT,
+        editTask: taskToEdit,
+      };
+
+      // act
+      const result = action.taskEdit(taskToEdit);
+
+      // assert
+      expect(result).toEqual(expectedAction);
+    });
+  });
 });
 
-describe('taskCreateSuccess', () => {
+describe('taskEditStart', () => {
   it('should create an action', () => {
     // arrange
-    const newTask = {id: '2', displayName: 'task 2', priority: 0, done: true};
-
     const expectedAction: TaskActionPartial = {
-      type: actionTypes.TASK_CREATE_SUCCESS,
-      newTask
+      type: actionTypes.TASK_EDIT_START
     };
 
     // act
-    const result = action.taskCreateSuccess(newTask);
+    const result = action.taskEditStart();
 
     // assert
     expect(result).toEqual(expectedAction);
   });
+
+  describe('taskEditSuccess', () => {
+    it('should create an action', () => {
+      // arrange
+      const newTask = {id: '2', displayName: 'task 2', priority: 0, done: true};
+
+      const expectedAction: TaskActionPartial = {
+        type: actionTypes.TASK_EDIT_SUCCESS,
+        editTask: newTask
+      };
+
+      // act
+      const result = action.taskEditSuccess(newTask);
+
+      // assert
+      expect(result).toEqual(expectedAction);
+    });
+  });
+
+  describe('taskEditError', () => {
+    it('should create an action', () => {
+      // arrange
+      const expectedAction: TaskActionPartial = {
+        type: actionTypes.TASK_EDIT_ERROR
+      };
+
+      // act
+      const result = action.taskEditError();
+
+      // assert
+      expect(result).toEqual(expectedAction);
+    });
+  });
+
+  describe('taskDelete', () => {
+    it('should create an action', () => {
+      // arrange
+      const taskId = '1';
+
+      const expectedAction: TaskActionPartial = {
+        type: actionTypes.TASK_DELETE,
+        taskId
+      };
+
+      // act
+      const result = action.taskDelete(taskId);
+
+      // assert
+      expect(result).toEqual(expectedAction);
+    });
+  });
 });
 
-describe('taskCreateError', () => {
+describe('taskDeleteStart', () => {
   it('should create an action', () => {
     // arrange
     const expectedAction: TaskActionPartial = {
-      type: actionTypes.TASK_CREATE_ERROR
+      type: actionTypes.TASK_DELETE_START
     };
 
     // act
-    const result = action.taskCreateError();
+    const result = action.taskDeleteStart();
 
     // assert
     expect(result).toEqual(expectedAction);
+  });
+
+  describe('taskDeleteSuccess', () => {
+    it('should create an action', () => {
+      // arrange
+      const taskId = '1';
+
+      const expectedAction: TaskActionPartial = {
+        type: actionTypes.TASK_DELETE_SUCCESS,
+        taskId
+      };
+
+      // act
+      const result = action.taskDeleteSuccess(taskId);
+
+      // assert
+      expect(result).toEqual(expectedAction);
+    });
+  });
+
+  describe('taskDeleteError', () => {
+    it('should create an action', () => {
+      // arrange
+      const expectedAction: TaskActionPartial = {
+        type: actionTypes.TASK_DELETE_ERROR
+      };
+
+      // act
+      const result = action.taskDeleteError();
+
+      // assert
+      expect(result).toEqual(expectedAction);
+    });
   });
 });

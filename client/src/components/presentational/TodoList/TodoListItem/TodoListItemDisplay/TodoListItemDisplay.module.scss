@@ -1,11 +1,23 @@
 .wrapper {
-  border-bottom: 0.1em solid lighten(#000, 90);
   border-left-style: solid;
   border-left-width: 0.2em;
   display: flex;
   font-size: 1.2em;
   justify-content: space-between;
-  padding-left: 0.6em;
+  transition: opacity 0.3s;
+
+  &:hover > .button-group {
+    opacity: 1;
+  }
+}
+
+.button-group {
+  opacity: 0;
+  transition: opacity 0.3s;
+
+  button:nth-child(1) {
+    margin-right: 0.2em;
+  }
 }
 
 .task {
@@ -18,5 +30,7 @@
 
 .checkbox {
   cursor: pointer;
+  margin-left: 0.5em;
+  margin-right: 0.2em;
   zoom: 1.5;
 }

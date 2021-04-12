@@ -24,6 +24,7 @@ type StateProps = {
    * 'dismiss': to actions related to delete or cancel,
    */
   buttonStyle: BUTTON_STYLE;
+  size: 'small' | 'medium' | 'big';
   iconName?: IconName;
 }
 
@@ -35,7 +36,7 @@ type Props = StateProps & DispatchProps;
 
 export const Button: React.FC<Props> = (props: Props) => {
   return (
-    <button title={props.tooltip || ''} className={`${props.buttonStyle}`} onClick={props.onClick}>
+    <button title={props.tooltip || ''} className={`${props.buttonStyle} ${props.size}`} onClick={props.onClick}>
       <span>{props.displayText}</span>
       {props.iconName && <FontAwesomeIcon icon={props.iconName} />}
     </button>

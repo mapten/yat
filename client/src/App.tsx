@@ -4,6 +4,7 @@ import { ToastContainer } from 'react-toastify';
 
 // Styles
 import 'react-toastify/dist/ReactToastify.css';
+import styles from './App.module.scss';
 
 // Constants
 import { TOAST_DISPLAY_TIME } from './constants/configuration';
@@ -14,19 +15,21 @@ import Create from './components/containers/Create/Create';
 
 export const App: React.FC = () => {
   return (
-    <Router>
+    <div className={styles.wrapper}>
       <ToastContainer hideProgressBar={true} limit={1} position={'top-center'} autoClose={TOAST_DISPLAY_TIME} />
-      <Switch>
-        <Route exact path="/">
-          <TodoList />
-        </Route>
-        <Route path="/create">
-          <Create />
-        </Route>
-        <Route path="/todolist">
-          <TodoList />
-        </Route>
-      </Switch>
-    </Router>
+      <Router>
+        <Switch>
+          <Route exact path="/">
+            <TodoList />
+          </Route>
+          <Route path="/create">
+            <Create />
+          </Route>
+          <Route path="/todolist">
+            <TodoList />
+          </Route>
+        </Switch>
+      </Router>
+    </div>
   );
 };

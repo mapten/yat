@@ -3,11 +3,11 @@ import { render, cleanup, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
 
 // Components
-import { TodoListItem } from '../../../../components/presentational/TodoList/TodoListItem/TodoListItem';
+import { TodoListItemDisplay } from '../../../../components/presentational/TodoList/TodoListItem/TodoListItemDisplay/TodoListItemDisplay';
 
-type Props = React.ComponentProps<typeof TodoListItem>;
+type Props = React.ComponentProps<typeof TodoListItemDisplay>;
 
-describe(`<TaskListItem/>`, () => {
+describe(`<TodoListItemDisplay/>`, () => {
   let baseProps: Props;
 
   beforeEach(() => {
@@ -17,11 +17,13 @@ describe(`<TaskListItem/>`, () => {
       taskPriorityColor: 'red',
       taskDone: false,
       onTaskChangeStatus: jest.fn(),
+      onSetEdit: jest.fn(),
+      onDelete: jest.fn()
     };
   });
 
   const renderUI = (props: Partial<Props> = {}) => {
-    return render(<TodoListItem {...baseProps} {...props} />);
+    return render(<TodoListItemDisplay {...baseProps} {...props} />);
   };
 
   afterEach(() => {
@@ -52,7 +54,7 @@ describe(`<TaskListItem/>`, () => {
     expect(spanTaskName).not.toHaveClass('crossed');
   });
 
-  it(`should call to onTaskChangeStatus when the checkbox changes`, () => {
+  it(`should trigger onTaskChangeStatus when the checkbox changes`, () => {
     // arrange
     const props: Partial<Props> = {taskDone: false};
 
@@ -64,5 +66,29 @@ describe(`<TaskListItem/>`, () => {
 
     // assert
     expect(baseProps.onTaskChangeStatus).toHaveBeenCalledWith('1', true);
+  });
+
+  it(`should trigger onSetEdit when the edit button is clicked`, () => {
+    // arrange
+    const renderResult = renderUI();
+    const buttonEdit = renderResult.container.querySelector('button:nth-child(1)') as HTMLButtonElement;
+
+    // act
+    buttonEdit.click();
+
+    // assert
+    expect(baseProps.onSetEdit).toHaveBeenCalledTimes(1);
+  });
+
+  it(`should trigger onDelete when the edit button is clicked`, () => {
+    // arrange
+    const renderResult = renderUI();
+    const buttonDelete = renderResult.container.querySelector('button:nth-child(2)') as HTMLButtonElement;
+
+    // act
+    buttonDelete.click();
+
+    // assert
+    expect(baseProps.onDelete).toHaveBeenCalledTimes(1);
   });
 });
