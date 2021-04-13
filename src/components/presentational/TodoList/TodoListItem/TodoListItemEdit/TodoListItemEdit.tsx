@@ -61,19 +61,18 @@ export const TodoListItemEdit: React.FC<Props> = (props: Props) => {
   };
 
   return (
-    <div data-testid="todoItemEdit" className={styles.wrapper}>
-      <div>
+    <div data-testid="todoItemEdit" className={styles.itemEdit}>
+      <div className={styles.itemEdit__formRow}>
         <input
           data-testid="todoItemEdit_InputName"
           onBlur={() => setErrorOnName(false)}
           onChange={(e) => setName(e.target.value)}
           value={name}
           type='text'
-          className={`${styles.formControl} ${errorOnName ? styles.danger : ''}`} />
+          className={`${errorOnName ? styles['itemEdit--danger'] : ''}`} />
         <label>Priority: </label>
         <select
           data-testid="todoItemEdit_PrioritySelect"
-          className={styles.formControl}
           onChange={(e) => priorityChangeHandler(e)}
           value={priority}>
           {PRIORITY_LEVELS.map((priorityLevel) => {

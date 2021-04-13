@@ -1,4 +1,4 @@
-.wrapper {
+.itemDisplay {
   border-left-style: solid;
   border-left-width: 0.2em;
   display: flex;
@@ -6,31 +6,31 @@
   justify-content: space-between;
   transition: opacity 0.3s;
 
-  &:hover > .button-group {
+  &:hover > &__buttonGroup {
     opacity: 1;
   }
-}
 
-.button-group {
-  opacity: 0;
-  transition: opacity 0.3s;
-
-  button:nth-child(1) {
-    margin-right: 0.2em;
+  &__buttonGroup {
+    opacity: 0;
+    transition: opacity 0.3s;
+  
+    button:nth-child(1) {
+      margin-right: 0.2em;
+    }
   }
-}
 
-.task {
-  margin-top: 0.2em;
-}
+  &__task {
+    margin-top: 0.2em;
 
-.crossed {
-  text-decoration: line-through;
-}
+    &--crossed {
+      text-decoration: line-through;
+    }
+  }
 
-.checkbox {
-  cursor: pointer;
-  margin-left: 0.5em;
-  margin-right: 0.2em;
-  zoom: 1.5;
+  &__checkBox {
+    cursor: pointer;
+    margin-left: 0.5em;
+    margin-right: 0.2em;
+    zoom: 1.5;
+  }
 }

@@ -42,12 +42,12 @@ export const TodoListItemDisplay: React.FC<Props> = (props: Props) => {
   };
 
   return (
-    <div data-testid="todoItemDisplay" style={{borderLeftColor: props.taskPriorityColor}} className={styles.wrapper}>
+    <div data-testid="todoItemDisplay" style={{borderLeftColor: props.taskPriorityColor}} className={styles.itemDisplay}>
       <div>
-        <input className={styles.checkbox} type='checkbox' checked={taskDone} onChange={checkboxChangeHandler} />
-        <span className={`${styles.task} ${taskDone ? styles.crossed : ''}`}>{props.taskName}</span>
+        <input className={styles.itemDisplay__checkBox} type='checkbox' checked={taskDone} onChange={checkboxChangeHandler} />
+        <span className={`${styles.itemDisplay__task} ${taskDone ? styles['itemDisplay__task--crossed'] : ''}`}>{props.taskName}</span>
       </div>
-      <div className={styles['button-group']}>
+      <div className={styles.itemDisplay__buttonGroup}>
         <Button size="small" displayText="Edit" buttonStyle="default" onClick={editTaskHandler} iconName="pencil-alt" />
         <Button size="small" displayText="Delete" buttonStyle="default" onClick={deleteTaskHandler} iconName="trash" />
       </div>

@@ -13,14 +13,14 @@ export const TodoListHeader: React.FC = () => {
   }
 
   return (
-    <header className={styles.wrapper}>
+    <header className={styles.todoList__Header}>
       <h1>Task list</h1>
       <Button
         tooltip='Create new task'
         displayText='New'
         buttonStyle='add'
         iconName='plus'
-        size='medium'
+        size='big'
         onClick={clickHandler} />
     </header>
   );

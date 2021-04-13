@@ -71,7 +71,7 @@ describe('<TodoListItemEdit/>', () => {
     const nameInput = renderResult.container.querySelector('input') as HTMLInputElement;
 
     // assert
-    expect(nameInput).toHaveClass('danger');
+    expect(nameInput).toHaveClass('itemEdit--danger');
     expect(mockToastifyWarning).toHaveBeenCalledTimes(1);
     expect(baseProps.onEdit).not.toHaveBeenCalled();
   });

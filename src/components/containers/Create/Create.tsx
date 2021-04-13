@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react';
+import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
@@ -67,15 +67,15 @@ export const Create: React.FC<Props> = (props: Props) => {
   };
 
   return (
-    <Fragment>
-      <header className={styles.header}>
+    <React.Fragment>
+      <header className={styles.createTask__header}>
         <h1>Create task</h1>
       </header>
       <main>
         <section>
           <form>
-            <div className={styles.formRow}>
-              <label className={styles.formLabel}>
+            <div className={styles.createTask__formRow}>
+              <label>
                 Task:
               </label>
               <input
@@ -84,15 +84,14 @@ export const Create: React.FC<Props> = (props: Props) => {
                 onChange={(e) => setName(e.target.value)}
                 value={name}
                 type='text'
-                className={`${styles.formControl} ${errorOnName ? styles.danger : ''}`} />
+                className={` ${errorOnName ? styles.danger : ''}`} />
             </div>
-            <div className={styles.formRow}>
-              <label className={styles.formLabel}>
+            <div className={styles.createTask__formRow}>
+              <label>
                 Priority:
               </label>
               <select
                 data-testid="createTask_prioritySelect"
-                className={styles.formControl}
                 onChange={(e) => priorityChangeHandler(e)}
                 value={priority}>
                 {PRIORITY_LEVELS.map((priorityLevel) => {
@@ -101,7 +100,7 @@ export const Create: React.FC<Props> = (props: Props) => {
               </select>
             </div>
           </form>
-          <div className={styles.buttonGroup}>
+          <div className={styles.createTask__buttonGroup}>
             <Button
               tooltip='Cancel changes and go to task list'
               displayText='Cancel'
@@ -119,7 +118,7 @@ export const Create: React.FC<Props> = (props: Props) => {
           </div>
         </section>
       </main>
-    </Fragment>
+    </React.Fragment>
   );
 };
 
