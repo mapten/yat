@@ -79,6 +79,7 @@ export const Create: React.FC<Props> = (props: Props) => {
                 Task:
               </label>
               <input
+                data-testid="createTask_inputName"
                 onBlur={() => setErrorOnName(false)}
                 onChange={(e) => setName(e.target.value)}
                 value={name}
@@ -90,6 +91,7 @@ export const Create: React.FC<Props> = (props: Props) => {
                 Priority:
               </label>
               <select
+                data-testid="createTask_prioritySelect"
                 className={styles.formControl}
                 onChange={(e) => priorityChangeHandler(e)}
                 value={priority}>
@@ -101,7 +103,6 @@ export const Create: React.FC<Props> = (props: Props) => {
           </form>
           <div className={styles.buttonGroup}>
             <Button
-              data-testid='create-button-cancel'
               tooltip='Cancel changes and go to task list'
               displayText='Cancel'
               buttonStyle='dismiss'
@@ -109,7 +110,6 @@ export const Create: React.FC<Props> = (props: Props) => {
               size='big'
               onClick={cancelHandler} />
             <Button
-              data-testid='create-button-save'
               tooltip='Save changes and go to task list'
               displayText='Save'
               buttonStyle='add'

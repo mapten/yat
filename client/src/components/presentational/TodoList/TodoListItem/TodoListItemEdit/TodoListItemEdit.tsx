@@ -41,7 +41,7 @@ export const TodoListItemEdit: React.FC<Props> = (props: Props) => {
 
   const onEdit = () => {
     if (!name) {
-      toast.warning('The task name is bloody empty');
+      toast.warning('The task name is empty');
       setErrorOnName(true);
     } else {
       setErrorOnName(false);
@@ -64,6 +64,7 @@ export const TodoListItemEdit: React.FC<Props> = (props: Props) => {
     <div data-testid="todoItemEdit" className={styles.wrapper}>
       <div>
         <input
+          data-testid="todoItemEdit_InputName"
           onBlur={() => setErrorOnName(false)}
           onChange={(e) => setName(e.target.value)}
           value={name}
@@ -71,6 +72,7 @@ export const TodoListItemEdit: React.FC<Props> = (props: Props) => {
           className={`${styles.formControl} ${errorOnName ? styles.danger : ''}`} />
         <label>Priority: </label>
         <select
+          data-testid="todoItemEdit_PrioritySelect"
           className={styles.formControl}
           onChange={(e) => priorityChangeHandler(e)}
           value={priority}>
