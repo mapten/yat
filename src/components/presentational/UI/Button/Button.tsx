@@ -36,7 +36,7 @@ type Props = StateProps & DispatchProps;
 
 export const Button: React.FC<Props> = (props: Props) => {
   return (
-    <button title={props.tooltip || ''} className={`${props.buttonStyle} ${props.size}`} onClick={props.onClick}>
+    <button title={props.tooltip || ''} className={`button--${props.buttonStyle} button--${props.size}`} onClick={props.onClick}>
       <span>{props.displayText}</span>
       {props.iconName && <FontAwesomeIcon icon={props.iconName} />}
     </button>

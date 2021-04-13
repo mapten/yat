@@ -39,7 +39,7 @@ describe(`<TodoListItemDisplay/>`, () => {
     const spanTaskName = renderResult.container.querySelector('span') as HTMLSpanElement;
 
     // assert
-    expect(spanTaskName).toHaveClass('crossed');
+    expect(spanTaskName).toHaveClass('itemDisplay__task--crossed');
   });
 
   it(`should not display the crossed style on the task name when props.taskDone is false`, () => {

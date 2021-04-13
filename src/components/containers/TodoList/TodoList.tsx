@@ -76,7 +76,7 @@ export const TodoList: React.FC<Props> = (props: Props) => {
             const priorityColor =
               PRIORITY_LEVELS.find((priorityLevel) => priorityLevel.order === task.priority)?.displayColor as string;
 
-            return <div data-testId="taskList" key={task.id} className={styles.task}>
+            return <div data-testid="taskList" key={task.id} className={styles.todoList}>
               {task.id === props.editTaskId
                 ? <TodoListItemEdit
                   taskId={task.id}
