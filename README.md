@@ -32,15 +32,15 @@ Most of the business logic is done in Redux. Working in this way, allows to the 
 
 The side effects related to Redux, is in the middleware, managed by Redux Saga. That means that for example the API calls are done there. Also the calls to the toast notifications, and in the future the login system.
 
-# Getting Started with Create React App
+## Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## Available Scripts
+### Available Scripts
 
 In the project directory, you can run:
 
-### `npm start`
+#### `npm start`
 
 Runs the app in the development mode.
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
@@ -50,12 +50,12 @@ You will also see any lint errors in the console.
 
 NOTE: it is not needed to run a service to test the application, because internally, it uses a local fake API (It is configured to run in development mode)
 
-### `npm test`
+#### `npm test`
 
 Launches the test runner in the interactive watch mode. Uses Jest.
 See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
-### `npm run build`
+#### `npm run build`
 
 Builds the app for production to the `build` folder.
 It correctly bundles React in production mode and optimizes the build for the best performance.
@@ -65,7 +65,7 @@ Your app is ready to be deployed!
 
 See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-### `npm run eject`
+#### `npm run eject`
 
 **Note: this is a one-way operation. Once you `eject`, you can’t go back!**
 
@@ -76,65 +76,65 @@ Instead, it will copy all the configuration files and the transitive dependencie
 You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
 
 
-### `npm run cy:open`
+#### `npm run cy:open`
 
 Opens the Cypress interface. Also enables port 9222 for debugging.
 
-### `npm run cy:e2e:run`
+#### `npm run cy:e2e:run`
 
 Runs the Cypress E2E tests in the console mode (no visual interface).
 
-### `npm run e2e:open`
+#### `npm run e2e:open`
 
 Runs the application in debug mode and opens the Cypress interface.
 
-### `npm run e2e:run`
+#### `npm run e2e:run`
 
 Runs the application in debug mode and runs the Cypress E2E tests.
 
-### `npm run storybook`
+#### `npm run storybook`
 
 Opens Storybook page.
 
-### `npm run lint`
+#### `npm run lint`
 
 Lints the code, both with eslint and stylelint.
 
-# 3rd party tools
+## 3rd party tools
 
-## components visualization
+### components visualization
 
 - [storybook](https://storybook.js.org/): tool for developing UI components in isolation for React, Vue, Angular, and more. It is based on the atomic design principles.
 
-## routing
+### routing
 
 - [React Router](https://reactrouter.com/web/guides/quick-start): routing for React.
 
-## typescript
+### typescript
 
 - [typescript](https://www.typescriptlang.org/): typed superset of Javascript that compiles to plain Javascript.
 
-## debugging
+### debugging
 
 - [mirage-js](https://miragejs.com/): fake local API, used when debugging the application, to have a working API but agnostic from APIs.
 
-## testing
+### testing
 
-### unit and functional tests
+#### unit and functional tests
 
 - [Jest](https://jestjs.io/): testing tool.
 - [ts-jest](https://github.com/kulshekhar/ts-jest): a typescript preprocessor for Jest.
 
-### end-to-end tests
+#### end-to-end tests
 
 - [cypress](https://www.cypress.io/): library for end-to-end testing.
 
-## app running
+### app running
 
 - [react-scripts](https://www.npmjs.com/package/react-scripts): scripts and configuration used by [Create React App](https://github.com/facebook/create-react-app)
 
 
-## API calls
+### API calls
 
 -  [axios](https://github.com/axios/axios): promise based HTTP client.
 -  [axios-retry](https://github.com/softonic/axios-retry): helper library for Axios, that intercepts failer request and retries.
