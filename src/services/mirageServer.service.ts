@@ -6,7 +6,6 @@ import { v4 as uuidv4 } from 'uuid';
 
 // Models
 import { Task } from '../models/task.model';
-import DbCollection from 'miragejs/db-collection';
 
 /**
  * Mirage.js requires objects for the model, and as Task is an interface,
