@@ -1,9 +1,0 @@
-@import 'src/assets/styles/colors';
-
-.noTaskMessage {
-  background-color: $warning-color;
-  border: solid 0.1em darken($warning-color, 40);
-  border-radius: 0.2em;
-  color: darken($warning-color, 40);
-  padding: 0.4em;
-}
