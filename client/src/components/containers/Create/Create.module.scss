@@ -1,0 +1,40 @@
+.createTask {
+  &__header {
+    margin-bottom: 1em;
+  
+    h1 {
+      font-size: 1.3em;
+    }
+  }
+  
+  &__formRow {
+    margin-bottom: 0.9em;
+    
+    label {
+      display: inline-block;
+    }
+    
+    input,
+    select {
+      border: 0.2em solid #ccc;
+      border-radius: 0.4em;
+      box-sizing: border-box;
+      padding: 0.3em;
+      resize: vertical;
+      width: 100%;
+    }
+  }
+
+  &__buttonGroup {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .danger {
+    border-color: #f00;
+  }
+}
+
+
+
+
