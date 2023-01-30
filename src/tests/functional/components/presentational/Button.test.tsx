@@ -12,6 +12,7 @@ describe(`<Button/>`, () => {
 
   beforeEach(() => {
     baseProps = {
+      size: 'small',
       displayText: '',
       buttonStyle: 'default',
       onClick: jest.fn(),

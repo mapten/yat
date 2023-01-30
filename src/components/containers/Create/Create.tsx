@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import { toast } from 'react-toastify';
@@ -29,7 +29,7 @@ type DispatchProps = {
 type Props = DispatchProps;
 
 export const Create: React.FC<Props> = (props: Props) => {
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const defaultPriorityLevel =
     PRIORITY_LEVELS.find((priorityLevel) => priorityLevel.isDefaultSelected === true) as Priority;
@@ -39,7 +39,7 @@ export const Create: React.FC<Props> = (props: Props) => {
   const [priority, setPriority] = useState<PRIORITY_ORDER_TYPE>(defaultPriorityLevel.order);
 
   const cancelHandler = () => {
-    history.push('/todolist');
+    navigate('/todolist');
   };
 
   const saveHandler = () => {
@@ -57,7 +57,7 @@ export const Create: React.FC<Props> = (props: Props) => {
       };
       props.onSave(newTask);
 
-      history.push('/todolist');
+      navigate('/todolist');
     }
   };
 

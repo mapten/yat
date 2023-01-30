@@ -1,15 +1,15 @@
 import React from 'react';
 import { Button } from '../../UI/Button/Button';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 // Styles
 import styles from './TodoListHeader.module.scss';
 
 export const TodoListHeader: React.FC = () => {
-  const history = useHistory();
+  const navigate = useNavigate();
 
   function clickHandler() {
-    history.push('/create');
+    navigate('/create');
   }
 
   return (

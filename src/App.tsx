@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { Routes, Route, BrowserRouter } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 
 // Styles
@@ -17,19 +17,13 @@ export const App: React.FC = () => {
   return (
     <div className={styles.wrapper}>
       <ToastContainer hideProgressBar={true} limit={1} position={'top-center'} autoClose={TOAST_DISPLAY_TIME} />
-      <Router>
-        <Switch>
-          <Route exact path="/">
-            <TodoList />
-          </Route>
-          <Route path="/create">
-            <Create />
-          </Route>
-          <Route path="/todolist">
-            <TodoList />
-          </Route>
-        </Switch>
-      </Router>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<TodoList />} />
+          <Route path="create" element={<Create />} />
+          <Route path="todolist" element={<TodoList />} />
+        </Routes>
+      </BrowserRouter>
     </div>
   );
 };
