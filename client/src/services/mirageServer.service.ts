@@ -32,12 +32,12 @@ export function makeServer({ environment = 'development' } = {}): Server<AnyRegi
     /** Creates predefined data for the application. In this case, random quote information */
     seeds(server) {
       const taskList: Task[] = [
-        {id: uuidv4(), displayName: 'Paint the wall', priority: 3, done: false},
-        {id: uuidv4(), displayName: 'Create a todoList demo application', priority: 0, done: true},
-        {id: uuidv4(), displayName: 'Learn Kubernetes', priority: 2, done: false},
-        {id: uuidv4(), displayName: 'Buy an ukelele', priority: 0, done: true},
-        {id: uuidv4(), displayName: 'Learn to play ukelele', priority: 1, done: false},
-        {id: uuidv4(), displayName: 'Sell ukelele', priority: 1, done: true},
+        { id: uuidv4(), displayName: 'Paint the wall', priority: 3, done: false },
+        { id: uuidv4(), displayName: 'Create a todoList demo application', priority: 0, done: true },
+        { id: uuidv4(), displayName: 'Learn Kubernetes', priority: 2, done: false },
+        { id: uuidv4(), displayName: 'Buy an ukelele', priority: 0, done: true },
+        { id: uuidv4(), displayName: 'Learn to play ukelele', priority: 1, done: false },
+        { id: uuidv4(), displayName: 'Sell ukelele', priority: 1, done: true },
       ];
 
       taskList.forEach((task) => {
@@ -80,7 +80,7 @@ export function makeServer({ environment = 'development' } = {}): Server<AnyRegi
       this.post(`${API_ENDPOINT}/task`, (schema, request) => {
         const postData: Task = JSON.parse(request.requestBody);
 
-        const newTask = {...postData, id: uuidv4()};
+        const newTask = { ...postData, id: uuidv4() };
 
         return schema.db.tasks.insert(newTask);
       });

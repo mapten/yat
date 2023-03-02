@@ -9,7 +9,7 @@ describe('redux reducers - task', () => {
   let initialState: TaskState;
 
   beforeEach(() => {
-    initialState = {...taskInitialState};
+    initialState = { ...taskInitialState };
   });
 
   describe('taskReducer', () => {
@@ -27,15 +27,15 @@ describe('redux reducers - task', () => {
     it('should handle TASK_CHANGE_STATUS_SUCCESS', () => {
       // arrange
       const initialTaskList: Task[] = [
-        {id: '1', displayName: 'task 1', priority: 1, done: false},
-        {id: '2', displayName: 'task 2', priority: 0, done: true},
+        { id: '1', displayName: 'task 1', priority: 1, done: false },
+        { id: '2', displayName: 'task 2', priority: 0, done: true },
       ];
 
-      const initialStateWithTasks: TaskState = {...initialState, taskList: initialTaskList};
+      const initialStateWithTasks: TaskState = { ...initialState, taskList: initialTaskList };
 
       const expectedTaskList: Task[] = [
-        {id: '1', displayName: 'task 1', priority: 1, done: true},
-        {id: '2', displayName: 'task 2', priority: 0, done: true},
+        { id: '1', displayName: 'task 1', priority: 1, done: true },
+        { id: '2', displayName: 'task 2', priority: 0, done: true },
       ];
 
       const expectedState: TaskState = {
@@ -59,16 +59,16 @@ describe('redux reducers - task', () => {
     it('should handle TASK_CREATE_SUCCESS', () => {
       // arrange
       const initialTaskList: Task[] = [
-        {id: '1', displayName: 'task 1', priority: 1, done: false},
-        {id: '2', displayName: 'task 2', priority: 0, done: true},
+        { id: '1', displayName: 'task 1', priority: 1, done: false },
+        { id: '2', displayName: 'task 2', priority: 0, done: true },
       ];
 
-      const initialStateWithTasks: TaskState = {...initialState, taskList: initialTaskList};
+      const initialStateWithTasks: TaskState = { ...initialState, taskList: initialTaskList };
 
       const expectedTaskList: Task[] = [
-        {id: '1', displayName: 'task 1', priority: 1, done: false},
-        {id: '2', displayName: 'task 2', priority: 0, done: true},
-        {id: '3', displayName: 'task 3', priority: 2, done: false},
+        { id: '1', displayName: 'task 1', priority: 1, done: false },
+        { id: '2', displayName: 'task 2', priority: 0, done: true },
+        { id: '3', displayName: 'task 3', priority: 2, done: false },
       ];
 
       const expectedState: TaskState = {
@@ -76,7 +76,7 @@ describe('redux reducers - task', () => {
         taskList: expectedTaskList,
       };
 
-      const newTask: Task = {id: '3', displayName: 'task 3', priority: 2, done: false};
+      const newTask: Task = { id: '3', displayName: 'task 3', priority: 2, done: false };
 
       const action = {
         type: actionTypes.TASK_CREATE_SUCCESS,
@@ -93,8 +93,8 @@ describe('redux reducers - task', () => {
     it('should handle TASK_FETCH_SUCCESS', () => {
       // arrange
       const expectedTaskList: Task[] = [
-        {id: '1', displayName: 'task 1', priority: 1, done: false},
-        {id: '2', displayName: 'task 2', priority: 0, done: true},
+        { id: '1', displayName: 'task 1', priority: 1, done: false },
+        { id: '2', displayName: 'task 2', priority: 0, done: true },
       ];
 
       const expectedState: TaskState = {
@@ -103,8 +103,8 @@ describe('redux reducers - task', () => {
       };
 
       const fetchedTasks = [
-        {id: '1', displayName: 'task 1', priority: 1, done: false},
-        {id: '2', displayName: 'task 2', priority: 0, done: true},
+        { id: '1', displayName: 'task 1', priority: 1, done: false },
+        { id: '2', displayName: 'task 2', priority: 0, done: true },
       ];
 
       const action = {
@@ -143,15 +143,15 @@ describe('redux reducers - task', () => {
     it('should handle TASK_EDIT_SUCCESS', () => {
       // arrange
       const initialTaskList: Task[] = [
-        {id: '1', displayName: 'task 1', priority: 1, done: false},
-        {id: '2', displayName: 'task 2', priority: 0, done: true},
+        { id: '1', displayName: 'task 1', priority: 1, done: false },
+        { id: '2', displayName: 'task 2', priority: 0, done: true },
       ];
 
-      const initialStateWithTasks: TaskState = {...initialState, taskList: initialTaskList};
+      const initialStateWithTasks: TaskState = { ...initialState, taskList: initialTaskList };
 
       const expectedTaskList: Task[] = [
-        {id: '1', displayName: 'task 1', priority: 1, done: false},
-        {id: '2', displayName: 'task 2 modified', priority: 2, done: false},
+        { id: '1', displayName: 'task 1', priority: 1, done: false },
+        { id: '2', displayName: 'task 2 modified', priority: 2, done: false },
       ];
 
       const expectedState: TaskState = {
@@ -160,7 +160,7 @@ describe('redux reducers - task', () => {
         taskList: expectedTaskList,
       };
 
-      const editTask: Task = {id: '2', displayName: 'task 2 modified', priority: 2, done: false};
+      const editTask: Task = { id: '2', displayName: 'task 2 modified', priority: 2, done: false };
 
       const action = {
         type: actionTypes.TASK_EDIT_SUCCESS,
@@ -177,14 +177,14 @@ describe('redux reducers - task', () => {
     it('should handle TASK_DELETE_SUCCESS', () => {
       // arrange
       const initialTaskList: Task[] = [
-        {id: '1', displayName: 'task 1', priority: 1, done: false},
-        {id: '2', displayName: 'task 2', priority: 0, done: true},
+        { id: '1', displayName: 'task 1', priority: 1, done: false },
+        { id: '2', displayName: 'task 2', priority: 0, done: true },
       ];
 
-      const initialStateWithTasks: TaskState = {...initialState, taskList: initialTaskList};
+      const initialStateWithTasks: TaskState = { ...initialState, taskList: initialTaskList };
 
       const expectedTaskList: Task[] = [
-        {id: '2', displayName: 'task 2', priority: 0, done: true},
+        { id: '2', displayName: 'task 2', priority: 0, done: true },
       ];
 
       const expectedState: TaskState = {
@@ -212,11 +212,11 @@ describe('redux reducers - task', () => {
       it('should return the list of tasks', () => {
         // arrange
         const initialTaskList: Task[] = [
-          {id: '1', displayName: 'task 1', priority: 1, done: false},
-          {id: '2', displayName: 'task 2', priority: 0, done: true},
+          { id: '1', displayName: 'task 1', priority: 1, done: false },
+          { id: '2', displayName: 'task 2', priority: 0, done: true },
         ];
 
-        const initialStateWithTasks: TaskState = {...initialState, taskList: initialTaskList};
+        const initialStateWithTasks: TaskState = { ...initialState, taskList: initialTaskList };
 
         // act
         const result = getTaskList(initialStateWithTasks);
@@ -230,7 +230,7 @@ describe('redux reducers - task', () => {
         // arrange
         const editingTaskId = '3';
 
-        const initialStateWithTasks: TaskState = {...initialState, editingTaskId};
+        const initialStateWithTasks: TaskState = { ...initialState, editingTaskId };
 
         // act
         const result = getEditingTaskId(initialStateWithTasks);

@@ -1,0 +1,19 @@
+{
+  "name": "deploy-yes-another-todolist",
+  "author": {
+    "name": "Marcos",
+    "website": "https://www.github.com/MarcosPrieto"
+  },
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "build": "if-env TYPE=server && (cd server && npm install) || (cd client && npm install)",
+    "server": "node server/server.ts",
+    "client": "cd client && npm start"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.13",
+    "@types/pg": "^8.6.6",
+    "if-env": "^1.0.4"
+  }
+}

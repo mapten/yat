@@ -61,7 +61,7 @@ export function* changeStatusSaga(action: TaskAction) {
   try {
     const apiEndpoint = `${API_ENDPOINT}/task`;
 
-    yield call(getAxiosApiInstance(apiEndpoint).patch, `/${action.taskId}`, {done: action.done});
+    yield call(getAxiosApiInstance(apiEndpoint).patch, `/${action.taskId}`, { done: action.done });
 
     const allTaskSelector = (state: RootState) => getTaskList(state.task);
     const allTasks: Task[] = yield select(allTaskSelector);

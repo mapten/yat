@@ -13,12 +13,12 @@ describe('<TodoList/>', () => {
   beforeEach(() => {
     baseProps = {
       taskList: [
-        {id: '1', displayName: 'Paint the wall', priority: 3, done: false},
-        {id: '2', displayName: 'Create a todoList demo application', priority: 0, done: true},
-        {id: '3', displayName: 'Learn Kubernetes', priority: 2, done: false},
-        {id: '4', displayName: 'Buy an ukelele', priority: 0, done: true},
-        {id: '5', displayName: 'Learn to play ukelele', priority: 1, done: false},
-        {id: '6', displayName: 'Sell ukelele', priority: 1, done: true},
+        { id: '1', displayName: 'Paint the wall', priority: 3, done: false },
+        { id: '2', displayName: 'Create a todoList demo application', priority: 0, done: true },
+        { id: '3', displayName: 'Learn Kubernetes', priority: 2, done: false },
+        { id: '4', displayName: 'Buy an ukelele', priority: 0, done: true },
+        { id: '5', displayName: 'Learn to play ukelele', priority: 1, done: false },
+        { id: '6', displayName: 'Sell ukelele', priority: 1, done: true },
       ],
       onFetchTasks: jest.fn(),
       onTaskChangeStatus: jest.fn(),
@@ -37,7 +37,7 @@ describe('<TodoList/>', () => {
     cleanup();
   });
 
-  it('should sort the task, displaying first the task with more priority (lowest number), then the lowest, and at the bottom the task marked as done', async() => {
+  it('should sort the task, displaying first the task with more priority (lowest number), then the lowest, and at the bottom the task marked as done', async () => {
     // arrange
     // act
     const renderResult = renderUI();
@@ -53,7 +53,7 @@ describe('<TodoList/>', () => {
     expect(todoItemList[5].querySelector('span')).toHaveTextContent('Sell ukelele');
   });
 
-  it('should reorder the list when a task is marked as done/undone', async() => {
+  it('should reorder the list when a task is marked as done/undone', async () => {
     // arrange
     const renderResult = renderUI();
 
@@ -75,7 +75,7 @@ describe('<TodoList/>', () => {
     expect(updatedTodoItemList[5].querySelector('span')).toHaveTextContent('Sell ukelele');
   });
 
-  it('should fetch the task list the first time the component is loaded', async() => {
+  it('should fetch the task list the first time the component is loaded', async () => {
     // arrange
     // act
     const renderResult = renderUI();
@@ -89,9 +89,9 @@ describe('<TodoList/>', () => {
     expect(baseProps.onFetchTasks).toHaveBeenCalledTimes(1);
   });
 
-  it('should render a TodoListItemEdit when editTaskId equals that task id', async() => {
+  it('should render a TodoListItemEdit when editTaskId equals that task id', async () => {
     // arrange
-    const props: Partial<Props> = {editTaskId: '3'};
+    const props: Partial<Props> = { editTaskId: '3' };
 
     // act
     const renderResult = renderUI(props);
@@ -105,7 +105,7 @@ describe('<TodoList/>', () => {
     expect(todoItemEditComponents).toHaveLength(1);
   });
 
-  it('should trigger onTaskChangeStatus when a task is marked as done/undone', async() => {
+  it('should trigger onTaskChangeStatus when a task is marked as done/undone', async () => {
     // arrange
     const renderResult = renderUI();
 
@@ -120,7 +120,7 @@ describe('<TodoList/>', () => {
     expect(baseProps.onTaskChangeStatus).toHaveBeenCalledWith('6', false);
   });
 
-  it('should trigger onSetTaskEditId when button edit is clicked on TodoListItemDisplay', async() => {
+  it('should trigger onSetTaskEditId when button edit is clicked on TodoListItemDisplay', async () => {
     // arrange
     const renderResult = renderUI();
 
@@ -135,7 +135,7 @@ describe('<TodoList/>', () => {
     expect(baseProps.onSetTaskEditId).toHaveBeenCalledWith('2');
   });
 
-  it('should trigger onDelete when button delete is clicked on TodoListItemDisplay', async() => {
+  it('should trigger onDelete when button delete is clicked on TodoListItemDisplay', async () => {
     // arrange
     const renderResult = renderUI();
 
@@ -150,9 +150,9 @@ describe('<TodoList/>', () => {
     expect(baseProps.onDeleteTask).toHaveBeenCalledWith('2');
   });
 
-  it(`should trigger onSetTaskEditId with 'undefined' value when button cancel is clicked on TodoListItemEdit`, async() => {
+  it(`should trigger onSetTaskEditId with 'undefined' value when button cancel is clicked on TodoListItemEdit`, async () => {
     // arrange
-    const props: Partial<Props> = {editTaskId: '4'};
+    const props: Partial<Props> = { editTaskId: '4' };
 
     const renderResult = renderUI(props);
 
@@ -167,9 +167,9 @@ describe('<TodoList/>', () => {
     expect(baseProps.onSetTaskEditId).toHaveBeenCalledWith(undefined);
   });
 
-  it(`should trigger onEditTask when button save is clicked on TodoListItemEdit`, async() => {
+  it(`should trigger onEditTask when button save is clicked on TodoListItemEdit`, async () => {
     // arrange
-    const props: Partial<Props> = {editTaskId: '4'};
+    const props: Partial<Props> = { editTaskId: '4' };
 
     const renderResult = renderUI(props);
 

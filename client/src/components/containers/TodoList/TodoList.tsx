@@ -52,7 +52,7 @@ export const TodoList: React.FC<Props> = (props: Props) => {
   const taskChangeStatusHandler = (taskId: string, done: boolean) => {
     setTaskList([...taskList].map((task) => {
       if (task.id === taskId) {
-        return {...task, done};
+        return { ...task, done };
       }
       return task;
     }));
@@ -70,7 +70,7 @@ export const TodoList: React.FC<Props> = (props: Props) => {
             (taskA.priority - taskB.priority)
           )
           .sort((taskA, taskB) =>
-            (taskA.done === taskB.done) ? 0 : taskA.done? 1 : -1
+            (taskA.done === taskB.done) ? 0 : taskA.done ? 1 : -1
           )
           .map((task) => {
             const priorityColor =
@@ -84,7 +84,7 @@ export const TodoList: React.FC<Props> = (props: Props) => {
                   taskDone={task.done}
                   taskPriority={task.priority}
                   onCancelEdit={() => props.onSetTaskEditId(undefined)}
-                  onEdit={props.onEditTask}/>
+                  onEdit={props.onEditTask} />
                 : <TodoListItemDisplay
                   taskId={task.id}
                   taskName={task.displayName}

@@ -42,8 +42,8 @@ describe('redux actions - task', () => {
     it('should create an action', () => {
       // arrange
       const taskList: Task[] = [
-        {id: '1', displayName: 'task 1', priority: 1, done: false},
-        {id: '2', displayName: 'task 2', priority: 0, done: true},
+        { id: '1', displayName: 'task 1', priority: 1, done: false },
+        { id: '2', displayName: 'task 2', priority: 0, done: true },
       ];
 
       const expectedAction: TaskActionPartial = {
@@ -147,7 +147,7 @@ describe('redux actions - task', () => {
   describe('taskCreate', () => {
     it('should create an action', () => {
       // arrange
-      const newTask = {id: '2', displayName: 'task 2', priority: 0, done: true};
+      const newTask = { id: '2', displayName: 'task 2', priority: 0, done: true };
 
       const expectedAction: TaskActionPartial = {
         type: actionTypes.TASK_CREATE,
@@ -180,7 +180,7 @@ describe('taskCreateStart', () => {
   describe('taskCreateSuccess', () => {
     it('should create an action', () => {
       // arrange
-      const newTask = {id: '2', displayName: 'task 2', priority: 0, done: true};
+      const newTask = { id: '2', displayName: 'task 2', priority: 0, done: true };
 
       const expectedAction: TaskActionPartial = {
         type: actionTypes.TASK_CREATE_SUCCESS,
@@ -228,7 +228,7 @@ describe('taskCreateStart', () => {
   describe('taskEdit', () => {
     it('should create an action', () => {
       // arrange
-      const taskToEdit = {id: '2', displayName: 'task 2', priority: 0, done: true};
+      const taskToEdit = { id: '2', displayName: 'task 2', priority: 0, done: true };
 
       const expectedAction: TaskActionPartial = {
         type: actionTypes.TASK_EDIT,
@@ -261,7 +261,7 @@ describe('taskEditStart', () => {
   describe('taskEditSuccess', () => {
     it('should create an action', () => {
       // arrange
-      const newTask = {id: '2', displayName: 'task 2', priority: 0, done: true};
+      const newTask = { id: '2', displayName: 'task 2', priority: 0, done: true };
 
       const expectedAction: TaskActionPartial = {
         type: actionTypes.TASK_EDIT_SUCCESS,

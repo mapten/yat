@@ -120,10 +120,10 @@ describe('Create', () => {
       };
 
       const todoNameInput = renderResult.container.querySelector('input') as HTMLInputElement;
-      fireEvent.change(todoNameInput, {target: {value: 'foo'}});
+      fireEvent.change(todoNameInput, { target: { value: 'foo' } });
 
       const prioritySelect = renderResult.container.querySelector('select') as HTMLSelectElement;
-      fireEvent.change(prioritySelect, {target: {value: 1}});
+      fireEvent.change(prioritySelect, { target: { value: 1 } });
 
       const saveButton = renderResult.container.querySelector('button:nth-child(2)') as HTMLButtonElement;
       // act
@@ -156,7 +156,7 @@ describe('Create', () => {
 
     const renderUI = (partialState: Partial<taskReducer.TaskState> = {}) => {
       store = mockStore({
-        task: {...taskReducer, ...partialState},
+        task: { ...taskReducer, ...partialState },
       });
       store.dispatch = jest.fn();
 
@@ -174,10 +174,10 @@ describe('Create', () => {
       const renderResult = renderUI(storeProps);
 
       const todoNameInput = renderResult.container.querySelector('input') as HTMLInputElement;
-      fireEvent.change(todoNameInput, {target: {value: 'foo'}});
+      fireEvent.change(todoNameInput, { target: { value: 'foo' } });
 
       const prioritySelect = renderResult.container.querySelector('select') as HTMLSelectElement;
-      fireEvent.change(prioritySelect, {target: {value: 1}});
+      fireEvent.change(prioritySelect, { target: { value: 1 } });
 
       const saveButton = renderResult.container.querySelector('button:nth-child(2)') as HTMLButtonElement;
 
