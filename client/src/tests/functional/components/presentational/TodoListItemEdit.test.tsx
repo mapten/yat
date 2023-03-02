@@ -1,7 +1,6 @@
 import React from 'react';
 import { render, cleanup, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import { toast } from 'react-toastify';
 
 // Components
 import { TodoListItemEdit } from '../../../../components/presentational/TodoList/TodoListItem/TodoListItemEdit/TodoListItemEdit';
@@ -58,8 +57,6 @@ describe('<TodoListItemEdit/>', () => {
 
   it('should not trigger onEdit when the edit button is clicked and the name is empty', () => {
     // arrange
-    const mockToastifyWarning = jest.spyOn(toast, 'warning');
-
     const props: Partial<Props> = {taskName: ''};
 
     const renderResult = renderUI(props);
@@ -72,7 +69,6 @@ describe('<TodoListItemEdit/>', () => {
 
     // assert
     expect(nameInput).toHaveClass('itemEdit--danger');
-    expect(mockToastifyWarning).toHaveBeenCalledTimes(1);
     expect(baseProps.onEdit).not.toHaveBeenCalled();
   });
 

@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
-import { toast } from 'react-toastify';
 
 // Styles
 import styles from './Create.module.scss';
@@ -44,7 +43,6 @@ export const Create: React.FC<Props> = (props: Props) => {
 
   const saveHandler = () => {
     if (!name) {
-      toast.warning('A task needs a name');
       setErrorOnName(true);
     } else {
       setErrorOnName(false);

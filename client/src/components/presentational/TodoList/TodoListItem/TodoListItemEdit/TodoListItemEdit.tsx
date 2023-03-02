@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { toast } from 'react-toastify';
 
 // Styles
 import styles from './TodoListItemEdit.module.scss';
@@ -41,7 +40,6 @@ export const TodoListItemEdit: React.FC<Props> = (props: Props) => {
 
   const onEdit = () => {
     if (!name) {
-      toast.warning('The task name is empty');
       setErrorOnName(true);
     } else {
       setErrorOnName(false);
