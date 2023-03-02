@@ -20,7 +20,6 @@
     "react-dom": "^18.2.0",
     "react-redux": "^8.0.5",
     "react-router-dom": "^6.8.0",
-    "react-scripts": "5.0.1",
     "react-toastify": "^9.1.1",
     "redux": "^4.2.1",
     "redux-saga": "^1.2.2",
@@ -30,11 +29,10 @@
     "web-vitals": "^3.1.1"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-app-rewired build",
+    "start": "vite",
+    "build": "vite build",
     "clear-jest": "jest --clearCache",
     "test": "jest --config jest.config.json --coverage",
-    "eject": "react-scripts eject",
     "cy:open": "cross-env CYPRESS_REMOTE_DEBUGGING_PORT=9222 cypress open",
     "cy:e2e:run": "cypress run --config defaultCommandTimeout=30000 --spec 'cypress/integration/**/*'",
     "e2e:open": "npm-run-all --parallel start cy:open",
@@ -65,11 +63,11 @@
   },
   "devDependencies": {
     "@storybook/addon-actions": "^6.5.16",
-    "@storybook/addon-essentials": "^6.5.16",
+    "@storybook/addon-essentials": "^6.4.22",
     "@storybook/addon-links": "^6.5.16",
     "@storybook/node-logger": "^6.5.16",
-    "@storybook/preset-create-react-app": "^4.1.2",
-    "@storybook/react": "^6.5.16",
+    "@storybook/preset-create-react-app": "^1.2.0",
+    "@storybook/react": "^6.1.21",
     "@testing-library/jest-dom": "^5.16.5",
     "@types/jest": "^29.4.0",
     "@types/node": "^18.11.18",
@@ -81,6 +79,7 @@
     "@types/uuid": "^9.0.0",
     "@typescript-eslint/eslint-plugin": "^5.49.0",
     "@typescript-eslint/parser": "^5.49.0",
+    "@vitejs/plugin-react": "^3.1.0",
     "axios-mock-adapter": "^1.21.2",
     "cross-env": "^7.0.3",
     "cypress": "^12.4.1",
@@ -96,6 +95,9 @@
     "sass": "^1.57.1",
     "stylelint": "^14.16.1",
     "stylelint-config-sass-guidelines": "^9.0.1",
-    "ts-jest": "^29.0.5"
+    "ts-jest": "^29.0.5",
+    "vite": "^4.1.4",
+    "vite-plugin-svgr": "^2.4.0",
+    "vite-tsconfig-paths": "^4.0.5"
   }
 }
