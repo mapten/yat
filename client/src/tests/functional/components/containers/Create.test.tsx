@@ -4,7 +4,6 @@ import '@testing-library/jest-dom';
 import { Provider } from 'react-redux';
 import createSagaMiddleware from 'redux-saga';
 import configureStore, { MockStoreEnhanced } from 'redux-mock-store';
-import { toast } from 'react-toastify';
 
 // Store
 import * as taskReducer from '../../../../store/reducers/task.reducer';
@@ -88,28 +87,8 @@ describe('Create', () => {
       expect(options[1]).toHaveTextContent('Second');
     });
 
-    it(`should display a toast error and the input border in red when saving changes but the todo name is empty`, () => {
-      // arrange
-      const mockToastifyWarning = jest.spyOn(toast, 'warning');
-
-      const renderResult = renderUI();
-
-      const saveButton = renderResult.container.querySelector('button:nth-child(2)') as HTMLButtonElement;
-      // act
-      saveButton.click();
-
-      const todoNameInput = renderResult.container.querySelector('input') as HTMLInputElement;
-
-      // assert
-      expect(todoNameInput).toHaveClass('danger');
-      expect(mockToastifyWarning).toHaveBeenCalledTimes(1);
-      expect(baseProps.onSave).not.toHaveBeenCalled();
-    });
-
     it(`should call to save prop when clicking on save and the form is valid`, () => {
       // arrange
-      const mockToastifyWarning = jest.spyOn(toast, 'warning');
-
       const renderResult = renderUI();
 
       const createTask: Task = {
@@ -131,7 +110,6 @@ describe('Create', () => {
 
       // assert
       expect(todoNameInput).not.toHaveClass('danger');
-      expect(mockToastifyWarning).not.toHaveBeenCalled();
       expect(baseProps.onSave).toHaveBeenCalledWith(createTask);
       expect(mockHistoryPush).toHaveBeenCalledWith('/todolist');
     });

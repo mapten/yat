@@ -30,7 +30,7 @@ The project is built based in the [atomic design principles](https://bradfrost.c
 
 Most of the business logic is done in Redux. Working in this way, allows to the component to be lighweight, and easier to test and to modify.
 
-The side effects related to Redux, is in the middleware, managed by Redux Saga. That means that for example the API calls are done there. Also the calls to the toast notifications, and in the future the login system.
+The side effects related to Redux, is in the middleware, managed by Redux Saga. That means that for example the API calls are done there.
 
 ## Getting Started with Create React App
 

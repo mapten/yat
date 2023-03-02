@@ -2,7 +2,6 @@ import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
 import { combineReducers } from 'redux';
 import { expectSaga } from 'redux-saga-test-plan';
-import { toast } from 'react-toastify';
 
 // Fixtures
 import * as apiTasks from '../../fixtures/apiTasks.json';
@@ -91,8 +90,6 @@ describe('redux saga - integration - task', () => {
 
     it('should put fetchError when API response code is error', async () => {
       // arrange
-      const mockToastError = jest.spyOn(toast, 'error');
-
       mockAxios.onGet().networkErrorOnce();
 
       // act, assert
@@ -102,10 +99,7 @@ describe('redux saga - integration - task', () => {
         .put.actionType(TASK_FETCH_START)
         .not.put.actionType(TASK_FETCH_SUCCESS)
         .put.actionType(TASK_FETCH_ERROR)
-        .run()
-        .then(() => {
-          expect(mockToastError).toHaveBeenCalledTimes(1);
-        });
+        .run();
     });
   });
 
@@ -155,8 +149,6 @@ describe('redux saga - integration - task', () => {
 
     it('should put TASK_CREATE_ERROR when API response code is error', async () => {
       // arrange
-      const mockToastError = jest.spyOn(toast, 'error');
-
       mockAxios.onPost().networkErrorOnce();
 
       const taskAction = {
@@ -171,18 +163,13 @@ describe('redux saga - integration - task', () => {
         .put.actionType(TASK_CREATE_START)
         .not.put.actionType(TASK_CREATE_SUCCESS)
         .put.actionType(TASK_CREATE_ERROR)
-        .run()
-        .then(() => {
-          expect(mockToastError).toHaveBeenCalledTimes(1);
-        });
+        .run();
     });
   });
 
   describe('changeStatusSaga', () => {
     it('should update a Task done value when the API response code is not an error', async () => {
       // arrange
-      const mockToastSuccess = jest.spyOn(toast, 'success');
-
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const apiTasksFromJson: Task[] = (apiTasks as any).default;
 
@@ -214,14 +201,11 @@ describe('redux saga - integration - task', () => {
           const stateTask = result.storeState.task as taskReducer.TaskState;
           expect(stateTask.taskList[0].id).toBe('1');
           expect(stateTask.taskList[0].done).toBe(true);
-          expect(mockToastSuccess).toHaveBeenCalledWith(`Changed task 'Paint the wall' status to done`);
         });
     });
 
     it('should put TASK_CHANGE_STATUS_ERROR when API response code is error', async () => {
       // arrange
-      const mockToastError = jest.spyOn(toast, 'error');
-
       mockAxios.onPatch().networkErrorOnce();
 
       const taskAction = {
@@ -237,18 +221,13 @@ describe('redux saga - integration - task', () => {
         .put.actionType(TASK_CHANGE_STATUS_START)
         .not.put.actionType(TASK_CHANGE_STATUS_SUCCESS)
         .put.actionType(TASK_CHANGE_STATUS_ERROR)
-        .run()
-        .then(() => {
-          expect(mockToastError).toHaveBeenCalledTimes(1);
-        });
+        .run();
     });
   });
 
   describe('editTaskSaga', () => {
     it('should update a Task when the API response code is not an error', async () => {
       // arrange
-      const mockToastSuccess = jest.spyOn(toast, 'success');
-
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const apiTasksFromJson: Task[] = (apiTasks as any).default;
 
@@ -284,14 +263,11 @@ describe('redux saga - integration - task', () => {
           const stateTask = result.storeState.task as taskReducer.TaskState;
           expect(stateTask.taskList[0].id).toBe('1');
           expect(stateTask.taskList[0].displayName).toBe('modified');
-          expect(mockToastSuccess).toHaveBeenCalledWith(`Edited 'modified' task`);
         });
     });
 
     it('should put TASK_EDIT_ERROR when API response code is error', async () => {
       // arrange
-      const mockToastError = jest.spyOn(toast, 'error');
-
       mockAxios.onPatch().networkErrorOnce();
 
       const editTask: Task = {
@@ -313,17 +289,13 @@ describe('redux saga - integration - task', () => {
         .put.actionType(TASK_EDIT_START)
         .not.put.actionType(TASK_EDIT_SUCCESS)
         .put.actionType(TASK_EDIT_ERROR)
-        .run()
-        .then(() => {
-          expect(mockToastError).toHaveBeenCalledTimes(1);
-        });
+        .run();
     });
   });
 
   describe('deleteTaskSaga', () => {
     it('should delete a Task when the API response code is not an error', async () => {
       // arrange
-      const mockToastSuccess = jest.spyOn(toast, 'success');
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const apiTasksFromJson: Task[] = (apiTasks as any).default;
@@ -357,14 +329,11 @@ describe('redux saga - integration - task', () => {
           const stateTask = result.storeState.task as taskReducer.TaskState;
           expect(stateTask.taskList.length).toBe(5);
           expect(stateTask.taskList.find((task) => task.id === taskIdToDelete)).toBeUndefined();
-          expect(mockToastSuccess).toHaveBeenCalledWith('Deleted task');
         });
     });
 
     it('should put TASK_DELETE_ERROR when API response code is error', async () => {
       // arrange
-      const mockToastError = jest.spyOn(toast, 'error');
-
       mockAxios.onDelete().networkErrorOnce();
 
       const taskIdToDelete = '1';
@@ -381,10 +350,7 @@ describe('redux saga - integration - task', () => {
         .put.actionType(TASK_DELETE_START)
         .not.put.actionType(TASK_DELETE_SUCCESS)
         .put.actionType(TASK_DELETE_ERROR)
-        .run()
-        .then(() => {
-          expect(mockToastError).toHaveBeenCalledTimes(1);
-        });
+        .run();
     });
   });
 });
