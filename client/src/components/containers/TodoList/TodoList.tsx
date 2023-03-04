@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 
@@ -24,7 +24,7 @@ import { TodoListItemDisplay } from '../../presentational/TodoList/TodoListItem/
 
 
 type StateProps = {
-  taskList: Task[];
+  initialTaskList: Task[];
   editTaskId?: string;
 }
 
@@ -46,8 +46,8 @@ export const TodoList: React.FC<Props> = (props: Props) => {
   }, []);
 
   useEffect(() => {
-    setTaskList(props.taskList);
-  }, [props.taskList]);
+    setTaskList(props.initialTaskList);
+  }, [props.initialTaskList]);
 
   const taskChangeStatusHandler = (taskId: string, done: boolean) => {
     setTaskList([...taskList].map((task) => {
@@ -61,7 +61,7 @@ export const TodoList: React.FC<Props> = (props: Props) => {
   };
 
   return (
-    <React.Fragment>
+    <>
       <TodoListHeader />
       {!taskList || taskList.length === 0
         ? <NoTasksMessage />
@@ -97,13 +97,13 @@ export const TodoList: React.FC<Props> = (props: Props) => {
             </div>;
           })
       }
-    </React.Fragment>
+    </>
   );
 };
 
 const mapStateToProps = (state: RootState): StateProps => {
   return {
-    taskList: getTaskList(state.task),
+    initialTaskList: getTaskList(state.task),
     editTaskId: getEditTaskId(state.task)
   };
 };

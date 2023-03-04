@@ -23,7 +23,8 @@ const Template: Story<Props> = (args) => <TodoList {...args} />;
 
 export const TodoListDefault = Template.bind({});
 TodoListDefault.args = {
-  taskList: [
+  editTaskId: '2',
+  initialTaskList: [
     { id: '1', displayName: 'Paint the wall', priority: 3, done: false },
     { id: '2', displayName: 'Create a todoList demo application', priority: 0, done: true },
     { id: '3', displayName: 'Learn Kubernetes', priority: 2, done: false },

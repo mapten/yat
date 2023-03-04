@@ -1,10 +1,9 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-import { call, put, select } from 'redux-saga/effects';
+import { call, put } from 'redux-saga/effects';
 import { AxiosResponse } from 'axios';
 
 // Store
 import * as actions from '../actions';
-import { RootState } from '../models/rootState.model';
 
 // Models
 import { Task } from '../../models/task.model';
@@ -14,7 +13,7 @@ import { API_ENDPOINT } from '../../constants/configuration';
 
 // Services
 import { getAxiosApiInstance } from '../../services/axios.service';
-import { getTaskList, TaskAction } from '../reducers/task.reducer';
+import { TaskAction } from '../reducers/task.reducer';
 
 /**
  * Fetch the tasks from the API

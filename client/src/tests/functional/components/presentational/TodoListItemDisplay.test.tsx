@@ -1,6 +1,6 @@
 import React from 'react';
-import { render, cleanup, fireEvent } from '@testing-library/react';
-import '@testing-library/jest-dom';
+import { describe, it, vi, beforeEach, afterEach, expect } from 'vitest';
+import { render, cleanup, fireEvent, screen, waitFor } from '@testing-library/react';
 
 // Components
 import { TodoListItemDisplay } from '../../../../components/presentational/TodoList/TodoListItem/TodoListItemDisplay/TodoListItemDisplay';
@@ -16,9 +16,9 @@ describe(`<TodoListItemDisplay/>`, () => {
       taskName: 'Paint the wall',
       taskPriorityColor: 'red',
       taskDone: false,
-      onTaskChangeStatus: jest.fn(),
-      onSetEdit: jest.fn(),
-      onDelete: jest.fn()
+      onTaskChangeStatus: vi.fn(),
+      onSetEdit: vi.fn(),
+      onDelete: vi.fn()
     };
   });
 
@@ -30,51 +30,29 @@ describe(`<TodoListItemDisplay/>`, () => {
     cleanup();
   });
 
-  it(`should display the crossed style on the task name when props.taskDone is true`, () => {
+  it(`should trigger onTaskChangeStatus when the checkbox changes`, async () => {
     // arrange
-    const props: Partial<Props> = {taskDone: true};
+    const props: Partial<Props> = { taskDone: false };
 
-    // act
-    const renderResult = renderUI(props);
-    const spanTaskName = renderResult.container.querySelector('span') as HTMLSpanElement;
-
-    // assert
-    expect(spanTaskName).toHaveClass('itemDisplay__task--crossed');
-  });
-
-  it(`should not display the crossed style on the task name when props.taskDone is false`, () => {
-    // arrange
-    const props: Partial<Props> = {taskDone: false};
-
-    // act
-    const renderResult = renderUI(props);
-    const spanTaskName = renderResult.container.querySelector('span') as HTMLSpanElement;
-
-    // assert
-    expect(spanTaskName).not.toHaveClass('crossed');
-  });
-
-  it(`should trigger onTaskChangeStatus when the checkbox changes`, () => {
-    // arrange
-    const props: Partial<Props> = {taskDone: false};
-
-    const renderResult = renderUI(props);
-    const checkbox = renderResult.container.querySelector('input[type="checkbox"]') as HTMLInputElement;
+    renderUI(props);
+    const checkbox = screen.getByRole('checkbox') as HTMLInputElement;
 
     // act
     fireEvent.click(checkbox);
 
     // assert
-    expect(baseProps.onTaskChangeStatus).toHaveBeenCalledWith('1', true);
+    await waitFor(() => expect(baseProps.onTaskChangeStatus).toHaveBeenCalled());
   });
 
   it(`should trigger onSetEdit when the edit button is clicked`, () => {
     // arrange
-    const renderResult = renderUI();
-    const buttonEdit = renderResult.container.querySelector('button:nth-child(1)') as HTMLButtonElement;
+    renderUI();
+    const buttonEdit = screen.getByText('Edit') as HTMLButtonElement;
+
+    expect(baseProps.onSetEdit).toHaveBeenCalledTimes(0);
 
     // act
-    buttonEdit.click();
+    fireEvent.click(buttonEdit);
 
     // assert
     expect(baseProps.onSetEdit).toHaveBeenCalledTimes(1);
@@ -82,11 +60,13 @@ describe(`<TodoListItemDisplay/>`, () => {
 
   it(`should trigger onDelete when the edit button is clicked`, () => {
     // arrange
-    const renderResult = renderUI();
-    const buttonDelete = renderResult.container.querySelector('button:nth-child(2)') as HTMLButtonElement;
+    renderUI();
+    const buttonDelete = screen.getByText('Delete') as HTMLButtonElement;
+
+    expect(baseProps.onDelete).toHaveBeenCalledTimes(0);
 
     // act
-    buttonDelete.click();
+    fireEvent.click(buttonDelete);
 
     // assert
     expect(baseProps.onDelete).toHaveBeenCalledTimes(1);

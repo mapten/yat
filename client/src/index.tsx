@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom/client';
+import { createRoot } from 'react-dom/client';
 import { Provider } from 'react-redux';
 import createSagaMiddleware from 'redux-saga';
 
@@ -41,9 +41,7 @@ const store = createStore(
 
 sagaMiddleware.run(watchTask);
 
-const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement);
-
-root.render(
+createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
     <Provider store={store}>
       <App />

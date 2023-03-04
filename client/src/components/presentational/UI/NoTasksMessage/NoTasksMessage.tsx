@@ -1,5 +1,3 @@
-import React from 'react';
-
 // Styles
 import styles from './NoTasksMessage.module.scss';
 

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 // Styles
 import styles from './TodoListItemEdit.module.scss';
@@ -79,8 +79,8 @@ export const TodoListItemEdit: React.FC<Props> = (props: Props) => {
         </select>
       </div>
       <div>
-        <Button size="small" displayText="Cancel" buttonStyle="dismiss" onClick={props.onCancelEdit} iconName="times" />
-        <Button size="small" displayText="Save" buttonStyle="add" onClick={onEdit} iconName="save" />
+        <Button size="small" displayText="Cancel" buttonStyle="dismiss" onClick={props.onCancelEdit} iconName="uil:times" />
+        <Button size="small" displayText="Save" buttonStyle="add" onClick={onEdit} iconName="material-symbols:save" />
       </div>
     </div>
   );

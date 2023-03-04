@@ -1,6 +1,6 @@
 import React from 'react';
-import { render, cleanup, fireEvent } from '@testing-library/react';
-import '@testing-library/jest-dom';
+import { render, cleanup, fireEvent, screen, waitFor } from '@testing-library/react';
+import { describe, it, vi, beforeEach, afterEach, expect } from 'vitest';
 import { Provider } from 'react-redux';
 import createSagaMiddleware from 'redux-saga';
 import configureStore, { MockStoreEnhanced } from 'redux-mock-store';
@@ -19,19 +19,16 @@ import { Task } from '../../../../models/task.model';
 // Components
 import ConnectedCreate, { Create } from '../../../../components/containers/Create/Create';
 
-
-const mockPriorityLevelsValueGetter = jest.fn();
-jest.mock('../../../../constants/priorityLevels.constants', () => ({
+const mockPriorityLevelsValueGetter = vi.fn();
+vi.mock('../../../../constants/priorityLevels.constants', () => ({
   get PRIORITY_LEVELS() {
     return mockPriorityLevelsValueGetter();
   },
 }));
 
-const mockHistoryPush = jest.fn();
-jest.mock('react-router-dom', () => ({
-  useHistory: () => ({
-    push: mockHistoryPush,
-  }),
+const mockNavigate = vi.fn();
+vi.mock('react-router-dom', () => ({
+  useNavigate: () => mockNavigate,
 }));
 
 
@@ -58,7 +55,7 @@ describe('Create', () => {
   });
 
   afterEach(() => {
-    jest.restoreAllMocks();
+    vi.restoreAllMocks();
     cleanup();
   });
 
@@ -67,51 +64,53 @@ describe('Create', () => {
 
     beforeEach(() => {
       baseProps = {
-        onSave: jest.fn(),
+        onSave: vi.fn(),
       };
     });
 
     const renderUI = (props: Partial<Props> = {}) => {
-      return render(<Create {...baseProps} {...props} />);
+      return render(
+        <Create {...baseProps} {...props} />
+      );
     };
 
     it(`should load as many options in the select as items are in PRIORITY_LEVELS`, () => {
       // arrange
       // act
-      const renderResult = renderUI();
+      renderUI();
 
-      const options = renderResult.container.querySelectorAll('select option');
+      const options = screen.getByRole('combobox').querySelectorAll('option');
 
       // assert
-      expect(options[0]).toHaveTextContent('First');
-      expect(options[1]).toHaveTextContent('Second');
+      expect(options[0].textContent).toBe('First');
+      expect(options[1].textContent).toBe('Second');
     });
 
-    it(`should call to save prop when clicking on save and the form is valid`, () => {
+    it(`should call to save prop when clicking on save and the form is valid`, async () => {
       // arrange
-      const renderResult = renderUI();
+      renderUI();
 
       const createTask: Task = {
         id: NEW_TASK_ID,
         displayName: 'foo',
-        priority: 1,
+        priority: 0,
         done: false,
       };
 
-      const todoNameInput = renderResult.container.querySelector('input') as HTMLInputElement;
+      const todoNameInput = screen.getByRole('textbox') as HTMLInputElement;
       fireEvent.change(todoNameInput, { target: { value: 'foo' } });
 
-      const prioritySelect = renderResult.container.querySelector('select') as HTMLSelectElement;
-      fireEvent.change(prioritySelect, { target: { value: 1 } });
+      const prioritySelect = screen.getByRole('combobox') as HTMLSelectElement;
+      fireEvent.change(prioritySelect, { target: { value: 0 } });
 
-      const saveButton = renderResult.container.querySelector('button:nth-child(2)') as HTMLButtonElement;
+      const saveButton = screen.getByRole('button', {name: /Save/i}) as HTMLButtonElement;
       // act
       saveButton.click();
 
       // assert
-      expect(todoNameInput).not.toHaveClass('danger');
+      expect(Array.from(todoNameInput.classList).find(f => f.includes('danger'))).toBeFalsy();
       expect(baseProps.onSave).toHaveBeenCalledWith(createTask);
-      expect(mockHistoryPush).toHaveBeenCalledWith('/todolist');
+      expect(mockNavigate).toHaveBeenCalledWith('/todolist');
     });
 
     it(`should redirect to '/todolist' when click on 'Cancel'`, () => {
@@ -124,9 +123,10 @@ describe('Create', () => {
 
       // assert
       expect(baseProps.onSave).not.toHaveBeenCalled();
-      expect(mockHistoryPush).toHaveBeenCalledWith('/todolist');
+      expect(mockNavigate).toHaveBeenCalledWith('/todolist');
     });
   });
+
   describe('<ConnectedCreate>', () => {
     let store: MockStoreEnhanced<unknown, unknown>;
     const middlewares = [createSagaMiddleware()];
@@ -136,7 +136,7 @@ describe('Create', () => {
       store = mockStore({
         task: { ...taskReducer, ...partialState },
       });
-      store.dispatch = jest.fn();
+      store.dispatch = vi.fn();
 
       const component = <Provider store={store}>
         <ConnectedCreate />
@@ -149,23 +149,23 @@ describe('Create', () => {
       // arrange
       const storeProps: Partial<taskReducer.TaskState> = {};
 
-      const renderResult = renderUI(storeProps);
+      renderUI(storeProps);
 
-      const todoNameInput = renderResult.container.querySelector('input') as HTMLInputElement;
+      const todoNameInput = screen.getByRole('textbox') as HTMLInputElement;
       fireEvent.change(todoNameInput, { target: { value: 'foo' } });
 
-      const prioritySelect = renderResult.container.querySelector('select') as HTMLSelectElement;
-      fireEvent.change(prioritySelect, { target: { value: 1 } });
+      const prioritySelect = screen.getByRole('combobox') as HTMLSelectElement;
+      fireEvent.change(prioritySelect, { target: { value: 0 } });
 
-      const saveButton = renderResult.container.querySelector('button:nth-child(2)') as HTMLButtonElement;
+      const saveButton = screen.getByRole('button', {name: /Save/i}) as HTMLButtonElement;
 
       // act
-      saveButton.click();
+      fireEvent.click(saveButton);
 
       const createdTask: Task = {
         id: NEW_TASK_ID,
         displayName: 'foo',
-        priority: 1,
+        priority: 0,
         done: false,
       };
 

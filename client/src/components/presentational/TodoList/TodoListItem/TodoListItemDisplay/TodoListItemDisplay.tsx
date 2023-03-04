@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 // Styles
 import styles from './TodoListItemDisplay.module.scss';
 
 // Components
 import { Button } from '../../../UI/Button/Button';
+import CheckBoxCrossed from '../../../UI/CheckBoxCrossed/CheckBoxCrossed';
 
 type StateProps = {
   taskId: string;
@@ -28,9 +29,9 @@ export const TodoListItemDisplay: React.FC<Props> = (props: Props) => {
     setTaskDone(props.taskDone);
   }, [props.taskDone]);
 
-  const checkboxChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setTaskDone(event.target.checked);
-    props.onTaskChangeStatus(props.taskId, event.target.checked);
+  const checkboxChangeHandler = (checked: boolean) => {
+    setTaskDone(checked);
+    props.onTaskChangeStatus(props.taskId, checked);
   };
 
   const editTaskHandler = () => {
@@ -43,13 +44,10 @@ export const TodoListItemDisplay: React.FC<Props> = (props: Props) => {
 
   return (
     <div data-testid="todoItemDisplay" style={{borderLeftColor: props.taskPriorityColor}} className={styles.itemDisplay}>
-      <div>
-        <input className={styles.itemDisplay__checkBox} type='checkbox' checked={taskDone} onChange={checkboxChangeHandler} />
-        <span className={`${styles.itemDisplay__task} ${taskDone ? styles['itemDisplay__task--crossed'] : ''}`}>{props.taskName}</span>
-      </div>
+      <CheckBoxCrossed onChange={checkboxChangeHandler} text={props.taskName} initialChecked={taskDone} color={props.taskPriorityColor} />
       <div className={styles.itemDisplay__buttonGroup}>
-        <Button size="small" displayText="Edit" buttonStyle="default" onClick={editTaskHandler} iconName="pencil-alt" />
-        <Button size="small" displayText="Delete" buttonStyle="default" onClick={deleteTaskHandler} iconName="trash" />
+        <Button size="small" displayText="Edit" buttonStyle="default" onClick={editTaskHandler} iconName="material-symbols:edit" />
+        <Button size="small" displayText="Delete" buttonStyle="default" onClick={deleteTaskHandler} iconName="mdi:trash-can-outline" />
       </div>
     </div>
   );

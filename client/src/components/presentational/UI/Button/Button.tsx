@@ -1,16 +1,10 @@
-import React from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { IconName } from '@fortawesome/fontawesome-svg-core';
-import { library } from '@fortawesome/fontawesome-svg-core';
-import { fas } from '@fortawesome/free-solid-svg-icons';
+import { Icon } from '@iconify/react';
 
 // Styles
 import './Button.scss';
 
 // Constants
 import { BUTTON_STYLE } from '../../../../constants/buttonStyles.constants';
-
-library.add(fas);
 
 type StateProps = {
   displayText: string;
@@ -21,11 +15,11 @@ type StateProps = {
   /** The button style used. The corresponding styles are:
    * 'default': for any type of button,
    * 'add': for actions related to adding or saving,
-   * 'dismiss': to actions related to delete or cancel,
+   * 'dismiss': to actions related to delete or cancel
    */
   buttonStyle: BUTTON_STYLE;
   size: 'small' | 'medium' | 'big';
-  iconName?: IconName;
+  iconName?: string;
 }
 
 type DispatchProps = {
@@ -38,7 +32,7 @@ export const Button: React.FC<Props> = (props: Props) => {
   return (
     <button title={props.tooltip || ''} className={`button--${props.buttonStyle} button--${props.size}`} onClick={props.onClick}>
       <span>{props.displayText}</span>
-      {props.iconName && <FontAwesomeIcon icon={props.iconName} />}
+      {props.iconName && <span role="img"><Icon role="img" icon={props.iconName} /></span>}
     </button>
   );
 };

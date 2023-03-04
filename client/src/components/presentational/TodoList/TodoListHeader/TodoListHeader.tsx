@@ -1,4 +1,3 @@
-import React from 'react';
 import { Button } from '../../UI/Button/Button';
 import { useNavigate } from 'react-router-dom';
 
@@ -19,7 +18,7 @@ export const TodoListHeader: React.FC = () => {
         tooltip='Create new task'
         displayText='New'
         buttonStyle='add'
-        iconName='plus'
+        iconName='material-symbols:add'
         size='big'
         onClick={clickHandler} />
     </header>
