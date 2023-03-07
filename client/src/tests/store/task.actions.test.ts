@@ -3,8 +3,8 @@ import { describe, it, expect } from 'vitest';
 import * as actionTypes from '../../constants/redux-action-types.constants';
 
 // Store
-import { TaskActionPartial } from '../reducers/task.reducer';
-import * as action from './task.actions';
+import { TaskActionPartial } from '../../store/reducers/task.reducer';
+import * as action from '../../store/actions/task.actions';
 
 // Models
 import { Task } from '../../models/task.model';
@@ -18,7 +18,7 @@ describe('redux actions - task', () => {
       };
 
       // act
-      const result = action.taskFetch();
+      const result = action.fetchTask();
 
       // assert
       expect(result).toEqual(expectedAction);
@@ -152,12 +152,12 @@ describe('redux actions - task', () => {
       const newTask = { id: '2', displayName: 'task 2', priority: 0, done: true };
 
       const expectedAction: TaskActionPartial = {
-        type: actionTypes.TASK_CREATE,
+        type: actionTypes.TASK_ADD,
         editTask: newTask,
       };
 
       // act
-      const result = action.taskCreate(newTask);
+      const result = action.addTask(newTask);
 
       // assert
       expect(result).toEqual(expectedAction);
@@ -169,11 +169,11 @@ describe('taskCreateStart', () => {
   it('should create an action', () => {
     // arrange
     const expectedAction: TaskActionPartial = {
-      type: actionTypes.TASK_CREATE_START
+      type: actionTypes.TASK_ADD_START
     };
 
     // act
-    const result = action.taskCreateStart();
+    const result = action.addTaskStart();
 
     // assert
     expect(result).toEqual(expectedAction);
@@ -185,12 +185,12 @@ describe('taskCreateStart', () => {
       const newTask = { id: '2', displayName: 'task 2', priority: 0, done: true };
 
       const expectedAction: TaskActionPartial = {
-        type: actionTypes.TASK_CREATE_SUCCESS,
+        type: actionTypes.TASK_ADD_SUCCESS,
         editTask: newTask
       };
 
       // act
-      const result = action.taskCreateSuccess(newTask);
+      const result = action.addTaskSuccess(newTask);
 
       // assert
       expect(result).toEqual(expectedAction);
@@ -201,26 +201,11 @@ describe('taskCreateStart', () => {
     it('should create an action', () => {
       // arrange
       const expectedAction: TaskActionPartial = {
-        type: actionTypes.TASK_CREATE_ERROR
+        type: actionTypes.TASK_ADD_ERROR
       };
 
       // act
-      const result = action.taskCreateError();
-
-      // assert
-      expect(result).toEqual(expectedAction);
-    });
-  });
-
-  describe('taskSetEditId', () => {
-    it('should create an action', () => {
-      // arrange
-      const expectedAction: TaskActionPartial = {
-        type: actionTypes.TASK_SET_EDIT_ID
-      };
-
-      // act
-      const result = action.taskSetEditId();
+      const result = action.addTaskError();
 
       // assert
       expect(result).toEqual(expectedAction);
@@ -233,12 +218,12 @@ describe('taskCreateStart', () => {
       const taskToEdit = { id: '2', displayName: 'task 2', priority: 0, done: true };
 
       const expectedAction: TaskActionPartial = {
-        type: actionTypes.TASK_EDIT,
+        type: actionTypes.TASK_UPDATE,
         editTask: taskToEdit,
       };
 
       // act
-      const result = action.taskEdit(taskToEdit);
+      const result = action.updateTask(taskToEdit);
 
       // assert
       expect(result).toEqual(expectedAction);
@@ -250,11 +235,11 @@ describe('taskEditStart', () => {
   it('should create an action', () => {
     // arrange
     const expectedAction: TaskActionPartial = {
-      type: actionTypes.TASK_EDIT_START
+      type: actionTypes.TASK_UPDATE_START
     };
 
     // act
-    const result = action.taskEditStart();
+    const result = action.updateTaskStart();
 
     // assert
     expect(result).toEqual(expectedAction);
@@ -266,12 +251,12 @@ describe('taskEditStart', () => {
       const newTask = { id: '2', displayName: 'task 2', priority: 0, done: true };
 
       const expectedAction: TaskActionPartial = {
-        type: actionTypes.TASK_EDIT_SUCCESS,
+        type: actionTypes.TASK_UPDATE_SUCCESS,
         editTask: newTask
       };
 
       // act
-      const result = action.taskEditSuccess(newTask);
+      const result = action.updateTaskSuccess(newTask);
 
       // assert
       expect(result).toEqual(expectedAction);
@@ -282,11 +267,11 @@ describe('taskEditStart', () => {
     it('should create an action', () => {
       // arrange
       const expectedAction: TaskActionPartial = {
-        type: actionTypes.TASK_EDIT_ERROR
+        type: actionTypes.TASK_UPDATE_ERROR
       };
 
       // act
-      const result = action.taskEditError();
+      const result = action.updateTaskError();
 
       // assert
       expect(result).toEqual(expectedAction);
@@ -304,7 +289,7 @@ describe('taskEditStart', () => {
       };
 
       // act
-      const result = action.taskDelete(taskId);
+      const result = action.deleteTask(taskId);
 
       // assert
       expect(result).toEqual(expectedAction);
@@ -320,7 +305,7 @@ describe('taskDeleteStart', () => {
     };
 
     // act
-    const result = action.taskDeleteStart();
+    const result = action.deleteTaskStart();
 
     // assert
     expect(result).toEqual(expectedAction);
@@ -337,7 +322,7 @@ describe('taskDeleteStart', () => {
       };
 
       // act
-      const result = action.taskDeleteSuccess(taskId);
+      const result = action.deleteTaskSuccess(taskId);
 
       // assert
       expect(result).toEqual(expectedAction);
@@ -352,7 +337,7 @@ describe('taskDeleteStart', () => {
       };
 
       // act
-      const result = action.taskDeleteError();
+      const result = action.deleteTaskError();
 
       // assert
       expect(result).toEqual(expectedAction);

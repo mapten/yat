@@ -1,10 +1,14 @@
 import { describe, it, vi, beforeEach, afterEach, expect } from 'vitest';
 
 import React from 'react';
-import { render, cleanup, screen } from '@testing-library/react';
+import { render, cleanup, screen, fireEvent } from '@testing-library/react';
+
+// Helpers
+import { wait } from '../../../helpers';
 
 // Components
 import CheckBoxCrossed  from '../../../../components/presentational/UI/CheckBoxCrossed/CheckBoxCrossed';
+
 
 type Props = React.ComponentPropsWithoutRef<typeof CheckBoxCrossed>;
 
@@ -50,5 +54,31 @@ describe('<CheckBoxCrossed/>', () => {
 
     // assert
     expect(Array.from(spanTaskName.classList).find(f => f.includes('crossed'))).toBeFalsy();
+  });
+
+  it('should modify the icon when hover it', async () => {
+    // arrange
+    const props: Partial<Props> = { initialChecked: false, text: 'foo' };
+
+    const {container} = renderUI(props);
+
+    // as the svg is loaded asynchronously, we need to wait for it
+    await wait(1000);
+
+    const checkbox = container.querySelector('div[data-testid="checkboxCrossed"]') as HTMLInputElement;
+
+    const oldPath = container.querySelector('svg > path') as SVGPathElement;
+
+    // act
+    fireEvent.mouseOver(checkbox);
+
+    const newPath = container.querySelector('svg > path') as SVGPathElement;
+
+    fireEvent.mouseLeave(checkbox);
+
+    const newOldPath = container.querySelector('svg > path') as SVGPathElement;
+
+    expect(oldPath.getAttribute('d')).not.toBe(newPath.getAttribute('d'));
+    expect(oldPath.getAttribute('d')).toBe(newOldPath.getAttribute('d'));
   });
 });

@@ -5,13 +5,13 @@ import styles from './TodoListItemDisplay.module.scss';
 
 // Components
 import { Button } from '../../../UI/Button/Button';
-import CheckBoxCrossed from '../../../UI/CheckBoxCrossed/CheckBoxCrossed';
+import CheckBoxCrossed from '../../../../presentational/UI/CheckBoxCrossed/CheckBoxCrossed';
 
 type StateProps = {
   taskId: string;
   taskName: string;
   taskDone: boolean;
-  taskPriorityColor: string;
+  taskPriorityColor?: string;
 }
 
 type DispatchProps = {
@@ -43,11 +43,11 @@ export const TodoListItemDisplay: React.FC<Props> = (props: Props) => {
   };
 
   return (
-    <div data-testid="todoItemDisplay" style={{borderLeftColor: props.taskPriorityColor}} className={styles.itemDisplay}>
+    <div data-testid="todoItemDisplay" className={`task ${styles.itemDisplay}`}>
       <CheckBoxCrossed onChange={checkboxChangeHandler} text={props.taskName} initialChecked={taskDone} color={props.taskPriorityColor} />
       <div className={styles.itemDisplay__buttonGroup}>
-        <Button size="small" displayText="Edit" buttonStyle="default" onClick={editTaskHandler} iconName="material-symbols:edit" />
-        <Button size="small" displayText="Delete" buttonStyle="default" onClick={deleteTaskHandler} iconName="mdi:trash-can-outline" />
+        <Button size="big" displayText="Edit" buttonStyle="default" onClick={editTaskHandler} buttonType="icon" iconName="material-symbols:edit" />
+        <Button size="big" displayText="Delete" buttonStyle="default" onClick={deleteTaskHandler} buttonType="icon" iconName="mdi:trash-can-outline" />
       </div>
     </div>
   );

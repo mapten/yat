@@ -2,8 +2,22 @@ import React from 'react';
 import { describe, it, vi, beforeEach, afterEach, expect } from 'vitest';
 import { render, cleanup, fireEvent, screen } from '@testing-library/react';
 
+// Models
+import { Priority } from '../../../../models/priority.model';
+
 // Components
 import { TodoListItemEdit } from '../../../../components/presentational/TodoList/TodoListItem/TodoListItemEdit/TodoListItemEdit';
+
+
+const mockPriorityLevelsValueGetter = vi.fn();
+vi.mock('../../../../constants/priorityLevels.constants', () => ({
+  get PRIORITY_LEVELS() {
+    return mockPriorityLevelsValueGetter();
+  },
+  get DEFAULT_PRIORITY() {
+    return 1;
+  }
+}));
 
 type Props = React.ComponentProps<typeof TodoListItemEdit>;
 
@@ -13,12 +27,29 @@ describe('<TodoListItemEdit/>', () => {
   beforeEach(() => {
     baseProps = {
       taskId: '1',
-      taskName: 'Paint the wall',
-      taskPriority: 0,
+      initialTaskName: 'Paint the wall',
+      initialTaskPriority: 0,
       taskDone: false,
       onCancelEdit: vi.fn(),
-      onEdit: vi.fn(),
+      onSave: vi.fn(),
     };
+
+    const fakePriorityLevels: Priority[] = [
+      {
+        order: 0,
+        displayText: 'First',
+        displayColor: '#000000',
+        isDefaultSelected: false,
+      },
+      {
+        order: 1,
+        displayText: 'Second',
+        displayColor: '#111111',
+        isDefaultSelected: true,
+      },
+    ];
+
+    mockPriorityLevelsValueGetter.mockReturnValue(fakePriorityLevels);
   });
 
   const renderUI = (props: Partial<Props> = {}) => {
@@ -31,22 +62,26 @@ describe('<TodoListItemEdit/>', () => {
 
   it('should trigger onEdit when the edit button is clicked and the name is not empty', () => {
     // arrange
-    const props: Partial<Props> = {taskId: '1', taskName: 'foo', taskPriority: 1, taskDone: false};
+    const props: Partial<Props> = { taskId: '1', initialTaskName: 'foo', initialTaskPriority: 1, taskDone: false };
 
-    const { container } = renderUI(props);
-    const buttonEdit = container.querySelector('button:nth-child(2)') as HTMLButtonElement;
+    renderUI(props);
+    const buttonSave = screen.getByRole('button', { name: /Save/i }) as HTMLButtonElement;
 
-    const nameInput = container.querySelector('input') as HTMLInputElement;
-    fireEvent.change(nameInput, {target: {value: 'foo modified'}});
+    const nameInput = screen.getByRole('textbox') as HTMLInputElement;
+    fireEvent.input(nameInput, { target: { value: 'foo modified' } });
 
-    const prioritySelect = container.querySelector('select') as HTMLSelectElement;
-    fireEvent.change(prioritySelect, {target: {value: 0}});
+    fireEvent.click(screen.getByTestId('select__selected'));
+
+    const option = screen.getByRole('option', { name: 'First' });
 
     // act
-    fireEvent.click(buttonEdit);
+    fireEvent.click(option);
+
+    // act
+    fireEvent.click(buttonSave);
 
     // assert
-    expect(baseProps.onEdit).toHaveBeenCalledWith({
+    expect(baseProps.onSave).toHaveBeenCalledWith({
       id: '1',
       displayName: 'foo modified',
       priority: 0,
@@ -56,7 +91,7 @@ describe('<TodoListItemEdit/>', () => {
 
   it('should not trigger onEdit when the edit button is clicked and the name is empty', () => {
     // arrange
-    const props: Partial<Props> = {taskName: ''};
+    const props: Partial<Props> = { initialTaskName: '' };
 
     renderUI(props);
     const buttonEdit = screen.getByText('Save') as HTMLButtonElement;
@@ -65,18 +100,18 @@ describe('<TodoListItemEdit/>', () => {
     fireEvent.click(buttonEdit);
 
     // assert
-    expect(baseProps.onEdit).not.toHaveBeenCalled();
+    expect(baseProps.onSave).not.toHaveBeenCalled();
   });
 
   it('should trigger onCancelEdit when the edit button is clicked', () => {
     // arrange
-    const props: Partial<Props> = {taskDone: false};
+    const props: Partial<Props> = { taskDone: false };
 
-    const { container } = renderUI(props);
-    const buttonCancelEdit = container.querySelector('button:nth-child(1)') as HTMLButtonElement;
+    renderUI(props);
+    const buttonCancel = screen.getByText('Cancel') as HTMLButtonElement;
 
     // act
-    buttonCancelEdit.click();
+    buttonCancel.click();
 
     // assert
     expect(baseProps.onCancelEdit).toHaveBeenCalledTimes(1);

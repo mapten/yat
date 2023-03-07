@@ -1,3 +1,5 @@
+@import 'src/assets/styles/colors';
+
 .checkboxCrossed {
   display: inline-flex;
   cursor: pointer;
@@ -5,29 +7,12 @@
 
   svg {
     font-size: 1.1rem;
+    color: $gray-dark;
+    min-width: 24px;
+    display: block;
   }
 }
 
-@keyframes crossed{
-  0%   { width : 0; }
-  100% { width: 100%; }
-}
-
 .crossed {
-  position: relative;
-}
-
-.crossed::after {
-  content: ' ';
-  position: absolute;
-  top: 50%;
-  left: 0;
-  width: 100%;
-  height: 1px;
-  background-color: black;
-  animation-name: crossed;
-  animation-duration: 0.3s;
-  animation-timing-function: linear;
-  animation-iteration-count: 1;
-  animation-fill-mode: forwards;
+  text-decoration: line-through;
 }

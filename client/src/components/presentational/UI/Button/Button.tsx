@@ -5,12 +5,10 @@ import './Button.scss';
 
 // Constants
 import { BUTTON_STYLE } from '../../../../constants/buttonStyles.constants';
+import { useCallback } from 'react';
 
-type StateProps = {
+type CommonProps = {
   displayText: string;
-
-  /** the tooltip to display when the mouse is over the button */
-  tooltip?: string;
 
   /** The button style used. The corresponding styles are:
    * 'default': for any type of button,
@@ -19,6 +17,18 @@ type StateProps = {
    */
   buttonStyle: BUTTON_STYLE;
   size: 'small' | 'medium' | 'big';
+
+  /** the tooltip to display when the mouse is over the button */
+  tooltip?: string;
+}
+
+type StateIconButtonProps = {
+  buttonType?: 'icon';
+  iconName: string;
+}
+
+type StateButtonProps = {
+  buttonType?: 'button';
   iconName?: string;
 }
 
@@ -26,13 +36,40 @@ type DispatchProps = {
   onClick: () => void;
 }
 
-type Props = StateProps & DispatchProps;
+type Props = (StateIconButtonProps | StateButtonProps) & CommonProps & DispatchProps;
 
-export const Button: React.FC<Props> = (props: Props) => {
+export const Button: React.FC<Props> = ({displayText, buttonStyle, size = 'medium', buttonType = 'button', iconName, tooltip, onClick}: Props) => {
+
+  const getTooltip = useCallback(() => {
+    if (tooltip) {
+      return tooltip;
+    }
+    if (buttonType === 'icon') {
+      return displayText;
+    }
+    return '';
+  }, [tooltip, buttonType, displayText]);
+
+  const getClassNames = useCallback(() => {
+    let style = '';
+
+    if (buttonType === 'icon') {
+      style += 'button--icon';
+    } else {
+      style += `button--${buttonStyle}`;
+    }
+
+    style += ` button--${size}`;
+
+    return style;
+  }, [buttonType, buttonStyle, size]);
+
   return (
-    <button title={props.tooltip || ''} className={`button--${props.buttonStyle} button--${props.size}`} onClick={props.onClick}>
-      <span>{props.displayText}</span>
-      {props.iconName && <span role="img"><Icon role="img" icon={props.iconName} /></span>}
+    <button title={getTooltip()} className={getClassNames()} onClick={onClick}>
+      { buttonType === 'button' && (
+        <span>{displayText}</span>
+      )}
+      {iconName && <Icon role="img" icon={iconName} />}
     </button>
   );
 };

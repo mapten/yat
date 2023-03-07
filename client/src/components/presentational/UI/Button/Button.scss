@@ -3,21 +3,26 @@
 @mixin button($color) {
   display: inline-flex;
   background-color: $color;
-  border: solid 0.2em darken($color, 5);
-  border-radius: 0.5em;
+  border: solid 0.2rem darken($color, 10%);
+  border-radius: 0.5rem;
   cursor: pointer;
-  font-size: 0.9em;
-  padding: 0.4em;
-  gap: 0.5em;
+  font-size: 0.9rem;
+  padding: 0.4rem;
+  gap: 0.5rem;
+  transition: background-color 0.2s ease-in-out;
+
+  &:hover {
+    background-color: darken($color, 10%);
+  }
 }
 
 @mixin size($percent) {
-  border-radius: 0.5em * $percent;
-  border-width: 0.2em * $percent;
-  font-size: 0.9em * $percent;
-  padding: 0.4em * $percent;
+  border-radius: 0.5rem * $percent;
+  border-width: 0.2rem * $percent;
+  font-size: 0.9rem * $percent;
+  padding: 0.4rem * $percent;
+  gap: 0.5rem * $percent;
 }
-
 
 .button {
   &--default {
@@ -45,6 +50,16 @@
   
   &--big {
     @include size(1);
+  }
+
+  &--icon {
+    all: unset;
+    cursor: pointer;
+    color: $gray-dark;
+
+    &:hover {
+      color: $gray-darker;
+    }
   }
 }
 

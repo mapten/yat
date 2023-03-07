@@ -6,7 +6,7 @@ import { TaskActionPartial } from '../reducers/task.reducer';
 // Models
 import { Task } from '../../models/task.model';
 
-export const taskFetch = (): TaskActionPartial => {
+export const fetchTask = (): TaskActionPartial => {
   return {
     type: actionTypes.TASK_FETCH
   };
@@ -59,86 +59,79 @@ export const taskChangeStatusError = (): TaskActionPartial => {
   };
 };
 
-export const taskCreate = (task: Task): TaskActionPartial => {
+export const addTask = (task: Task): TaskActionPartial => {
   return {
-    type: actionTypes.TASK_CREATE,
+    type: actionTypes.TASK_ADD,
     editTask: task
   };
 };
 
-export const taskCreateStart = (): TaskActionPartial => {
+export const addTaskStart = (): TaskActionPartial => {
   return {
-    type: actionTypes.TASK_CREATE_START
+    type: actionTypes.TASK_ADD_START
   };
 };
 
-export const taskCreateSuccess = (task: Task): TaskActionPartial => {
+export const addTaskSuccess = (task: Task): TaskActionPartial => {
   return {
-    type: actionTypes.TASK_CREATE_SUCCESS,
+    type: actionTypes.TASK_ADD_SUCCESS,
     editTask: task
   };
 };
 
-export const taskCreateError = (): TaskActionPartial => {
+export const addTaskError = (): TaskActionPartial => {
   return {
-    type: actionTypes.TASK_CREATE_ERROR
+    type: actionTypes.TASK_ADD_ERROR
   };
 };
 
-export const taskSetEditId = (taskId?: string): TaskActionPartial => {
+export const updateTask = (task: Task): TaskActionPartial => {
   return {
-    type: actionTypes.TASK_SET_EDIT_ID,
-    taskId
-  };
-};
-
-export const taskEdit = (task: Task): TaskActionPartial => {
-  return {
-    type: actionTypes.TASK_EDIT,
+    type: actionTypes.TASK_UPDATE,
     editTask: task
   };
 };
 
-export const taskEditStart = (): TaskActionPartial => {
+export const updateTaskStart = (): TaskActionPartial => {
   return {
-    type: actionTypes.TASK_EDIT_START
+    type: actionTypes.TASK_UPDATE_START
   };
 };
 
-export const taskEditSuccess = (task: Task): TaskActionPartial => {
+export const updateTaskSuccess = (task: Task): TaskActionPartial => {
   return {
-    type: actionTypes.TASK_EDIT_SUCCESS,
+    type: actionTypes.TASK_UPDATE_SUCCESS,
     editTask: task
   };
 };
 
-export const taskEditError = (): TaskActionPartial => {
+export const updateTaskError = (): TaskActionPartial => {
   return {
-    type: actionTypes.TASK_EDIT_ERROR
+    type: actionTypes.TASK_UPDATE_ERROR
   };
 };
 
-export const taskDelete = (taskId: string): TaskActionPartial => {
+export const deleteTask = (taskId: string): TaskActionPartial => {
   return {
     type: actionTypes.TASK_DELETE,
     taskId
   };
 };
 
-export const taskDeleteStart = (): TaskActionPartial => {
+export const deleteTaskStart = (): TaskActionPartial => {
   return {
     type: actionTypes.TASK_DELETE_START
   };
 };
 
-export const taskDeleteSuccess = (taskId: string): TaskActionPartial => {
+export const deleteTaskSuccess = (taskId: string): TaskActionPartial => {
   return {
     type: actionTypes.TASK_DELETE_SUCCESS,
     taskId
   };
 };
 
-export const taskDeleteError = (): TaskActionPartial => {
+export const deleteTaskError = (): TaskActionPartial => {
   return {
     type: actionTypes.TASK_DELETE_ERROR
   };

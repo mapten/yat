@@ -38,3 +38,5 @@ export type PRIORITY_LEVEL_TYPE = typeof PRIORITY_LEVEL_NAMES[number];
 
 const PRIORITY_ORDERS = PRIORITY_LEVELS.map((priorityLevel) => priorityLevel.order);
 export type PRIORITY_ORDER_TYPE = typeof PRIORITY_ORDERS[number];
+
+export const DEFAULT_PRIORITY = 2;

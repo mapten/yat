@@ -22,8 +22,7 @@ export type TaskActionPartial = { type: TaskActionType } & Partial<TaskPayload>;
 export type TaskAction = { type: TaskActionType } & TaskPayload;
 
 export type TaskState = Readonly<{
-  taskList: Task[],
-  editingTaskId?: string
+  taskList: Task[]
 }>;
 
 export const taskInitialState: TaskState = {
@@ -36,7 +35,7 @@ export const taskReducer = (state: TaskState = taskInitialState, action: TaskAct
       return updateObject(state, {
         taskList: state.taskList.map((todoItem) => {
           if (todoItem.id === action.taskId) {
-            const modifiedTask = {...todoItem};
+            const modifiedTask = { ...todoItem };
             modifiedTask.done = action.done;
 
             return modifiedTask;
@@ -45,23 +44,17 @@ export const taskReducer = (state: TaskState = taskInitialState, action: TaskAct
         }),
       });
     }
-    case actionTypes.TASK_EDIT_SUCCESS: {
+    case actionTypes.TASK_UPDATE_SUCCESS: {
       return updateObject(state, {
-        editingTaskId: undefined,
         taskList: state.taskList.map((task) => {
           if (task.id === action.editTask.id) {
-            return {...task, ...action.editTask};
+            return { ...task, ...action.editTask };
           }
           return task;
         }),
       });
     }
-    case actionTypes.TASK_SET_EDIT_ID: {
-      return updateObject(state, {
-        editingTaskId: action.taskId,
-      });
-    }
-    case actionTypes.TASK_CREATE_SUCCESS: {
+    case actionTypes.TASK_ADD_SUCCESS: {
       return updateObject(state, {
         taskList: [...state.taskList, action.editTask],
       });
@@ -84,8 +77,4 @@ export const taskReducer = (state: TaskState = taskInitialState, action: TaskAct
 
 export const getTaskList: Selector<TaskState, Task[]> = (state: TaskState): Task[] => {
   return state.taskList;
-};
-
-export const getEditingTaskId: Selector<TaskState, string | undefined> = (state: TaskState): string | undefined => {
-  return state.editingTaskId;
 };

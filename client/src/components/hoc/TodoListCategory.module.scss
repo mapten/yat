@@ -1,0 +1,20 @@
+.todoListCategory {
+  padding-top: 1rem;
+
+  &__Items {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+
+  h2 {
+    padding-bottom: 0.5rem;
+    cursor: pointer;
+    display: inline-flex;
+    gap: 0.7rem;
+
+    svg {
+      font-size: 2rem;
+    }
+  }
+}

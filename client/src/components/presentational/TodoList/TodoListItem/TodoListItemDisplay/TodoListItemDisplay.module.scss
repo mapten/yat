@@ -1,7 +1,7 @@
+@import 'src/assets/styles/colors.scss';
+
 .itemDisplay {
-  display: flex;
-  font-size: 1.2em;
-  justify-content: space-between;
+  overflow: hidden;
 
   &__buttonGroup {
     display: inline-flex;

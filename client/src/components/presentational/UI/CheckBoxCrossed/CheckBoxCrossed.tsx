@@ -5,25 +5,43 @@ import styles from './CheckBoxCrossed.module.scss';
 type Props = {
   initialChecked: boolean;
   text: string;
-  color: string;
+  color?: string;
   onChange: (checked: boolean) => void;
 }
 
 const CheckBoxCrossed: React.FC<Props> = ({initialChecked, text, color, onChange} : Props) => {
   const [checked, setChecked] = useState(false);
+  const [icon, setIcon] = useState('mdi:checkbox-marked-circle');
+
+  const iconValue: Record<string, string> = {
+    checked: 'mdi:checkbox-marked-circle',
+    unchecked: 'mdi:checkbox-blank-circle'
+  };
 
   useEffect(() => {
     setChecked(initialChecked);
   }, [initialChecked]);
+
+  useEffect(() => {
+    setIcon(checked ? iconValue.checked : iconValue.unchecked);
+  }, [checked]);
 
   const checkedHandler = () => {
     setChecked(!checked);
     onChange(!checked);
   };
 
+  const mouseHoverHandler = () => {
+    setIcon(checked ? iconValue.unchecked : iconValue.checked);
+  };
+
+  const mouseLeaveHandler = () => {
+    setIcon(checked ? iconValue.checked : iconValue.unchecked);
+  };
+
   return (
-    <div data-testid="checkboxCrossed" className={styles.checkboxCrossed} role="checkbox" onClick={checkedHandler}>
-      <Icon color={color} icon={checked ? 'ri:checkbox-circle-fill' : 'ri:checkbox-blank-circle-fill'} />
+    <div onMouseLeave={mouseLeaveHandler} onMouseEnter={mouseHoverHandler} data-testid="checkboxCrossed" className={styles.checkboxCrossed} role="checkbox" onClick={checkedHandler}>
+      <Icon role="img" color={color} icon={icon} />
       <span className={checked ? styles.crossed : ''}>{text}</span>
     </div>
   );

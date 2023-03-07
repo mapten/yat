@@ -1,28 +1,49 @@
+@import 'src/assets/styles/colors.scss';
+
 .itemEdit {
-  display: flex;
-  font-size: 1.2em;
-  justify-content: space-between;
 
-  &__formRow {   
-    label {
-      font-size: 0.8em;
-      margin-left: 1em;
-    }
-    
-    input,
-    select {
-      border: 0.2em solid #ccc;
-      border-radius: 0.4em;
-      box-sizing: border-box;
-      padding: 0.3em;
-    }
-  }
-
-  button:nth-child(1) {
-    margin-right: 0.2em;
+  &__formItem {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
   }
 
   &--danger {
-    border-color: #f00;
+    border: 2px solid $red !important;
+  }
+
+  &__select, input {
+    font-size: 1rem;
+    min-width: 20rem;
+    border: 1px solid $gray-dark;
+    background-color: $white;
+    border-radius: 0.4rem;
+    box-sizing: border-box;
+    padding: 0.3em;
+  }
+
+  &__selectOption {
+    display: inline-flex;
+    gap: 0.5rem;
+    display: grid;
+    grid-template-columns: auto 1fr;
+
+    span {
+      display: inline-block;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    svg {
+      min-width: 1rem;
+      min-height: 1rem;
+    }
+  }
+
+  &__buttonGroup {
+    display: flex;
+    align-items: flex-end;
+    gap: 0.5rem;
   }
 }

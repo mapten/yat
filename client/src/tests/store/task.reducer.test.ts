@@ -1,7 +1,7 @@
 import { describe, it, beforeEach, expect } from 'vitest';
 
 // Store
-import { getEditingTaskId, getTaskList, TaskAction, taskInitialState, taskReducer, TaskState } from './task.reducer';
+import { getTaskList, TaskAction, taskInitialState, taskReducer, TaskState } from '../../store/reducers/task.reducer';
 import * as actionTypes from '../../constants/redux-action-types.constants';
 
 // Models
@@ -81,7 +81,7 @@ describe('redux reducers - task', () => {
       const newTask: Task = { id: '3', displayName: 'task 3', priority: 2, done: false };
 
       const action = {
-        type: actionTypes.TASK_CREATE_SUCCESS,
+        type: actionTypes.TASK_ADD_SUCCESS,
         editTask: newTask,
       } as TaskAction;
 
@@ -121,27 +121,6 @@ describe('redux reducers - task', () => {
       expect(result).toEqual(expectedState);
     });
 
-    it('should handle TASK_SET_EDIT_ID', () => {
-      // arrange
-      const editingTaskId = '1';
-
-      const expectedState: TaskState = {
-        ...initialState,
-        editingTaskId,
-      };
-
-      const action = {
-        type: actionTypes.TASK_SET_EDIT_ID,
-        taskId: editingTaskId,
-      } as TaskAction;
-
-      // act
-      const result = taskReducer(initialState, action);
-
-      // assert
-      expect(result).toEqual(expectedState);
-    });
-
     it('should handle TASK_EDIT_SUCCESS', () => {
       // arrange
       const initialTaskList: Task[] = [
@@ -158,14 +137,13 @@ describe('redux reducers - task', () => {
 
       const expectedState: TaskState = {
         ...initialState,
-        editingTaskId: undefined,
         taskList: expectedTaskList,
       };
 
       const editTask: Task = { id: '2', displayName: 'task 2 modified', priority: 2, done: false };
 
       const action = {
-        type: actionTypes.TASK_EDIT_SUCCESS,
+        type: actionTypes.TASK_UPDATE_SUCCESS,
         editTask,
       } as TaskAction;
 
@@ -224,20 +202,6 @@ describe('redux reducers - task', () => {
         const result = getTaskList(initialStateWithTasks);
 
         expect(result).toEqual(initialTaskList);
-      });
-    });
-
-    describe('getEditingTaskId', () => {
-      it('should return the edit task id', () => {
-        // arrange
-        const editingTaskId = '3';
-
-        const initialStateWithTasks: TaskState = { ...initialState, editingTaskId };
-
-        // act
-        const result = getEditingTaskId(initialStateWithTasks);
-
-        expect(result).toEqual('3');
       });
     });
   });

@@ -15,5 +15,13 @@ export const ButtonDefault = Template.bind({});
 ButtonDefault.args = {
   displayText: 'Some text',
   buttonStyle: 'add',
-  iconName: 'save',
+  iconName: 'material-symbols:save',
+};
+
+export const ButtonIcon = Template.bind({});
+ButtonIcon.args = {
+  buttonStyle: 'add',
+  buttonType: 'icon',
+  iconName: 'material-symbols:save',
+  displayText: 'Save',
 };

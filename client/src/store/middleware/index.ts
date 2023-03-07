@@ -7,8 +7,8 @@ import * as taskSaga from './task.Saga';
 
 export function* watchTask() {
   yield takeLatest(actionTypes.TASK_FETCH, taskSaga.fetchTasksSaga);
-  yield takeEvery(actionTypes.TASK_CREATE, taskSaga.createTaskSaga);
+  yield takeEvery(actionTypes.TASK_ADD, taskSaga.createTaskSaga);
   yield takeEvery(actionTypes.TASK_CHANGE_STATUS, taskSaga.changeStatusSaga);
-  yield takeEvery(actionTypes.TASK_EDIT, taskSaga.editTaskSaga);
+  yield takeEvery(actionTypes.TASK_UPDATE, taskSaga.editTaskSaga);
   yield takeEvery(actionTypes.TASK_DELETE, taskSaga.deleteTaskSaga);
 }

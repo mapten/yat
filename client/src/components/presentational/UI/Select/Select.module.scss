@@ -1,0 +1,46 @@
+@import 'src/assets/styles/variables';
+@import 'src/assets/styles/colors';
+
+.select {
+  min-width: calc($breakpoint-mobile - 2rem);
+  max-width: 20rem;
+  position: relative;
+
+  @media screen and (max-width: $breakpoint-mobile) {
+    max-width: 100%;
+  }
+
+  &__selected {
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+
+    svg {
+      min-width: 1rem;
+      min-height: 1rem;
+    }
+  }
+
+  &__options {
+    background-color: inherit;
+    border: inherit;
+    border-radius: inherit;
+    cursor: pointer;
+    overflow: hidden;
+    margin-top: 0.7rem;
+    z-index: 1;
+    position: absolute;
+    left: 0;
+    right: 0;
+  }
+
+  &__option {
+    padding: 0.5rem;
+    transition: background-color 0.1s ease-in-out;
+
+    &:hover {
+      background-color: $gray-light;
+    }
+  }
+}
