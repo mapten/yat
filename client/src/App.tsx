@@ -7,7 +7,7 @@ import './App.scss';
 // Components
 import TodoList from './components/containers/TodoList/TodoList';
 import { useTheme } from './components/hoc/ThemeProvider/ThemeProvider';
-import TodoListHeader from './components/presentational/TodoList/TodoListHeader/TodoListHeader';
+import Header from './components/presentational/Header/Header';
 
 const App: React.FC = () => {
   const { theme } = useTheme();
@@ -15,7 +15,7 @@ const App: React.FC = () => {
   return (
     <div className={`${theme}-theme app`}>
       <header>
-        <TodoListHeader />
+        <Header />
       </header>
       <main>
         <BrowserRouter>

@@ -1,6 +1,13 @@
 @import 'src/assets/styles/colors.scss';
+@import 'src/assets/styles/variables.scss';
 
 .itemEdit {
+  gap: 1rem;
+  @media screen and (max-width: $breakpoint-laptop) {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
   &__formItem {
     display: flex;
     flex-direction: column;
@@ -13,12 +20,16 @@
 
   &__select, input {
     font-size: 1rem;
-    min-width: 20rem;
+    width: 100%;
     border: 1px solid $gray-dark;
     background-color: inherit;
     border-radius: 0.4rem;
     box-sizing: border-box;
     padding: 0.3em;
+
+    @media screen and (min-width: $breakpoint-laptop) {
+      min-width: calc($breakpoint-mobile);
+    }
   }
 
   &__selectOption {

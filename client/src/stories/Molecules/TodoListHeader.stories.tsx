@@ -4,17 +4,17 @@ import { Story, Meta } from '@storybook/react/types-6-0';
 // Decorators
 import ThemeDecorator from '../../../.storybook/decorators/ThemeDecorator';
 
-import TodoListHeader from '../../components/presentational/TodoList/TodoListHeader/TodoListHeader';
+import Header from '../../components/presentational/Header/Header';
 
 export default {
   title: 'Molecules/Todo list header',
-  component: TodoListHeader,
-  decorators: [ ThemeDecorator ]
+  component: Header,
+  decorators: [ThemeDecorator]
 } as Meta;
 
-type Props = React.ComponentProps<typeof TodoListHeader>;
+type Props = React.ComponentProps<typeof Header>;
 
-const Template: Story<Props> = (args) => <TodoListHeader {...args} />;
+const Template: Story<Props> = (args) => <Header {...args} />;
 
 export const TodoListHeaderDefault = Template.bind({});
 TodoListHeaderDefault.args = {

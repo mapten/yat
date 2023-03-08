@@ -3,13 +3,7 @@
 
 .select {
   background-color: inherit;
-  min-width: calc($breakpoint-mobile - 2rem);
-  max-width: 20rem;
   position: relative;
-
-  @media screen and (max-width: $breakpoint-mobile) {
-    max-width: 100%;
-  }
 
   &__selected {
     cursor: pointer;
