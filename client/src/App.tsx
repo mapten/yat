@@ -8,6 +8,7 @@ import './App.scss';
 import TodoList from './components/containers/TodoList/TodoList';
 import { useTheme } from './components/hoc/ThemeProvider/ThemeProvider';
 import Header from './components/presentational/Header/Header';
+import Footer from './components/presentational/Footer/Footer';
 
 const App: React.FC = () => {
   const { theme } = useTheme();
@@ -25,7 +26,9 @@ const App: React.FC = () => {
           </Routes>
         </BrowserRouter>
       </main>
-
+      <footer>
+        <Footer />
+      </footer>
     </div>
   );
 };
