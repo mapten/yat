@@ -14,9 +14,8 @@ import { Task } from '../../../models/task.model';
 import { PRIORITY_LEVELS } from '../../../constants/priorityLevels.constants';
 
 // Components
-import { TodoListHeader } from '../../presentational/TodoList/TodoListHeader/TodoListHeader';
 import TodoListCreate from '../../presentational/TodoList/TodoListCreate/TodoListCreate';
-import TodoListCategory from '../../hoc/TodoListCategory';
+import TodoListCategory from '../../hoc/TodoListCategory/TodoListCategory';
 import { TodoListItemEdit } from '../../presentational/TodoList/TodoListItem/TodoListItemEdit/TodoListItemEdit';
 import { TodoListItemDisplay } from '../../presentational/TodoList/TodoListItem/TodoListItemDisplay/TodoListItemDisplay';
 
@@ -119,18 +118,15 @@ export const TodoList: React.FC<Props> = ({ initialTaskList, onFetchTasks, onCha
 
   return (
     <>
-      <TodoListHeader />
-      <main>
-        <TodoListCategory displayCount={false} category='create task'>
-          <TodoListCreate onAddTask={addTaskHandler} />
-        </TodoListCategory>
-        <TodoListCategory category='pending' itemCount={getTasks(false).length} displayCount={true} initialShowList={true}>
-          {renderTaskList(false)}
-        </TodoListCategory>
-        <TodoListCategory category='completed' itemCount={getTasks(true).length} displayCount={true} initialShowList={false}>
-          {renderTaskList(true)}
-        </TodoListCategory>
-      </main>
+      <TodoListCategory displayCount={false} category='create task'>
+        <TodoListCreate onAddTask={addTaskHandler} />
+      </TodoListCategory>
+      <TodoListCategory category='pending' itemCount={getTasks(false).length} displayCount={true} initialShowList={true}>
+        {renderTaskList(false)}
+      </TodoListCategory>
+      <TodoListCategory category='completed' itemCount={getTasks(true).length} displayCount={true} initialShowList={false}>
+        {renderTaskList(true)}
+      </TodoListCategory>
     </>
   );
 };

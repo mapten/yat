@@ -1,13 +1,18 @@
 import React from 'react';
 import { Story, Meta } from '@storybook/react/types-6-0';
+import { Icon } from '@iconify/react';
+
+// Decorators
+import ThemeDecorator from '../../../.storybook/decorators/ThemeDecorator';
 
 // Components
 import Select from '../../components/presentational/UI/Select/Select';
-import { Icon } from '@iconify/react';
+
 
 export default {
   title: 'Atoms/Select',
   component: Select,
+  decorators: [ ThemeDecorator ]
 } as Meta;
 
 type Item = {

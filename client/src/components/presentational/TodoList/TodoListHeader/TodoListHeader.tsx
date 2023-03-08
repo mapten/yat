@@ -1,11 +1,17 @@
 // Styles
 import styles from './TodoListHeader.module.scss';
 
-export const TodoListHeader: React.FC = () => {
+// Components
+import ThemeToggleButton from '../../ThemeToggleButton/ThemeToggleButton';
+
+const TodoListHeader: React.FC = () => {
 
   return (
-    <header className={styles.todoList__Header}>
+    <div className={styles.todoList__Header}>
       <h1>Task list</h1>
-    </header>
+      <ThemeToggleButton />
+    </div>
   );
 };
+
+export default TodoListHeader;

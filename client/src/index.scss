@@ -46,9 +46,6 @@ h2 {
 }
 
 body {
-  background-color: $gray-light;
-  padding: 2rem 7rem;
-
   @media screen and (max-width: $breakpoint-mobile) {
     padding: 0.5rem;
   }

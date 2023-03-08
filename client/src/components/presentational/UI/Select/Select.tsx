@@ -80,13 +80,13 @@ const Select = <T,I extends Index>({ items, initialItem, keyExtractor, textExtra
 
   return (
     <div ref={selectRef} id={otherProps.id} role="combobox" className={`${otherProps.className} ${styles.select}`}>
-      <div title={getSelectedTitle()} data-testid="select__selected" onClick={toggleMenuHandler} className={`select__selected ${styles.select__selected}`}>
+      <div title={getSelectedTitle()} data-testid="select__selected" onClick={toggleMenuHandler} className={`select select__selected ${styles.select__selected}`}>
         {renderSelectedItem()}
         <Icon icon='material-symbols:keyboard-arrow-down-rounded' rotate={menuOpen ? 2 : 0} />
       </div>
       {
         items && items.length > 0 && menuOpen && (
-          <div data-testid="select__options" className={`inputWrapper element ${styles.select__options}`}>
+          <div data-testid="select__options" className={`select option ${styles.select__options}`}>
             {
               items.map((item) => (
                 <div role="option" className={styles.select__option} onClick={(_) => itemChangeHandler(item)} key={keyExtractor(item)}>

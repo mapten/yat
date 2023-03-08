@@ -1,6 +1,8 @@
+
 import React from 'react';
 import { Story, Meta } from '@storybook/react/types-6-0';
 import { MemoryRouter } from 'react-router-dom';
+import ThemeDecorator from '../../../.storybook/decorators/ThemeDecorator';
 
 // Components
 import { TodoList } from '../../components/containers/TodoList/TodoList';
@@ -13,7 +15,8 @@ export default {
       <MemoryRouter initialEntries={['/', '/create']}>
         <Story {...context} />
       </MemoryRouter>
-    )
+    ),
+    ThemeDecorator
   ]
 } as Meta;
 

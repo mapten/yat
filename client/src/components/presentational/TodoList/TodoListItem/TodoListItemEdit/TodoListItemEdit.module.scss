@@ -1,7 +1,6 @@
 @import 'src/assets/styles/colors.scss';
 
 .itemEdit {
-
   &__formItem {
     display: flex;
     flex-direction: column;
@@ -16,7 +15,7 @@
     font-size: 1rem;
     min-width: 20rem;
     border: 1px solid $gray-dark;
-    background-color: $white;
+    background-color: inherit;
     border-radius: 0.4rem;
     box-sizing: border-box;
     padding: 0.3em;

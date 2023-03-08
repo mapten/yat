@@ -2,6 +2,7 @@
 @import 'src/assets/styles/colors';
 
 .select {
+  background-color: inherit;
   min-width: calc($breakpoint-mobile - 2rem);
   max-width: 20rem;
   position: relative;
@@ -38,9 +39,5 @@
   &__option {
     padding: 0.5rem;
     transition: background-color 0.1s ease-in-out;
-
-    &:hover {
-      background-color: $gray-light;
-    }
   }
 }

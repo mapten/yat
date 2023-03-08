@@ -6,9 +6,6 @@ import createSagaMiddleware from 'redux-saga';
 // Style
 import './index.scss';
 
-// Components
-import { App } from './App';
-
 // Store
 import { rootReducer } from './store/reducers';
 import { applyMiddleware, compose, createStore } from 'redux';
@@ -17,6 +14,10 @@ import { watchTask } from './store/middleware';
 // Services
 import { windowReferenceService } from './services/system/windowsReference.service';
 import * as mirageServerService from './services/mirageServer.service';
+
+// Components
+import App from './App';
+import ThemeProvider from './components/hoc/ThemeProvider/ThemeProvider';
 
 let composeEnhancers = null;
 
@@ -44,7 +45,9 @@ sagaMiddleware.run(watchTask);
 createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
     <Provider store={store}>
-      <App />
+      <ThemeProvider>
+        <App />
+      </ThemeProvider>
     </Provider>
   </React.StrictMode>
 );

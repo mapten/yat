@@ -2,7 +2,7 @@ import { describe, it, afterEach, expect } from 'vitest';
 import { render, cleanup, screen, fireEvent } from '@testing-library/react';
 
 // Components
-import TodoListCategory from '../../../../components/hoc/TodoListCategory';
+import TodoListCategory from '../../../../components/hoc/TodoListCategory/TodoListCategory';
 
 describe('<TodoListCategory/>', () => {
   afterEach(() => {

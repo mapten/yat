@@ -1,0 +1,57 @@
+@import 'src/assets/styles/colors.scss';
+
+.app {
+  height: 100vh;
+}
+
+main {
+  padding: 0rem 7rem;
+}
+
+.dark-theme {
+  background-color: $black-light;
+  color: $gray-light;
+
+  header {
+    box-shadow: 0px 2px 7px darken($black-light, 10%);
+  }
+
+  .task, .select, header, input[type = 'text'] {
+    background-color: $black;
+    color: $gray-light;
+  }
+
+  .option {
+    div:hover {
+      background-color: $black-light;
+    }
+  }
+
+  input[type = 'text']::placeholder {
+    color: $gray-light;
+  }
+}
+
+.light-theme {
+  background-color: $gray-light;
+  color: $black;
+
+  header {
+    box-shadow: 0px 2px 7px darken($gray-light, 10%);
+  }
+
+  .task, .select,  header, input[ type = 'text'] {
+    background-color: $white;
+    color: $black;
+  }
+
+  .option {
+    div:hover {
+      background-color: $gray-light;
+    }
+  }
+
+  input[type = 'text']::placeholder {
+    color: $black;
+  }
+}
