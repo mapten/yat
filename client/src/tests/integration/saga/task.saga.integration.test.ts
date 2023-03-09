@@ -228,7 +228,7 @@ describe('redux saga - integration - task', () => {
       // arrange
       const apiTasksFromJson: Task[] = apiTasks;
 
-      mockAxios.onPatch().replyOnce(200);
+      mockAxios.onPut().replyOnce(200);
 
       const modifiedMockInitialState: RootState = {
         ...mockInitialState,
@@ -265,7 +265,7 @@ describe('redux saga - integration - task', () => {
 
     it('should put TASK_UPDATE_ERROR when API response code is error', async () => {
       // arrange
-      mockAxios.onPatch().networkErrorOnce();
+      mockAxios.onPut().networkErrorOnce();
 
       const editTask: Task = {
         id: '1',

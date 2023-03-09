@@ -8,12 +8,11 @@ import * as actions from '../actions';
 // Models
 import { Task } from '../../models/task.model';
 
-// Constants
-import { API_ENDPOINT } from '../../constants/configuration';
-
 // Services
 import { getAxiosApiInstance } from '../../services/axios.service';
 import { TaskAction } from '../reducers/task.reducer';
+
+const API_ENDPOINT = import.meta.env.VITE_APP_API_ENDPOINT;
 
 /**
  * Fetch the tasks from the API
@@ -71,7 +70,7 @@ export function* editTaskSaga(action: TaskAction) {
   try {
     const apiEndpoint = `${API_ENDPOINT}/task`;
 
-    yield call(getAxiosApiInstance(apiEndpoint).patch, `/${action.editTask.id}`, action.editTask);
+    yield call(getAxiosApiInstance(apiEndpoint).put, '', action.editTask);
 
     yield put(actions.task.updateTaskSuccess(action.editTask));
   } catch (error) {

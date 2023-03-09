@@ -1,8 +1,9 @@
 /* istanbul ignore file */
 import { Server, Model, Response } from 'miragejs';
 import { AnyRegistry } from 'miragejs/-types';
-import { API_ENDPOINT } from '../constants/configuration';
 import { v4 as uuidv4 } from 'uuid';
+
+const API_ENDPOINT = import.meta.env.VITE_APP_API_ENDPOINT;
 
 // Models
 import { Task } from '../models/task.model';

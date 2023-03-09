@@ -83,12 +83,12 @@ describe('getAxiosApiInstance', () => {
     // act
     await getAxiosApiInstance('').get('/foo').catch((error) => {
       // assert
-      expect(error.response.status).toBe(512);
-      expect(error.response.data).toBe(6);
+      expect(error.response.status).toBe(500);
+      expect(error.response.data).toBe(4);
     });
 
     // assert
-    expect(count).toBe(6);
+    expect(count).toBe(4);
 
     // assert
   }, 30000);

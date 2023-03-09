@@ -5,4 +5,7 @@
 /client/coverage
 /client/build
 
+client/.vscode
+server/.vscode
+
 .env

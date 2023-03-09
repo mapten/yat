@@ -15,6 +15,8 @@ import { watchTask } from './store/middleware';
 import { windowReferenceService } from './services/system/windowsReference.service';
 import * as mirageServerService from './services/mirageServer.service';
 
+const FAKE_API = import.meta.env.VITE_APP_FAKE_API;
+
 // Components
 import App from './App';
 import ThemeProvider from './components/hoc/ThemeProvider/ThemeProvider';
@@ -27,7 +29,9 @@ if (process.env.NODE_ENV === 'development') {
 
   if (!windowReferenceService().Cypress) {
     // runs the in-memory testing API
-    mirageServerService.makeServer();
+    if (FAKE_API === true) {
+      mirageServerService.makeServer();
+    }
   }
 } else {
   composeEnhancers = compose;

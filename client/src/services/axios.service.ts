@@ -1,8 +1,6 @@
 import axios, { AxiosInstance } from 'axios';
 import axiosRetry from 'axios-retry';
 
-// Constants
-import { AXIOS_RETRIES } from '../constants/configuration';
 
 export const getAxiosApiInstance = (endpoint: string): AxiosInstance => {
   const client = axios.create({
@@ -18,7 +16,7 @@ export const getAxiosApiInstance = (endpoint: string): AxiosInstance => {
 };
 
 const configureRetry = (client: AxiosInstance) => {
-  const retries = AXIOS_RETRIES;
+  const retries = Number(import.meta.env.VITE_API_AXIOS_RETRIES || 3);
 
   axiosRetry(client, {
     retries, retryDelay: axiosRetry.exponentialDelay, retryCondition: (error) => {
