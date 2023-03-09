@@ -32,6 +32,10 @@ main {
     box-shadow: 0px 2px 7px darken($black-light, 10%);
   }
 
+  .themeText {
+    color: $gray-light;
+  }
+
   .task, .select, .progressBar, header, input[type = 'text'] {
     background-color: $black;
     color: $gray-light;
@@ -54,6 +58,10 @@ main {
 
   header {
     box-shadow: 0px 2px 7px darken($gray-light, 10%);
+  }
+
+  .themeText {
+    color: $black;
   }
 
   .task, .select, .progressBar, header, input[ type = 'text'] {
