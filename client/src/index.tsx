@@ -2,18 +2,20 @@ import React from 'react';
 import { createRoot } from 'react-dom/client';
 import { Provider } from 'react-redux';
 import createSagaMiddleware from 'redux-saga';
+import { applyMiddleware, compose, createStore } from 'redux';
+
+import { worker } from './mocks/browser';
 
 // Style
 import './index.scss';
 
 // Store
 import { rootReducer } from './store/reducers';
-import { applyMiddleware, compose, createStore } from 'redux';
 import { watchTask } from './store/middleware';
 
 // Services
 import { windowReferenceService } from './services/system/windowsReference.service';
-import * as mirageServerService from './services/mirageServer.service';
+
 
 const FAKE_API = import.meta.env.VITE_APP_FAKE_API;
 
@@ -23,14 +25,14 @@ import ThemeProvider from './components/hoc/ThemeProvider/ThemeProvider';
 
 let composeEnhancers = null;
 
-if (process.env.NODE_ENV === 'development') {
+if (import.meta.env.DEV) {
   // enables Redux Devtools in the browser
   composeEnhancers = windowReferenceService().__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
   if (!windowReferenceService().Cypress) {
     // runs the in-memory testing API
-    if (FAKE_API === true) {
-      mirageServerService.makeServer();
+    if (import.meta.env.DEV && FAKE_API === 'true') {
+      worker.start();
     }
   }
 } else {
