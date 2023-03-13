@@ -51,4 +51,14 @@ describe('<Footer/>', () => {
     // assert
     await waitFor(() => expect(progressBar.textContent).toBe('0 %'));
   });
+
+  it('should render the ScrollBar with the percentage of 0 when the taskList is undefined', async () => {
+    // arrange, act
+    renderUI({ taskList: undefined });
+
+    const progressBar = screen.getByRole('progressbar');
+
+    // assert
+    await waitFor(() => expect(progressBar.textContent).toBe('0 %'));
+  });
 });

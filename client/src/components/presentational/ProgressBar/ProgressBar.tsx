@@ -3,15 +3,11 @@ import { useSpring, animated } from 'react-spring';
 // Styles
 import styles from './ProgressBar.module.scss';
 
-// Components
-import { useTheme } from '../../hoc/ThemeProvider/ThemeProvider';
-
 type Props = {
   progress: number;
 }  & React.HTMLAttributes<HTMLDivElement>;
 
 const ProgressBar: React.FC<Props> = ({ progress, ...otherProps }: Props) => {
-  const { theme } = useTheme();
 
   const number = useSpring({
     from: { number: 0 },

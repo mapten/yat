@@ -21,7 +21,7 @@ type Props = StateProps;
 
 export const Footer: React.FC<Props> = ({taskList} : Props) => {
 
-  const progress = (taskList.filter((task) => task.done).length / taskList.length * 100) ?? 0;
+  const progress = (taskList && taskList.filter((task) => task.done).length / taskList.length * 100) || 0;
 
   return (
     <div className={styles.footer}>
