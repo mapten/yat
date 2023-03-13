@@ -3,12 +3,16 @@ $add-color: #1be082;
 $dismiss-color: #e4545f;
 $warning-color: #f6d3aa;
 
-$gray-light: #f5f5f5;
-$gray-dark: #a3a3a3;
-$gray-darker: #4d4d4d;
+$gray-light: #e6e6ea;
+$gray-dark: darken(#e6e6ea, 30%);
+$gray-darker: darken($gray-dark, 30%);
+
+$principal-color: #2ab7ca;
+$secondary-color: #fe4a49;
+$tertiary-color: #fed766;
 
 $white: #fff;
+$ghost-white: #f4f4f8;
 $black: #000;
 $black-light: lighten($black, 10%);
-
 $red: #ff0000;

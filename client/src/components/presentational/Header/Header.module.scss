@@ -3,13 +3,13 @@
 .todoList__Header {
   display: flex;
   justify-content: space-between;
-  padding: 2rem 7rem;
+  padding: 0.8rem 7rem;
 
   @media screen and (max-width: $breakpoint-laptop) {
-    padding: 1rem 2rem;
+    padding: 0.6rem 2rem;
   }
 
   @media screen and (max-width: $breakpoint-mobile) {
-    padding: 0.5rem 0.5rem;
+    padding: 0.4rem 0.5rem;
   }
 }

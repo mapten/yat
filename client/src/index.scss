@@ -1,10 +1,8 @@
 @import 'src/assets/styles/variables';
 @import 'src/assets/styles/colors';
 
-@font-face {
-  font-family: 'Avenir';
-  src: local('Avenir'), url(./assets/fonts/AvenirLTStd-Roman.otf);
-}
+@import url('https://fonts.cdnfonts.com/css/avenir');
+@import url('https://fonts.googleapis.com/css2?family=Prata&display=swap');
 
 *,
 *::after,
@@ -59,13 +57,13 @@ h2 {
 }
 
 h1 {
-  font-size: 2.5rem;
-
+  font-size: 4rem;
+  font-family: 'Prata';
   @media screen and (max-width: $breakpoint-mobile) {
-    font-size: 1.5rem;
+    font-size: 1.7rem;
   }
   @media screen and (max-width: $breakpoint-laptop) {
-    font-size: 2rem;
+    font-size: 3rem;
   }
 }
 
