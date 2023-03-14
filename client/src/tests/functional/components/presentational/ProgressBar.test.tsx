@@ -1,48 +1,42 @@
-import { describe, it, beforeEach, afterEach, expect } from 'vitest';
-
-import React from 'react';
+import { describe, it, vi, afterEach, expect } from 'vitest';
 import { render, cleanup, screen } from '@testing-library/react';
+
+// Store
+import * as taskStore from '../../../../store/task.store';
 
 // Components
 import ProgressBar from '../../../../components/presentational/ProgressBar/ProgressBar';
 
-
-type Props = React.ComponentPropsWithoutRef<typeof ProgressBar>;
-
 describe('<ProgressBar/>', () => {
-  let baseProps: Props;
 
-  beforeEach(() => {
-    baseProps = {
-      progress: 50,
-    };
-  });
-
-  const renderUI = (props: Partial<Props> = {}) => {
-    return render(<ProgressBar {...baseProps} {...props} />);
+  const renderUI = () => {
+    return render(<ProgressBar />);
   };
 
   afterEach(() => {
+    vi.restoreAllMocks();
     cleanup();
   });
 
   it('should display the progress with rounded decimals', async () => {
     // arrange
-    const props: Partial<Props> = { progress: 54.123 };
+    vi.spyOn(taskStore, 'getPercentageCompletedTasks').mockReturnValueOnce(33.3333333);
+
+    //mockGetPercentageCompletedTasks.mockReturnValueOnce(33.33333333333333);
 
     // act
-    renderUI(props);
+    renderUI();
 
     // assert
-    expect(async () => screen.findByText('54 %')).toBeTruthy();
+    expect(async () => screen.findByText('33 %')).toBeTruthy();
   });
 
   it('should set the text to the right of the progress bar when the progress is less than 5%', async () => {
     // arrange
-    const props: Partial<Props> = { progress: 4.123 };
+    vi.spyOn(taskStore, 'getPercentageCompletedTasks').mockReturnValueOnce(4);
 
     // act
-    renderUI(props);
+    renderUI();
 
     const span = await screen.findByText('4 %');
 
@@ -52,15 +46,14 @@ describe('<ProgressBar/>', () => {
 
   it('should not set the text to the right of the progress bar when the progress is more than 5%', async () => {
     // arrange
-    const props: Partial<Props> = { progress: 60 };
+    vi.spyOn(taskStore, 'getPercentageCompletedTasks').mockReturnValueOnce(60);
 
     // act
-    renderUI(props);
+    renderUI();
 
     const span = await screen.findByText('60 %');
 
     // assert
     expect(span.style.marginRight).toBe('0px');
   });
-
 });

@@ -1,17 +1,10 @@
 import { useEffect, useState } from 'react';
-import { connect } from 'react-redux';
-import { Dispatch } from 'redux';
-
-// Store
-import * as actions from '../../../store/actions';
-import { RootState } from '../../../store/models/rootState.model';
-import { getTaskList, TaskActionPartial } from '../../../store/reducers/task.reducer';
-
-// Models
-import { Task } from '../../../models/task.model';
 
 // Constants
 import { PRIORITY_LEVELS } from '../../../constants/priorityLevels.constants';
+
+// Store
+import { useTaskStore } from '../../../store/task.store';
 
 // Components
 import TodoListCreate from '../../presentational/TodoList/TodoListCreate/TodoListCreate';
@@ -19,75 +12,21 @@ import TodoListCategory from '../../hoc/TodoListCategory/TodoListCategory';
 import { TodoListItemEdit } from '../../presentational/TodoList/TodoListItem/TodoListItemEdit/TodoListItemEdit';
 import { TodoListItemDisplay } from '../../presentational/TodoList/TodoListItem/TodoListItemDisplay/TodoListItemDisplay';
 
-type StateProps = {
-  initialTaskList: Task[];
-}
-
-type DispatchProps = {
-  onFetchTasks: () => void;
-  onChangeTaskStatus: (taskId: string, done: boolean) => void;
-  onAddTask: (newTask: Task) => void;
-  onUpdateTask: (task: Task) => void;
-  onDeleteTask: (taskId: string) => void;
-}
-
-type Props = DispatchProps & StateProps;
-
-export const TodoList: React.FC<Props> = ({ initialTaskList, onFetchTasks, onChangeTaskStatus, onUpdateTask, onAddTask, onDeleteTask }: Props) => {
-  const [taskList, setTaskList] = useState<Task[]>([]);
+const TodoList: React.FC = () => {
   const [editTaskId, setEditTaskId] = useState<string | undefined>(undefined);
 
+  const { tasks, fetchTasks, addTask, changeTaskStatus, updateTask, deleteTask } = useTaskStore((state) => state);
+
   useEffect(() => {
-    onFetchTasks();
+    fetchTasks();
   }, []);
 
-  useEffect(() => {
-    if (taskList.length === 0) {
-      setTaskList(initialTaskList);
-    }
-  }, [initialTaskList]);
-
   const getTasks = (done: boolean) => {
-    return taskList
+    return tasks
       .filter((task) => task.done === done)
       .sort((taskA, taskB) =>
         (taskA.priority - taskB.priority)
       );
-  };
-
-  const taskChangeStatusHandler = (taskId: string, done: boolean) => {
-    setTaskList((tasks) => [...tasks].map((task) => {
-      if (task.id === taskId) {
-        return { ...task, done };
-      }
-      return task;
-    }));
-
-    onChangeTaskStatus(taskId, done);
-  };
-
-  const deleteTaskHandler = (taskId: string) => {
-    setTaskList((tasks) => [...tasks].filter((task) => task.id !== taskId));
-    onDeleteTask(taskId);
-  };
-
-  const updateTaskHandler = (task: Task) => {
-    setTaskList((tasks) => {
-      return [...tasks].map((taskItem) => {
-        if (taskItem.id === task.id) {
-          return task;
-        }
-        return taskItem;
-      });
-    });
-
-    setEditTaskId(undefined);
-    onUpdateTask(task);
-  };
-
-  const addTaskHandler = (newTask: Task) => {
-    setTaskList((tasks) => [...tasks, newTask]);
-    onAddTask(newTask);
   };
 
   const renderTaskList = (done: boolean) => {
@@ -104,15 +43,15 @@ export const TodoList: React.FC<Props> = ({ initialTaskList, onFetchTasks, onCha
               taskDone={task.done}
               initialTaskPriority={task.priority}
               onCancelEdit={() => setEditTaskId(undefined)}
-              onSave={updateTaskHandler} />
+              onSave={updateTask} />
             : <TodoListItemDisplay
               taskId={task.id}
               taskName={task.displayName}
               taskDone={task.done}
               taskPriorityColor={done ? undefined : priorityColor}
-              onTaskChangeStatus={taskChangeStatusHandler}
+              onTaskChangeStatus={changeTaskStatus}
               onSetEdit={setEditTaskId}
-              onDelete={deleteTaskHandler} />
+              onDelete={deleteTask} />
           }
         </div>;
       });
@@ -121,7 +60,7 @@ export const TodoList: React.FC<Props> = ({ initialTaskList, onFetchTasks, onCha
   return (
     <>
       <TodoListCategory displayCount={false} category='create task'>
-        <TodoListCreate onAddTask={addTaskHandler} />
+        <TodoListCreate onAddTask={addTask} />
       </TodoListCategory>
       <TodoListCategory category='pending' itemCount={getTasks(false).length} displayCount={true} initialShowList={true}>
         {renderTaskList(false)}
@@ -133,21 +72,4 @@ export const TodoList: React.FC<Props> = ({ initialTaskList, onFetchTasks, onCha
   );
 };
 
-const mapStateToProps = (state: RootState): StateProps => {
-  return {
-    initialTaskList: getTaskList(state.task)
-  };
-};
-
-const mapDispatchToProps = (dispatch: Dispatch<TaskActionPartial>): DispatchProps => {
-  return {
-    onFetchTasks: () => dispatch(actions.task.fetchTask()),
-    onChangeTaskStatus: (taskId: string, done: boolean) => dispatch(actions.task.taskChangeStatus(taskId, done)),
-    onAddTask: (newTask) => dispatch(actions.task.addTask(newTask)),
-    onUpdateTask: (task: Task) => dispatch(actions.task.updateTask(task)),
-    onDeleteTask: (taskId: string) => dispatch(actions.task.deleteTask(taskId)),
-  };
-};
-
-const connector = connect(mapStateToProps, mapDispatchToProps);
-export default connector(TodoList);
+export default TodoList;

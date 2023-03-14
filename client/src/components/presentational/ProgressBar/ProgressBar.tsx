@@ -1,13 +1,16 @@
 import { useSpring, animated } from 'react-spring';
 
+// Store
+import { useTaskStore, getPercentageCompletedTasks } from '../../../store/task.store';
+
 // Styles
 import styles from './ProgressBar.module.scss';
 
-type Props = {
-  progress: number;
-}  & React.HTMLAttributes<HTMLDivElement>;
+type Props = React.HTMLAttributes<HTMLDivElement>;
 
-const ProgressBar: React.FC<Props> = ({ progress, ...otherProps }: Props) => {
+const ProgressBar: React.FC<Props> = ({ ...otherProps }: Props) => {
+  
+  const progress = useTaskStore(getPercentageCompletedTasks);
 
   const number = useSpring({
     from: { number: 0 },
