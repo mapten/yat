@@ -1,15 +1,10 @@
-$default-color: #009fad;
-$add-color: #1be082;
-$dismiss-color: #e4545f;
-$warning-color: #f6d3aa;
+$principal-color: #2ab7ca;
+$secondary-color: #ff6392;
+$tertiary-color: #98ce00;
 
 $gray-light: #e6e6ea;
-$gray-dark: darken(#e6e6ea, 30%);
-$gray-darker: darken($gray-dark, 30%);
-
-$principal-color: #2ab7ca;
-$secondary-color: #fe4a49;
-$tertiary-color: #fed766;
+$gray: darken($gray-light, 30%);
+$gray-darker: darken($gray, 30%);
 
 $white: #fff;
 $ghost-white: #f4f4f8;

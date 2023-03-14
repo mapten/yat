@@ -26,17 +26,17 @@
 
 .button {
   &--default {
-    @include button($default-color);
+    @include button($principal-color);
     color: #fff;
   }
   
   &--add {
-    @include button($add-color);
+    @include button($tertiary-color);
     color: #000;
   }
   
   &--dismiss {
-    @include button($dismiss-color);
+    @include button($secondary-color);
     color: #fff;
   }
 
@@ -55,10 +55,10 @@
   &--icon {
     all: unset;
     cursor: pointer;
-    color: $gray-dark;
+    color: $gray;
 
     &:hover {
-      color: $gray-darker;
+      color: $gray;
     }
   }
 }
