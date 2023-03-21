@@ -113,6 +113,6 @@ export const useConfigurationStore = create<ConfigurationState>()(
   })), {
     name: 'configuration-storage',
     storage: createJSONStorage(() => localStorage),
-    partialize: (state) => ({ foo: state.theme }),
+    partialize: (state) => ({ theme: state.theme }),
   })
 );
