@@ -26,8 +26,10 @@
             2
         ],
         "semi": [
-            "error",
-            "always"
+            "warning",
+            "always", {
+                "omitLastInOneLineBlock": true
+            }
         ],
         "react/react-in-jsx-scope": "off"
     }
