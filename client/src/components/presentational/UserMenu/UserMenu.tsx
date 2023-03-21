@@ -16,8 +16,10 @@ const UserMenu: React.FC = () => {
   const ref = useRef<HTMLDivElement>(null);
 
   const [menuOpen, setMenuOpen] = useState(false);
+
   const { user, logout, isAuthorized, setIsLoginVisible } = useAuthStore((state) => state);
-  const { getStoreMode, setStoreMode } = useConfigurationStore((state) => state);
+  const { setStoreMode } = useConfigurationStore((state) => state);
+
   useOutsideClick(ref, () => setMenuOpen(false));
 
   const toggleMenuHandler = () => {
@@ -46,7 +48,7 @@ const UserMenu: React.FC = () => {
   return (
     <div ref={ref} role="menu" className={styles.userMenu} onMouseEnter={openMenuHandler} onMouseLeave={closeMenuHandler}>
       <div role="menuitem" className={`${styles.userMenu__displayName}`} onClick={toggleMenuHandler}>
-        <span>Hi, {user?.name || 'Anonymous'} {getStoreMode()}</span>
+        <span>Hi, {user?.name || 'Anonymous'}</span>
       </div>
       {
         menuOpen && (
