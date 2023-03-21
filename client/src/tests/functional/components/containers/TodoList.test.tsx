@@ -1,8 +1,8 @@
 import { describe, it, vi, afterEach, expect, MockedFunction } from 'vitest';
 import { render, cleanup, screen, fireEvent, within, waitFor } from '@testing-library/react';
 
-// Models
-import { Task } from '../../../../models/task.model';
+// Fixture
+import taskFixtures from '../../../fixtures/apiTasks.json';
 
 // Store
 import { useTaskStore } from '../../../../store/task.store';
@@ -22,14 +22,7 @@ vi.mock('react-router-dom', () => ({
 }));
 
 describe('<TodoList />', () => {
-  const initialTaskList: Task[] = [
-    { id: '1', displayName: 'Paint the wall', priority: 3, done: false },
-    { id: '2', displayName: 'Create a todoList demo application', priority: 0, done: true },
-    { id: '3', displayName: 'Learn Kubernetes', priority: 2, done: false },
-    { id: '4', displayName: 'Buy an ukelele', priority: 0, done: true },
-    { id: '5', displayName: 'Learn to play ukelele', priority: 1, done: false },
-    { id: '6', displayName: 'Sell ukelele', priority: 1, done: true },
-  ];
+  const initialTaskList = taskFixtures;
 
   const renderUI = () => {
     return render(<TodoList />);
@@ -42,7 +35,7 @@ describe('<TodoList />', () => {
 
   it('should display pending tasks sorted by priority', () => {
     // arrange, act
-    mockTaskStore.mockImplementationOnce(() => ({
+    mockTaskStore.mockImplementation(() => ({
       tasks: initialTaskList,
       fetchTasks: vi.fn(),
     }));
@@ -60,7 +53,7 @@ describe('<TodoList />', () => {
 
   it('should display completed tasks sorted by priority', () => {
     // arrange
-    mockTaskStore.mockImplementationOnce(() => ({
+    mockTaskStore.mockImplementation(() => ({
       tasks: initialTaskList,
       fetchTasks: vi.fn(),
     }));
@@ -85,7 +78,7 @@ describe('<TodoList />', () => {
     // arrange
     const mockFetchTasks = vi.fn();
 
-    mockTaskStore.mockImplementationOnce(() => ({
+    mockTaskStore.mockImplementation(() => ({
       tasks: [],
       fetchTasks: mockFetchTasks,
     }));
@@ -124,7 +117,7 @@ describe('<TodoList />', () => {
     // arrange
     const mockDelete = vi.fn();
 
-    mockTaskStore.mockImplementationOnce(() => ({
+    mockTaskStore.mockImplementation(() => ({
       tasks: initialTaskList,
       fetchTasks: vi.fn(),
       deleteTask: mockDelete,
@@ -147,7 +140,7 @@ describe('<TodoList />', () => {
     // arrange
     const mockAdd = vi.fn();
 
-    mockTaskStore.mockImplementationOnce(() => ({
+    mockTaskStore.mockImplementation(() => ({
       tasks: initialTaskList,
       fetchTasks: vi.fn(),
       addTask: mockAdd,
