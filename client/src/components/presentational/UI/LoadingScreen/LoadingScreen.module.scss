@@ -1,0 +1,20 @@
+@import 'src/assets/styles/colors';
+@import 'src/assets/styles/variables';
+
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0.5;
+  z-index: $z-index-loading;
+
+  .spinnerWrapper {
+    width: 10em;
+    height: 10em;
+  }
+}

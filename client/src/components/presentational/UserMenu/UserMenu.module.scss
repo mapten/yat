@@ -1,0 +1,30 @@
+@import 'src/assets/styles/variables';
+
+.userMenu {
+  background-color: inherit;
+  position: relative;
+  cursor: pointer;
+
+  &__displayName {
+    display: block;
+  }
+
+  &__options {
+    border-radius: 7px;
+    border-width: 0.1rem;
+    border-style: solid;
+    position: absolute;
+    z-index: $z-index-dropdown;
+    right: 0;
+  }
+
+  &__option {
+    padding: 0.5rem;
+    display: flex;
+    gap: 1rem;
+
+    span {
+      white-space: nowrap;
+    }
+  }
+}
