@@ -13,9 +13,15 @@ import { useTaskStore } from '../../../store/task.store';
 
 // Components
 import { Button } from '../../presentational/UI/Button/Button';
-import AuthOnlineOfflineSelector from './AuthOnlineOfflineSelector/AuthOnlineOfflineSelector';
+import AuthOnlineOfflineSelector from '../../presentational/AuthOnlineOfflineSelector/AuthOnlineOfflineSelector';
 
-const Auth: React.FC = () => {
+type StateProps = {
+  initialMode?: STORE_MODE;
+}
+
+type Props = StateProps;
+
+const Auth: React.FC<Props> = ({ initialMode }: Props) => {
   const nameId = useId();
   const emailId = useId();
   const passwordId = useId();
@@ -24,7 +30,7 @@ const Auth: React.FC = () => {
   const { setStoreMode, getStoreMode } = useConfigurationStore((state) => state);
   const { syncOfflineTasks } = useTaskStore((state) => state);
 
-  const [mode, setMode] = useState<STORE_MODE>('offline');
+  const [mode, setMode] = useState<STORE_MODE>(initialMode || 'offline');
   const [isLogin, setIsLogin] = useState<boolean>(true);
   const [name, setName] = useState<string>('');
   const [email, setEmail] = useState<string>('');
@@ -32,13 +38,6 @@ const Auth: React.FC = () => {
   const [errorName, setErrorName] = useState<string>('');
   const [errorEmail, setErrorEmail] = useState<string>('');
   const [errorPassword, setErrorPassword] = useState<string>('');
-
-  useEffect(() => {
-    const storeMode = getStoreMode();
-    if (storeMode) {
-      setMode(storeMode);
-    }
-  }, [getStoreMode]);
 
   const changeEmailHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setErrorEmail('');
@@ -55,11 +54,11 @@ const Auth: React.FC = () => {
     setName(e.target.value);
   };
 
-  const changeStoreModeHandler = async (mode: STORE_MODE) => {
+  const changeStoreModeHandler = (mode: STORE_MODE) => {
     const prevStoreMore = getStoreMode();
     setStoreMode(mode);
     if (mode === 'online' && prevStoreMore === 'offline') {
-      await syncOfflineTasks();
+      syncOfflineTasks();
     }
   };
 
@@ -117,6 +116,7 @@ const Auth: React.FC = () => {
       await createUser({ name, email, password });
     }
     changeStoreModeHandler('online');
+    setIsLoginVisible(false);
   };
 
   const resetForm = () => {
@@ -156,7 +156,7 @@ const Auth: React.FC = () => {
       <div className={`themeWrapper ${styles.auth}`}>
         <h2>{getHeaderText()}</h2>
         <h3>How do you want to proceed?</h3>
-        <AuthOnlineOfflineSelector selectedMode={mode} onChange={toggleModeHandler} />
+        <AuthOnlineOfflineSelector initialSelectedMode={mode} onChange={toggleModeHandler} />
         {
           mode === 'online' && (
             <>

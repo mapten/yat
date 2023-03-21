@@ -1,8 +1,8 @@
-import { describe, it, vi, afterEach, expect, MockedFunction } from 'vitest';
+import { describe, it, vi, afterEach, expect, MockedFunction, beforeEach } from 'vitest';
 import { render, cleanup, screen, fireEvent, within, waitFor } from '@testing-library/react';
 
-// Fixture
-import taskFixtures from '../../../fixtures/apiTasks.json';
+// Models
+import { Task } from '../../../../models/task.model';
 
 // Store
 import { useTaskStore } from '../../../../store/task.store';
@@ -13,16 +13,37 @@ import userEvent from '@testing-library/user-event';
 
 vi.mock('../../../../store/task.store', () => ({
   useTaskStore: vi.fn(),
+  getPercentageCompletedTasks: vi.fn(),
 }));
 const mockTaskStore = useTaskStore as unknown as MockedFunction<typeof useTaskStore>;
 
-const mockNavigate = vi.fn();
-vi.mock('react-router-dom', () => ({
-  useNavigate: () => mockNavigate,
-}));
-
 describe('<TodoList />', () => {
-  const initialTaskList = taskFixtures;
+  const initialTaskList: Task[] = [
+    { id: '1', displayName: 'Paint the wall', priority: 3, done: false },
+    { id: '2', displayName: 'Create a todoList demo application', priority: 0, done: true },
+    { id: '3', displayName: 'Learn Kubernetes', priority: 2, done: false },
+    { id: '4', displayName: 'Buy an ukelele', priority: 0, done: true },
+    { id: '5', displayName: 'Learn to play ukelele', priority: 1, done: false },
+    { id: '6', displayName: 'Sell ukelele', priority: 1, done: true },
+  ];
+
+  const mockChangeTaskStatus = vi.fn();
+  const mockAddTask = vi.fn();
+  const mockDeleteTask = vi.fn();
+  const mockUpdateTask = vi.fn();
+  const mockFetchTasks = vi.fn();
+
+  beforeEach(() => {
+    mockTaskStore.mockImplementation(() => ({
+      getPendingTasks: () => initialTaskList.filter((task) => !task.done).sort((a, b) => a.priority - b.priority),
+      getCompletedTasks: () => initialTaskList.filter((task) => task.done).sort((a, b) => a.priority - b.priority),
+      addTask: mockAddTask,
+      fetchTasks: mockFetchTasks,
+      changeTaskStatus: mockChangeTaskStatus,
+      deleteTask: mockDeleteTask,
+      updateTask: mockUpdateTask,
+    }));
+  });
 
   const renderUI = () => {
     return render(<TodoList />);
@@ -35,10 +56,6 @@ describe('<TodoList />', () => {
 
   it('should display pending tasks sorted by priority', () => {
     // arrange, act
-    mockTaskStore.mockImplementation(() => ({
-      tasks: initialTaskList,
-      fetchTasks: vi.fn(),
-    }));
     renderUI();
 
     const pendingSection = within(screen.getByText(/Pending/i).closest('section') as HTMLDivElement);
@@ -53,10 +70,6 @@ describe('<TodoList />', () => {
 
   it('should display completed tasks sorted by priority', () => {
     // arrange
-    mockTaskStore.mockImplementation(() => ({
-      tasks: initialTaskList,
-      fetchTasks: vi.fn(),
-    }));
     renderUI();
 
     const completedSection = within(screen.getByText(/Completed/i).closest('section') as HTMLDivElement);
@@ -75,15 +88,7 @@ describe('<TodoList />', () => {
   });
 
   it('should fetch the task list the first time the component is loaded', async () => {
-    // arrange
-    const mockFetchTasks = vi.fn();
-
-    mockTaskStore.mockImplementation(() => ({
-      tasks: [],
-      fetchTasks: mockFetchTasks,
-    }));
-
-    // act
+    // arrange, act
     renderUI();
 
     // assert
@@ -92,14 +97,6 @@ describe('<TodoList />', () => {
 
   it('should trigger changeTaskStatus when a task is marked as done/undone', () => {
     // arrange
-    const mockChangeTaskStatus = vi.fn();
-
-    mockTaskStore.mockImplementationOnce(() => ({
-      tasks: initialTaskList,
-      fetchTasks: vi.fn(),
-      changeTaskStatus: mockChangeTaskStatus,
-    }));
-
     renderUI();
 
     const todoItemDetailsComponents = screen.getAllByTestId('todoItemDisplay') as HTMLDivElement[];
@@ -115,14 +112,6 @@ describe('<TodoList />', () => {
 
   it('should trigger deleteTask when button delete is clicked on TodoListItemDisplay', () => {
     // arrange
-    const mockDelete = vi.fn();
-
-    mockTaskStore.mockImplementation(() => ({
-      tasks: initialTaskList,
-      fetchTasks: vi.fn(),
-      deleteTask: mockDelete,
-    }));
-
     renderUI();
 
     const todoItemDetailsComponents = screen.getAllByTestId('todoItemDisplay') as HTMLDivElement[];
@@ -133,19 +122,11 @@ describe('<TodoList />', () => {
     buttonDelete.click();
 
     // assert
-    expect(mockDelete).toHaveBeenCalledWith('5');
+    expect(mockDeleteTask).toHaveBeenCalledWith('5');
   });
 
-  it('should trigger addTask when a task is created', async () => {
+  it('should trigger addTask when a task is created', () => {
     // arrange
-    const mockAdd = vi.fn();
-
-    mockTaskStore.mockImplementation(() => ({
-      tasks: initialTaskList,
-      fetchTasks: vi.fn(),
-      addTask: mockAdd,
-    }));
-
     renderUI();
 
     const editSection = screen.getByText(/Create/i).closest('section') as HTMLDivElement;
@@ -156,22 +137,11 @@ describe('<TodoList />', () => {
     userEvent.type(input, 'New task name{enter}');
 
     // assert
-    await waitFor(() => expect(mockAdd).toHaveBeenCalledWith(expect.objectContaining({ displayName: 'New task name' })));
+    waitFor(() => expect(mockAddTask).toHaveBeenCalledWith(expect.objectContaining({ displayName: 'New task name' })));
   });
 
   it('should trigger updateTask when button Save is clicked on TodoListItemEdit', async () => {
-    // arrange
-    const mockUpdate = vi.fn();
-
-    mockTaskStore.mockImplementation(() => ({
-      tasks: initialTaskList,
-      fetchTasks: vi.fn(),
-      createTask: vi.fn(),
-      deleteTask: vi.fn(),
-      changeTaskStatus: vi.fn(),
-      updateTask: mockUpdate,
-    }));
-  
+    // arrange 
     renderUI();
 
     const pendingSection = within(screen.getByText(/Pending/i).closest('section') as HTMLDivElement);
@@ -191,6 +161,6 @@ describe('<TodoList />', () => {
     userEvent.type(input, 'New task name{enter}');
 
     // assert
-    await waitFor(() => expect(mockUpdate).toHaveBeenCalledWith(expect.objectContaining({ id: '5' })));
+    waitFor(() => expect(mockUpdateTask).toHaveBeenCalledWith(expect.objectContaining({ id: '5' })));
   });
 });

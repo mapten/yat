@@ -13,11 +13,11 @@ import Header from './components/presentational/Header/Header';
 import Auth from './components/containers/Auth/Auth';
 import LoadingScreen from './components/presentational/UI/LoadingScreen/LoadingScreen';
 
-
 const TodoList = lazy(async () => {
+  // to avoid flashing the loading screen for a split second
   const [moduleExports] = await Promise.all([
     import('./components/containers/TodoList/TodoList'),
-    new Promise(resolve => setTimeout(resolve, 500))
+    new Promise(resolve => setTimeout(resolve, 700))
   ]);
   return moduleExports;
 });

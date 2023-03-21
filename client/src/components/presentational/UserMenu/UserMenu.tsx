@@ -50,7 +50,7 @@ const UserMenu: React.FC = () => {
       </div>
       {
         menuOpen && (
-          <div className={`themeBg themeBorder ${styles.userMenu__options}`}>
+          <div data-testid="userMenu__options" className={`themeBg themeBorder ${styles.userMenu__options}`}>
             {
               isAuthorized() && (
                 <div className={`${styles.userMenu__option}`} onClick={logoutHandler} role="menuitem">

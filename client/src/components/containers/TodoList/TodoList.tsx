@@ -28,7 +28,7 @@ const TodoList: React.FC = () => {
     fetchTasks();
   }, []);
 
-  const onUpdateHandler = (task: Task) => {
+  const onUpdateHandler = (task: Partial<Task>) => {
     updateTask(task);
     setEditTaskId(undefined);
   }

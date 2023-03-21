@@ -136,7 +136,7 @@ describe('<Select/>', () => {
     expect(screen.queryByRole('option')).toBeNull();
   });
 
-  it('should hide the options when click outside the component', async () => {
+  it('should hide the options when click outside the component', () => {
     // arrange
     renderUI();
 
@@ -146,12 +146,12 @@ describe('<Select/>', () => {
     fireEvent.click(document.body);
 
     // assert
-    await waitFor(() => {
+    waitFor(() => {
       expect(screen.queryByRole('option')).toBeNull();
     });
   });
 
-  it('should hide the options when press escape', async () => {
+  it('should hide the options when press escape', () => {
     // arrange
     renderUI();
 
@@ -161,7 +161,7 @@ describe('<Select/>', () => {
     fireEvent.keyDown(document.body, { key: 'Escape', code: 'Escape' });
 
     // assert
-    await waitFor(() => {
+    waitFor(() => {
       expect(screen.queryByRole('option')).toBeNull();
     });
   });

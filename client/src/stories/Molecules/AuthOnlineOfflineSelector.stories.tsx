@@ -5,7 +5,7 @@ import { Story, Meta } from '@storybook/react/types-6-0';
 import ThemeDecorator from '../../../.storybook/decorators/ThemeDecorator';
 
 // Components
-import AuthOnlineOfflineSelector from '../../components/containers/Auth/AuthOnlineOfflineSelector/AuthOnlineOfflineSelector';
+import AuthOnlineOfflineSelector from '../../components/presentational/AuthOnlineOfflineSelector/AuthOnlineOfflineSelector';
 
 export default {
   title: 'Molecules/Auth Online Offline Selector',
@@ -19,5 +19,5 @@ const Template: Story<Props> = (args) => <AuthOnlineOfflineSelector {...args} />
 
 export const AuthOnlineOfflineSelectorDefault = Template.bind({});
 AuthOnlineOfflineSelectorDefault.args = {
-  selectedMode: 'online'
+  initialSelectedMode: 'online'
 };

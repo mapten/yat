@@ -13,6 +13,6 @@ export interface Task {
   /**
    * Indicates if the task is deleted. It is used to mark the task as deleted, and finally delete it when syncing to database.
    */
-  deleted: boolean;
-  syncStatus: SYNC_STATUS;
+  deleted?: boolean;
+  syncStatus?: SYNC_STATUS;
 }

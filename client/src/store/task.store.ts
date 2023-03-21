@@ -7,14 +7,19 @@ import { Task } from '../models/task.model';
 
 //Store
 import { useConfigurationStore } from './configuration.store';
+import { useAuthStore } from './auth.store';
 
 // Services
-import { changeStatus, createTask, deleteTask, fetchUserTasks, updateTask, syncTasks } from '../services/tasks.service';
-import { useAuthStore } from './auth.store';
+import {
+  changeStatus,
+  createTask, deleteTask,
+  fetchUserTasks,
+  updateTask,
+  syncTasks 
+} from '../services/tasks.service';
 
 const getStoreMode = () => useConfigurationStore.getState().getStoreMode();
 const getUser = () => useAuthStore.getState().getUser();
-
 
 type State = {
   tasks: Task[];
@@ -30,7 +35,7 @@ type Actions = {
   getPendingTasks: () => Task[];
   addTask: (task: Task) => Promise<void>;
   changeTaskStatus: (taskId: string, done: boolean) => Promise<void>;
-  updateTask: (task: Task) => Promise<void>;
+  updateTask: (task: Partial<Task>) => Promise<void>;
   deleteTask: (taskId: string) => Promise<void>;
   syncOfflineTasks: () => void;
 }
@@ -146,7 +151,7 @@ export const useTaskStore = create<TaskState>()(
       }));
     },
 
-    updateTask: async (task: Task) => {
+    updateTask: async (task: Partial<Task>) => {
       const existsTaskWithSameName = () =>
         get()
           .getTasks()
@@ -161,7 +166,7 @@ export const useTaskStore = create<TaskState>()(
         return;
       }
 
-      const existingTask = get().getTasks().find((t) => t.id === task.id);
+      const existingTask = get().getTasks().find((t) => t.id === task.id) as Task;
 
       const updatedTask: Task = {
         ...existingTask,
@@ -171,7 +176,7 @@ export const useTaskStore = create<TaskState>()(
       };
 
       if (getStoreMode() === 'online') {
-        await updateTask(task).then(() => {
+        await updateTask(updatedTask).then(() => {
           updatedTask.syncStatus = 'synced';
         }).catch(() => {
           updatedTask.syncStatus = 'error';
@@ -190,16 +195,15 @@ export const useTaskStore = create<TaskState>()(
     deleteTask: async (taskId: string) => {
       if (getStoreMode() === 'online') {
         await deleteTask(taskId);
-      } else {
-        set((state) => ({
-          tasks: state.tasks.map((task) => {
-            if (task.id === taskId) {
-              return { ...task, deleted: true, syncStatus: 'unsynced' };
-            }
-            return task;
-          }),
-        }));
       }
+      set((state) => ({
+        tasks: state.tasks.map((task) => {
+          if (task.id === taskId) {
+            return { ...task, deleted: true, syncStatus: 'unsynced' };
+          }
+          return task;
+        }),
+      }));
     },
 
     syncOfflineTasks: () => {
