@@ -1,0 +1,36 @@
+@import 'src/assets/styles/colors';
+
+.spinner,
+.spinner:after {
+  border-radius: 50%;
+  width: 100%;
+  height: 100%;
+}
+
+.spinner {
+  border: calc(var(--width) * 0.20) solid lighten($gray, 10%);
+  border-left-color: $principal-color;
+  -webkit-animation: spin 1.1s infinite linear;
+  animation: spin 1.1s infinite linear;
+}
+
+@-webkit-keyframes spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+@keyframes spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
