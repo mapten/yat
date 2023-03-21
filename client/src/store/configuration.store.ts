@@ -1,15 +1,16 @@
 import { create } from 'zustand';
-import { devtools } from 'zustand/middleware';
+import { createJSONStorage, devtools, persist } from 'zustand/middleware';
 import { toast } from 'react-hot-toast';
 
 // Services
 import { ping } from '../services/general.service';
 
 // Types
-import { CONNECTION_STATE, STORE_MODE } from '../typings/common.types';
+import { CONNECTION_STATE, STORE_MODE, THEME } from '../typings/common.types';
 
 export type State = {
   isLoginVisible: boolean;
+  theme: THEME;
   storeMode: STORE_MODE;
   connectionState: CONNECTION_STATE;
   connectionErrors: number;
@@ -17,6 +18,7 @@ export type State = {
 }
 
 type Actions = {
+  setTheme: (theme: THEME) => void;
   getStoreMode: () => STORE_MODE;
   setStoreMode: (storeMode: STORE_MODE) => void;
   increaseConnectionErrors: () => void;
@@ -29,11 +31,14 @@ export type ConfigurationState = State & Actions;
 
 export const useConfigurationStore = create<ConfigurationState>()(
   // @ts-ignore
-  devtools((set, get) => ({
+  persist(devtools((set, get) => ({
     storeMode: 'offline',
     connectionState: 'connected',
+    theme: 'light',
     connectionErrors: 0,
     reconnectToServerListeners: [],
+
+    setTheme: (theme: THEME) => set({ theme }),
 
     getStoreMode: () => {
       return get().storeMode;
@@ -105,5 +110,9 @@ export const useConfigurationStore = create<ConfigurationState>()(
         set((state) => ({ reconnectToServerListeners: state.reconnectToServerListeners.filter((listener) => listener !== callback) }));
       };
     }
-  }))
+  })), {
+    name: 'configuration-storage',
+    storage: createJSONStorage(() => localStorage),
+    partialize: (state) => ({ foo: state.theme }),
+  })
 );
