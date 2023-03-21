@@ -2,6 +2,7 @@
 
 @mixin button($color) {
   display: inline-flex;
+  align-items: center;
   background-color: $color;
   border: solid 0.2rem darken($color, 10%);
   border-radius: 0.5rem;
@@ -17,27 +18,32 @@
 }
 
 @mixin size($percent) {
-  border-radius: 0.5rem * $percent;
-  border-width: 0.2rem * $percent;
-  font-size: 0.9rem * $percent;
-  padding: 0.4rem * $percent;
+  border-radius: 1.5rem * $percent;
+  border-width: 0.15rem * $percent;
+  font-size: 1rem * $percent;
+  padding: 0.4rem * $percent 1rem * $percent;
   gap: 0.5rem * $percent;
 }
 
 .button {
   &--default {
     @include button($principal-color);
-    color: #fff;
+    color: $white;
   }
   
   &--add {
     @include button($tertiary-color);
-    color: #000;
+    color: $black;
   }
   
   &--dismiss {
     @include button($secondary-color);
-    color: #fff;
+    color: $white;
+  }
+
+  &--disabled {
+    @include button($gray);
+    color: $white;
   }
 
   &--small {
@@ -58,7 +64,7 @@
     color: $gray;
 
     &:hover {
-      color: $gray;
+      color: $gray-darker;
     }
   }
 }
