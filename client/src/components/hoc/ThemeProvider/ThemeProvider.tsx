@@ -1,8 +1,8 @@
 
 import { createContext, useContext, useState } from 'react';
 
-// Constants
-import { THEME } from '../../../constants/theme.constants';
+// Types
+import { THEME } from '../../../typings/common.types';
 
 type ThemeContextType = {
   theme: THEME;

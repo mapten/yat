@@ -4,6 +4,9 @@ import { Icon } from '@iconify/react';
 // Styles
 import styles from './Select.module.scss';
 
+// Hooks
+import { useOutsideClick } from '../../../../hooks/useOutsideClick';
+
 type StateProps<T, I> = {
   items: T[];
   initialItem: I;
@@ -21,10 +24,12 @@ type Index = React.Key | null | undefined;
 type Props<T, I> = StateProps<T, I> & DispatchProps<T, I> & Pick<React.HTMLAttributes<HTMLSelectElement>, 'className' | 'id'>;
 
 const Select = <T,I extends Index>({ items, initialItem, keyExtractor, textExtractor, onSelect, renderItem, ...otherProps }: Props<T, I>) => {
-  const selectRef = useRef(null);
+  const selectRef = useRef<HTMLDivElement>(null);
 
   const [menuOpen, setMenuOpen] = useState(false);
   const [item, setItem] = useState<I>(initialItem);
+
+  useOutsideClick(selectRef, () => setMenuOpen(false));
 
   const toggleMenuHandler = () => {
     setMenuOpen((open) => !open);
@@ -46,22 +51,14 @@ const Select = <T,I extends Index>({ items, initialItem, keyExtractor, textExtra
     }
   };
 
-  const clickOutsideHandler = (e: MouseEvent) => {
-    if (selectRef.current && !(selectRef.current as any).contains(e.target)) {
-      setMenuOpen(false);
-    }
-  };
-
   useEffect(() => {
     setItem(initialItem);
   }, [initialItem]);
 
   useEffect(() => {
     document.addEventListener('keydown', keydownHandler, true);
-    document.addEventListener('click', clickOutsideHandler, true);
     return () => {
       document.removeEventListener('keydown', keydownHandler, true);
-      document.removeEventListener('click', clickOutsideHandler, true);
     };
   });
 
@@ -86,10 +83,10 @@ const Select = <T,I extends Index>({ items, initialItem, keyExtractor, textExtra
       </div>
       {
         items && items.length > 0 && menuOpen && (
-          <div data-testid="select__options" className={`select option ${styles.select__options}`}>
+          <div data-testid="select__options" className={`options themeBg themeBorder ${styles.select__options}`}>
             {
               items.map((item) => (
-                <div role="option" className={styles.select__option} onClick={(_) => itemChangeHandler(item)} key={keyExtractor(item)}>
+                <div role="option" className={`option ${styles.select__option}`} onClick={(_) => itemChangeHandler(item)} key={keyExtractor(item)}>
                   {renderItem(item)}
                 </div>)
               )

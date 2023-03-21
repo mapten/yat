@@ -25,7 +25,7 @@ type Props = StateProps & DispatchProps;
 export const TodoListItemDisplay: React.FC<Props> = (props: Props) => {
   const [taskDone, setTaskDone] = useState<boolean>(false);
 
-  useEffect(() =>  {
+  useEffect(() => {
     setTaskDone(props.taskDone);
   }, [props.taskDone]);
 
@@ -43,7 +43,7 @@ export const TodoListItemDisplay: React.FC<Props> = (props: Props) => {
   };
 
   return (
-    <div data-testid="todoItemDisplay" className={`task ${styles.itemDisplay}`}>
+    <div data-testid="todoItemDisplay" className={`themeWrapper task ${styles.itemDisplay}`}>
       <CheckBoxCrossed onChange={checkboxChangeHandler} text={props.taskName} initialChecked={taskDone} color={props.taskPriorityColor} />
       <div className={styles.itemDisplay__buttonGroup}>
         <Button size="big" displayText="Edit" buttonStyle="default" onClick={editTaskHandler} buttonType="icon" iconName="material-symbols:edit" />

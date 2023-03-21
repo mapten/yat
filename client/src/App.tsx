@@ -1,35 +1,56 @@
-import React from 'react';
-import { Routes, Route, BrowserRouter } from 'react-router-dom';
+import React, { lazy, Suspense } from 'react';
+import { Toaster } from 'react-hot-toast';
 
 // Styles
 import './App.scss';
 
+// Hooks
+import { useStore } from './hooks/useStore';
+
 // Components
-import TodoList from './components/containers/TodoList/TodoList';
 import { useTheme } from './components/hoc/ThemeProvider/ThemeProvider';
 import Header from './components/presentational/Header/Header';
-import Footer from './components/presentational/Footer/Footer';
+import Auth from './components/containers/Auth/Auth';
+import LoadingScreen from './components/presentational/UI/LoadingScreen/LoadingScreen';
+
+
+const TodoList = lazy(async () => {
+  const [moduleExports] = await Promise.all([
+    import('./components/containers/TodoList/TodoList'),
+    new Promise(resolve => setTimeout(resolve, 500))
+  ]);
+  return moduleExports;
+});
+
 
 const App: React.FC = () => {
   const { theme } = useTheme();
 
+  const { storeHasLoaded, isLoginVisible } = useStore();
+
+  const renderTodoList = () => {
+    if (storeHasLoaded) {
+      return <Suspense fallback={<LoadingScreen />}>
+        <TodoList />
+      </Suspense>;
+    }
+    return <LoadingScreen />;
+  };
+
   return (
-    <div className={`${theme}-theme app`}>
-      <header>
-        <Header />
-      </header>
-      <main>
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<TodoList />} />
-            <Route path="todolist" element={<TodoList />} />
-          </Routes>
-        </BrowserRouter>
-      </main>
-      <footer>
-        <Footer />
-      </footer>
-    </div>
+    <>
+      <Toaster toastOptions={{ className: 'toaster' }} />
+      <div className={`${theme}-theme app`}>
+        <header>
+          <Header />
+        </header>
+        <main>
+          {isLoginVisible ? <Auth /> : renderTodoList()}
+        </main>
+        <footer>
+        </footer>
+      </div>
+    </>
   );
 };
 

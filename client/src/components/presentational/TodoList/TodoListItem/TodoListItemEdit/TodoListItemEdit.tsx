@@ -7,15 +7,19 @@ import styles from './TodoListItemEdit.module.scss';
 
 // Constants
 import { DEFAULT_PRIORITY, PRIORITY_LEVELS, PRIORITY_ORDER_TYPE } from '../../../../../constants/priorityLevels.constants';
+import { NEW_TASK_ID } from '../../../../../constants/common.constants';
 
 // Models
 import { Priority } from '../../../../../models/priority.model';
 import { Task } from '../../../../../models/task.model';
 
+// Store
+import { useAuthStore } from '../../../../../store/auth.store';
+
 // Components
 import { Button } from '../../../UI/Button/Button';
 import Select from '../../../UI/Select/Select';
-
+import { useConfigurationStore } from '../../../../../store/configuration.store';
 
 type StateProps = {
   taskId?: string;
@@ -27,7 +31,7 @@ type StateProps = {
 
 type DispatchProps = {
   onCancelEdit: () => void;
-  onSave: (task: Task) => void;
+  onSave: (task: Partial<Task>) => void;
 }
 
 type Props = StateProps & DispatchProps;
@@ -40,6 +44,9 @@ export const TodoListItemEdit: React.FC<Props> = ({ taskId, initialTaskName, ini
   const [name, setName] = useState<string>('');
   const [priority, setPriority] = useState<PRIORITY_ORDER_TYPE>(DEFAULT_PRIORITY);
   const [errorOnName, setErrorOnName] = useState<boolean>(false);
+
+  const { user } = useAuthStore((state) => state);
+  const { getStoreMode } = useConfigurationStore((state) => state);
 
   useEffect(() => {
     if (inputRef.current) {
@@ -72,7 +79,7 @@ export const TodoListItemEdit: React.FC<Props> = ({ taskId, initialTaskName, ini
     } else {
       setErrorOnName(false);
       onSave({
-        id: taskId ?? uuidv4(),
+        id: taskId ?? NEW_TASK_ID,
         displayName: name,
         priority,
         done: taskDone ?? false,
@@ -88,7 +95,7 @@ export const TodoListItemEdit: React.FC<Props> = ({ taskId, initialTaskName, ini
   };
 
   return (
-    <div data-testid="todoItemEdit" className={`task ${styles.itemEdit}`}>
+    <div data-testid="todoItemEdit" className={`themeWrapper task ${styles.itemEdit}`}>
       <div className={styles.itemEdit__formItem}>
         <label htmlFor={taskNameId}>Task: </label>
         <input
@@ -101,7 +108,7 @@ export const TodoListItemEdit: React.FC<Props> = ({ taskId, initialTaskName, ini
           onKeyDown={(e) => e.key === 'Enter' && saveHandler()}
           value={name}
           type='text'
-          className={`${errorOnName ? styles['itemEdit--danger'] : ''}`} />
+          className={`${errorOnName ? 'danger' : ''}`} />
       </div>
       <div className={styles.itemEdit__formItem}>
         <label htmlFor={selectId}>Priority: </label>
