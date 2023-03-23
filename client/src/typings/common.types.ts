@@ -28,3 +28,5 @@ export type CONNECTION_STATE = 'connected' | 'disconnected' | 'serverError';
 export type SYNC_STATUS = 'unsynced' | 'synced' | 'error';
 
 export type THEME = 'dark' | 'light';
+
+export type STORE_RESULT = 'success' | 'fail';

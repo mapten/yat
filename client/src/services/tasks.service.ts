@@ -1,3 +1,6 @@
+import axios from 'axios';
+import { toast } from 'react-hot-toast';
+
 // Services
 import { getAxiosApiInstance } from './axios.service';
 
@@ -20,7 +23,17 @@ export const createTask = async (task: Task) => {
   return getAxiosApiInstance(API_ENDPOINT)
     .post<Task>('', task)
     .then((response) => response.data)
-    .catch(httpErrorHandler);
+    .catch((error) => {
+      if (axios.isAxiosError(error) && error.response) {
+        if (error.response.status === 422) {
+          const errorMessage = 'Task with same name already exists';
+          toast.error(errorMessage);
+        }
+      }
+      else {
+        httpErrorHandler(error);
+      }
+    });
 };
 
 export const syncTasks = async (userId: string, tasks: Task[]) => {
@@ -41,7 +54,16 @@ export const updateTask = async (task: Task) => {
   return getAxiosApiInstance(API_ENDPOINT)
     .put<Task>('', task)
     .then((response) => response.data)
-    .catch(httpErrorHandler);
+    .catch((error) => {
+      if (axios.isAxiosError(error) && error.response) {
+        if (error.response.status === 422) {
+          toast.error('Another task with same name already exists');
+        }
+      }
+      else {
+        httpErrorHandler(error);
+      }
+    });
 };
 
 export const deleteTask = async (taskId: string) => {

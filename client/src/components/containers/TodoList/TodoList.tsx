@@ -15,7 +15,7 @@ import { useTaskStore } from '../../../store/task.store';
 // Components
 import TodoListCreate from '../../presentational/TodoList/TodoListCreate/TodoListCreate';
 import TodoListCategory from '../../hoc/TodoListCategory/TodoListCategory';
-import { TodoListItemEdit } from '../../presentational/TodoList/TodoListItem/TodoListItemEdit/TodoListItemEdit';
+import TodoListItemEdit from '../../presentational/TodoList/TodoListItem/TodoListItemEdit/TodoListItemEdit';
 import { TodoListItemDisplay } from '../../presentational/TodoList/TodoListItem/TodoListItemDisplay/TodoListItemDisplay';
 import ProgressBar from '../../presentational/ProgressBar/ProgressBar';
 
@@ -28,9 +28,16 @@ const TodoList: React.FC = () => {
     fetchTasks();
   }, []);
 
-  const onUpdateHandler = (task: Partial<Task>) => {
-    updateTask(task);
-    setEditTaskId(undefined);
+  const updateTaskHandler = async (task: Partial<Task>) => {
+    const result = await updateTask(task);
+
+    if (result === 'success') {
+      setEditTaskId(undefined);
+    }
+  }
+
+  const addTaskHandler = async (task: Partial<Task>) => {
+    return await addTask(task);
   }
 
   const renderTaskList = (done: boolean) => {
@@ -49,7 +56,7 @@ const TodoList: React.FC = () => {
               taskDone={task.done}
               initialTaskPriority={task.priority}
               onCancelEdit={() => setEditTaskId(undefined)}
-              onSave={onUpdateHandler} />
+              onSave={async (task: Partial<Task>) => updateTaskHandler(task)} />
             : <TodoListItemDisplay
               taskId={task.id}
               taskName={task.displayName}
@@ -67,7 +74,7 @@ const TodoList: React.FC = () => {
     <>
       <div className={styles.todoList}>
         <TodoListCategory displayCount={false} category='create task'>
-          <TodoListCreate onAddTask={addTask} />
+          <TodoListCreate onAddTask={addTaskHandler} />
         </TodoListCategory>
         <TodoListCategory category='pending' itemCount={getPendingTasks().length} displayCount={true} initialShowList={true}>
           {renderTaskList(false)}

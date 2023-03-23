@@ -21,6 +21,23 @@ vi.mock('../../../../store/configuration.store', () => ({
 const mockConfigurationStore = useConfigurationStore as unknown as MockedFunction<typeof useConfigurationStore>;
 
 describe('<UserMenu/>', () => {
+  beforeEach(() => {
+    mockAuthStore.mockReturnValue({
+      user: {
+        id: '1',
+        name: 'John Doe',
+        email: 'john@doe.com',
+      },
+      logout: vi.fn(),
+      isAuthenticated: vi.fn(),
+      setIsLoginModalOpen: vi.fn(),
+    });
+
+    mockConfigurationStore.mockReturnValue({
+      setStoreMode: vi.fn(),
+    });
+  });
+
   const renderUI = () => {
     return render(<UserMenu />);
   };
@@ -29,64 +46,125 @@ describe('<UserMenu/>', () => {
     cleanup();
   });
 
-  it('should trigger onSelect callback when click on an option', () => {
+  it('should render the user name when user is not null', () => {
     // arrange
     renderUI();
 
-    fireEvent.click(screen.getByTestId('select__selected'));
-
-    const option = screen.getByRole('option', { name: 'Mid' });
-
-    // act
-    fireEvent.click(option);
+    const menuItem = screen.getAllByRole('menuitem')[0];
 
     // assert
-    expect(baseProps.onSelect).toHaveBeenCalledWith('1');
+    expect(menuItem.textContent).toBe('Hi, John Doe');
   });
 
-
-  it('should hide the options when click on an option', () => {
+  it('should render "Anonymous" when user is null', () => {
     // arrange
-    renderUI();
-
-    fireEvent.click(screen.getByTestId('select__selected'));
-
-    const option = screen.getByRole('option', { name: 'Mid' });
-
-    // act
-    fireEvent.click(option);
-
-    // assert
-    expect(screen.queryByRole('option')).toBeNull();
-  });
-
-  it('should hide the options when click outside the component', () => {
-    // arrange
-    renderUI();
-
-    fireEvent.click(screen.getByTestId('select__selected'));
-
-    // act
-    fireEvent.click(document.body);
-
-    // assert
-    waitFor(() => {
-      expect(screen.queryByRole('option')).toBeNull();
+    mockAuthStore.mockReturnValue({
+      user: null
     });
+
+    renderUI();
+
+    const menuItem = screen.getAllByRole('menuitem')[0];
+
+    // assert
+    expect(menuItem.textContent).toBe('Hi, Anonymous');
   });
 
-  it('should hide the options when press escape', () => {
+  it('should render "Anonymous" when user name is empty', () => {
+    // arrange
+    mockAuthStore.mockReturnValue({
+      user: {
+        id: '1',
+        name: '',
+        email: 'john@doe.com',
+      },
+    });
+
+    renderUI();
+
+    const menuItem = screen.getAllByRole('menuitem')[0];
+
+    // assert
+    expect(menuItem.textContent).toBe('Hi, Anonymous');
+  });
+
+  it('should show / hide the menu when move the mouse over / outside the component', () => {
     // arrange
     renderUI();
 
-    fireEvent.click(screen.getByTestId('select__selected'));
+    // act
+    fireEvent.mouseEnter(screen.getAllByRole('menuitem')[0]);
+    // assert
+    expect(screen.getByTestId('userMenu__options')).toBeTruthy();
 
     // act
-    fireEvent.keyDown(document.body, { key: 'Escape', code: 'Escape' });
+    fireEvent.mouseLeave(screen.getAllByRole('menuitem')[0]);
+    // assert
+    expect(screen.queryByTestId('userMenu__options')).toBeNull();
+  });
+
+  it('should show / hide the menu when clicking on the component', () => {
+    // arrange
+    renderUI();
+
+    // act
+    fireEvent.click(screen.getAllByRole('menuitem')[0]);
+    // assert
+    expect(screen.getByTestId('userMenu__options')).toBeTruthy();
+
+    // act
+    fireEvent.click(screen.getAllByRole('menuitem')[0]);
+    // assert
+    expect(screen.queryByTestId('userMenu__options')).toBeNull();
+  });
+
+  it('should call logout when clicking on the logout option', async () => {
+    // arrange
+    const mockLogout = vi.fn();
+    mockAuthStore.mockReturnValue({
+      user: {
+        id: '1',
+        name: 'John Doe',
+        email: 'john@doe.com',
+      },
+      logout: mockLogout,
+      isAuthenticated: () => true,
+      setIsLoginModalOpen: vi.fn(),
+    });
+
+    renderUI();
+
+    fireEvent.click(screen.getAllByRole('menuitem')[0]);
+    // act
+    fireEvent.click(screen.getByText('Logout'));
 
     // assert
-    waitFor(() => {
-      expect(screen.queryByRole('option')).toBeNull();
+    expect(mockLogout).toHaveBeenCalled();
+    expect(screen.queryByTestId('userMenu__options')).toBeNull();
+  });
+
+  it('should call openLoginHandler when clicking on the "Select how to connect (online / offline)" option', async () => {
+    // arrange
+    const mockSetIsLoginVisible = vi.fn();
+    mockAuthStore.mockReturnValue({
+      user: {
+        id: '1',
+        name: 'John Doe',
+        email: 'john@doe.com',
+      },
+      logout: vi.fn(),
+      isAuthenticated: vi.fn(),
+      setIsLoginVisible: mockSetIsLoginVisible,
     });
+    
+    renderUI();
+
+    fireEvent.click(screen.getAllByRole('menuitem')[0]);
+    // act
+    fireEvent.click(screen.getByText('Select how to connect (online / offline)'));
+
+    // assert
+    expect(mockSetIsLoginVisible).toHaveBeenCalledWith(true);
+    expect(screen.queryByTestId('userMenu__options')).toBeNull();
   });
 });

@@ -3,7 +3,7 @@ import { createJSONStorage, devtools, persist } from 'zustand/middleware';
 import { toast } from 'react-hot-toast';
 
 // Services
-import { ping } from '../services/general.service';
+import { pingToServer } from '../services/general.service';
 
 // Types
 import { CONNECTION_STATE, STORE_MODE, THEME } from '../typings/common.types';
@@ -18,11 +18,12 @@ export type State = {
 }
 
 type Actions = {
+  clear: () => void;
   setTheme: (theme: THEME) => void;
   getStoreMode: () => STORE_MODE;
   setStoreMode: (storeMode: STORE_MODE) => void;
   increaseConnectionErrors: () => void;
-  tryToReconnectToServer: () => void;
+  tryToReconnectToServer: () => Promise<void>;
   setConnectionState: (connectionState: CONNECTION_STATE) => void;
   reconnectedToServer: (callback: () => void) => void;
 }
@@ -38,6 +39,14 @@ export const useConfigurationStore = create<ConfigurationState>()(
     connectionErrors: 0,
     reconnectToServerListeners: [],
 
+    clear: () => set({
+      storeMode: 'offline',
+      connectionState: 'connected',
+      theme: 'light',
+      connectionErrors: 0,
+      reconnectToServerListeners: [],
+    }),
+
     setTheme: (theme: THEME) => set({ theme }),
 
     getStoreMode: () => {
@@ -46,40 +55,44 @@ export const useConfigurationStore = create<ConfigurationState>()(
 
     setStoreMode: (storeMode: STORE_MODE) => {
       if (get().storeMode === 'offline' && storeMode === 'online') {
-        get().reconnectToServerListeners.forEach((cb) => cb);
+        get().reconnectToServerListeners.forEach((cb) => cb());
       }
       set({
         storeMode
       });
     },
 
-    tryToReconnectToServer: () => {
+    tryToReconnectToServer: async () => {
       let retries = 20;
 
       const checkIsConnectedToServer = async () => {
-        const isOnline = await ping();
+        const isOnline = await pingToServer().then(() => true).catch(() => false);
         if (isOnline) {
-
-          get().setConnectionState('connected');
-
+          set({ connectionErrors: 0 });
           toast.success('Connection to the server has been restored');
-          get().reconnectToServerListeners.forEach((cb) => cb);
-          clearInterval(isOnlineInterval);
+          get().reconnectToServerListeners.forEach((cb) => cb());
+          return true;
         } else {
           retries--;
-          if (retries === 0) {
-            clearInterval(isOnlineInterval);
-          }
+          return false;
         }
       };
 
-      const isOnlineInterval = setInterval(checkIsConnectedToServer, 120000);
+      while (retries > 0) {
+        await new Promise(resolve => setTimeout(() => resolve(true), 120000))
+
+        const connected = await checkIsConnectedToServer();
+        if (connected) {
+          get().setConnectionState('connected');
+          return;
+        }
+      }
     },
 
     increaseConnectionErrors: () => {
       set({ connectionErrors: get().connectionErrors + 1 });
 
-      if (get().connectionErrors > 5) {
+      if (get().connectionErrors > Number(import.meta.env.VITE_API_AXIOS_RETRIES)) {
         set({ connectionErrors: 0 });
         get().setConnectionState('serverError');
       }
@@ -96,15 +109,14 @@ export const useConfigurationStore = create<ConfigurationState>()(
         toast.error('There is no internet connection. You are working in offline mode. Your changes will be synchronized when the connection is restored');
       }
       if (get().connectionState !== 'connected' && connectionState === 'connected' && get().storeMode === 'error') {
-        set({ storeMode: 'online' });
         toast.success('Internet connection has been restored');
-        get().reconnectToServerListeners.forEach((cb) => cb);
+        get().setStoreMode('online');
       }
       set({ connectionState });
     },
 
     reconnectedToServer: (callback: () => void) => {
-      set((state) => ({ reconnectToServerListeners: [...new Set([...state.reconnectToServerListeners, callback])]}));
+      set((state) => ({ reconnectToServerListeners: [...new Set([...state.reconnectToServerListeners, callback])] }));
 
       return () => {
         set((state) => ({ reconnectToServerListeners: state.reconnectToServerListeners.filter((listener) => listener !== callback) }));

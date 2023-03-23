@@ -6,7 +6,7 @@ import { render, cleanup, fireEvent, screen } from '@testing-library/react';
 import { Priority } from '../../../../models/priority.model';
 
 // Components
-import { TodoListItemEdit } from '../../../../components/presentational/TodoList/TodoListItem/TodoListItemEdit/TodoListItemEdit';
+import TodoListItemEdit from '../../../../components/presentational/TodoList/TodoListItem/TodoListItemEdit/TodoListItemEdit';
 
 
 const mockPriorityLevelsValueGetter = vi.fn();

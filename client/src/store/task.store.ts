@@ -1,9 +1,13 @@
 import { create } from 'zustand';
 import { createJSONStorage, devtools, persist } from 'zustand/middleware';
 import { toast } from 'react-hot-toast';
+import { v4 as uuidv4 } from 'uuid';
 
 // Models
 import { Task } from '../models/task.model';
+
+// Types
+import { STORE_RESULT, SYNC_STATUS } from '../typings/common.types';
 
 //Store
 import { useConfigurationStore } from './configuration.store';
@@ -11,12 +15,14 @@ import { useAuthStore } from './auth.store';
 
 // Services
 import {
-  changeStatus,
-  createTask, deleteTask,
-  fetchUserTasks,
-  updateTask,
-  syncTasks 
+  changeStatus as changeStatusService,
+  createTask as createTaskService,
+  deleteTask as deleteTaskService,
+  fetchUserTasks as fetchUserTasksService,
+  updateTask as updateTaskService,
+  syncTasks as syncTasksService
 } from '../services/tasks.service';
+import { getDateNowService } from '../services/system/datetimeNow.service';
 
 const getStoreMode = () => useConfigurationStore.getState().getStoreMode();
 const getUser = () => useAuthStore.getState().getUser();
@@ -31,12 +37,13 @@ type Actions = {
   clearTasks: () => void;
   fetchTasks: () => Promise<void>;
   getTasks: () => Task[];
+  getFilteredTasks: () => Task[];
   getCompletedTasks: () => Task[];
   getPendingTasks: () => Task[];
-  addTask: (task: Task) => Promise<void>;
+  addTask: (task: Partial<Task>) => Promise<STORE_RESULT>;
   changeTaskStatus: (taskId: string, done: boolean) => Promise<void>;
-  updateTask: (task: Partial<Task>) => Promise<void>;
-  deleteTask: (taskId: string) => Promise<void>;
+  updateTask: (task: Partial<Task>) => Promise<STORE_RESULT>;
+  deleteTask: (taskId: string) => Promise<STORE_RESULT>;
   syncOfflineTasks: () => void;
 }
 
@@ -52,13 +59,15 @@ export const useTaskStore = create<TaskState>()(
 
     clearTasks: () => set({ tasks: [] }),
 
-    getTasks: () => get().tasks
+    getTasks: () => get().tasks,
+
+    getFilteredTasks: () => get().tasks
       .filter((task) => !task.deleted)
       .sort((taskA, taskB) => (taskA.priority - taskB.priority)),
 
-    getCompletedTasks: () => get().getTasks().filter((task) => task.done),
+    getCompletedTasks: () => get().getFilteredTasks().filter((task) => task.done),
 
-    getPendingTasks: () => get().getTasks().filter((task) => !task.done),
+    getPendingTasks: () => get().getFilteredTasks().filter((task) => !task.done),
 
     fetchTasks: async () => {
       const user = getUser();
@@ -66,80 +75,92 @@ export const useTaskStore = create<TaskState>()(
         return;
       }
 
-      const response = await fetchUserTasks(user.id);
+      const response = await fetchUserTasksService(user.id);
       if (!response) {
         return;
       }
 
-      const { existingTasksFromResponse, newTaskFromResponse } = 
-        response.reduce((acc: {existingTasksFromResponse: Task[], newTaskFromResponse: Task[]}, task) => {
-          if (get().tasks.find((t) => t.id === task.id)) {
-            acc.existingTasksFromResponse.push(task);
-          } else {
-            acc.newTaskFromResponse.push(task);
-          }
-          return acc;
-        }, { existingTasksFromResponse: [], newTaskFromResponse: [] });
+      const { existingTasksFromResponse, newTaskFromResponse } =
+        response
+          .map((r) => ({ ...r, syncStatus: 'synced' } as Task))
+          .reduce((acc: { existingTasksFromResponse: Task[], newTaskFromResponse: Task[] }, task) => {
+            if (get().tasks.find((t) => t.id === task.id)) {
+              acc.existingTasksFromResponse.push(task);
+            } else {
+              acc.newTaskFromResponse.push(task);
+            }
+            return acc;
+          }, { existingTasksFromResponse: [], newTaskFromResponse: [] });
 
       const mergedExistingTasks = get().tasks.map((task) => {
         const matchingTaskFromResponse = existingTasksFromResponse.find((t) => t.id === task.id);
         if (matchingTaskFromResponse) {
-          return {...matchingTaskFromResponse, ...task};
+          return { ...matchingTaskFromResponse, ...task };
         }
         return task;
       });
 
       const finalTasks = mergedExistingTasks.concat(newTaskFromResponse);
 
-      set({tasks: finalTasks});
+      set({ tasks: finalTasks });
     },
 
-    addTask: async (task: Task) => {
+    addTask: async (task: Partial<Task>) => {
       const existsTaskWithSameName = () =>
         get()
-          .getTasks()
-          .some((t) => 
-            t.displayName === task.displayName 
+          .getFilteredTasks()
+          .some((t) =>
+            t.displayName === task.displayName
             && (task.categoryId ? t.categoryId === task.categoryId : true)
           );
 
       if (existsTaskWithSameName()) {
         toast.error(`Task with name "${task.displayName}" already exists${task.categoryId ? ` in category "${task.categoryId}"` : ''}`);
-        return;
+        return 'fail';
       }
 
-      const createdTask: Task = {
+      const createdTask = {
         ...task,
-        createdAt: new Date().toISOString(),
+        id: uuidv4(),
+        createdAt: getDateNowService().toISOString(),
         userId: getUser()?.id,
-        deleted: false,
         syncStatus: 'unsynced',
-      };
+      } as Task;
 
       if (getStoreMode() === 'online') {
-        await createTask(createdTask).then(() => {
-          createdTask.syncStatus = 'synced';
-        }).catch(() => {
-          createdTask.syncStatus = 'error';
+        const { syncStatus, isFail } = await createTaskService(createdTask).then(() => {
+          return { syncStatus: 'synced' as SYNC_STATUS, isFail: false };
+        }).catch((error) => {
+          return { syncStatus: 'error' as SYNC_STATUS, isFail: error.response?.status === 422 };
         });
+
+        if (isFail) {
+          return 'fail';
+        }
+
+        createdTask.syncStatus = syncStatus;
       }
       set((state) => ({ tasks: [...state.tasks, createdTask] }));
+
+      return 'success';
     },
 
     changeTaskStatus: async (taskId: string, done: boolean) => {
       const updatedTask: Task = {
         ...get().tasks.find((task) => task.id === taskId) as Task,
         done,
-        updatedAt: new Date().toISOString(),
+        updatedAt: getDateNowService().toISOString(),
         syncStatus: 'unsynced'
       };
 
       if (getStoreMode() === 'online') {
-        await changeStatus(taskId, done).then(() => {
-          updatedTask.syncStatus = 'synced';
+        const syncStatus = await changeStatusService(taskId, done).then(() => {
+          return 'synced';
         }).catch(() => {
-          updatedTask.syncStatus = 'error';
+          return 'error';
         });
+        
+        updatedTask.syncStatus = syncStatus as SYNC_STATUS;
       }
       set((state) => ({
         tasks: state.tasks.map((task) => {
@@ -154,33 +175,39 @@ export const useTaskStore = create<TaskState>()(
     updateTask: async (task: Partial<Task>) => {
       const existsTaskWithSameName = () =>
         get()
-          .getTasks()
-          .some((t) => 
+          .getFilteredTasks()
+          .some((t) =>
             t.id !== task.id
-            && t.displayName === task.displayName 
+            && t.displayName === task.displayName
             && (task.categoryId ? t.categoryId === task.categoryId : true)
           );
 
       if (existsTaskWithSameName()) {
         toast.error(`Task with name "${task.displayName}" already exists${task.categoryId ? ` in category "${task.categoryId}"` : ''}`);
-        return;
+        return 'fail';
       }
 
-      const existingTask = get().getTasks().find((t) => t.id === task.id) as Task;
+      const existingTask = get().getFilteredTasks().find((t) => t.id === task.id) as Task;
 
       const updatedTask: Task = {
         ...existingTask,
         ...task,
-        updatedAt: new Date().toISOString(),
+        updatedAt: getDateNowService().toISOString(),
         syncStatus: 'unsynced'
       };
 
       if (getStoreMode() === 'online') {
-        await updateTask(updatedTask).then(() => {
-          updatedTask.syncStatus = 'synced';
-        }).catch(() => {
-          updatedTask.syncStatus = 'error';
+        const { syncStatus, isFail } = await updateTaskService(updatedTask).then(() => {
+          return { syncStatus: 'synced' as SYNC_STATUS, isFail: false };
+        }).catch((error) => {
+          return { syncStatus: 'error' as SYNC_STATUS, isFail: error.response?.status === 422 };
         });
+
+        if (isFail) {
+          return 'fail';
+        }
+
+        updatedTask.syncStatus = syncStatus;
       }
       set((state) => ({
         tasks: state.tasks.map((t) => {
@@ -190,11 +217,20 @@ export const useTaskStore = create<TaskState>()(
           return t;
         }),
       }));
+      return 'success';
     },
 
     deleteTask: async (taskId: string) => {
       if (getStoreMode() === 'online') {
-        await deleteTask(taskId);
+        const deletedTask = await deleteTaskService(taskId);
+
+        if (deletedTask) {
+          set((state) => ({
+            tasks: state.tasks.filter((task) => task.id !== taskId),
+          }));
+          return 'success';
+        }
+        return 'fail';
       }
       set((state) => ({
         tasks: state.tasks.map((task) => {
@@ -204,6 +240,8 @@ export const useTaskStore = create<TaskState>()(
           return task;
         }),
       }));
+
+      return 'success';
     },
 
     syncOfflineTasks: () => {
@@ -215,17 +253,23 @@ export const useTaskStore = create<TaskState>()(
       const tasksToSync = get().tasks
         .filter((task) => task.syncStatus !== 'synced')
         .map((task) => (
-          {...task,
+          {
+            ...task,
             userId: user.id,
           })
         );
 
-      const syncingTasks = syncTasks(user.id, tasksToSync).then(() => {
+      if (!tasksToSync.length) {
+        return;
+      }
+
+      const syncingTasks = syncTasksService(user.id, tasksToSync).then(() => {
         set((state) => {
           const updatedTasks = [...state.tasks].map((task) => {
             if (task.syncStatus !== 'synced') {
               return { ...task, syncStatus: 'synced' };
             }
+            return task;
           }).filter((task) => task && !task.deleted) as Task[];
 
           return { tasks: updatedTasks };
@@ -251,10 +295,16 @@ export const useTaskStore = create<TaskState>()(
       );
     }
   })), {
-    name: 'configuration-storage',
+    name: 'task-storage',
     storage: createJSONStorage(() => getStoreMode() === 'online' ? sessionStorage : localStorage)
   })
 );
 
 // selectors
-export const getPercentageCompletedTasks = (state: State) => ((state.tasks?.filter(task => task.done).length / state.tasks?.length * 100) || 0);
+export const getPercentageCompletedTasks = (state: State) => {
+  if (!state.tasks || state.tasks.length === 0) {
+    return 0;
+  }
+
+  return state.tasks.filter(task => task.done).length / state.tasks.length * 100;
+}

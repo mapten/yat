@@ -81,6 +81,12 @@ export const handlers = [
 
     const taskToCreate = await req.json<Task>();
 
+    const user = users.getValue().find((user) => user.id === taskToCreate.userId);
+
+    if (tasks.getValue().find((task) => task.displayName === taskToCreate.displayName && user && task.userId === user.id)) {
+      return res(ctx.status(422));
+    }
+
     tasks.update((tasks) => [...tasks, {...taskToCreate}]);
 
     return res(ctx.status(201));
@@ -97,6 +103,12 @@ export const handlers = [
 
     if (!tasks.getValue().find((task) => task.id === id)) {
       return res(ctx.status(404));
+    }
+
+    const user = users.getValue().find((user) => user.id === taskToUpdate.userId);
+
+    if (tasks.getValue().find((task) => user && task.userId === user.id && task.displayName === taskToUpdate.displayName && task.id !== id)) {
+      return res(ctx.status(422));
     }
 
     tasks.update((tasks) => tasks.map((task) => (task.id === id ? taskToUpdate : task)));

@@ -4,7 +4,7 @@ import { Story, Meta } from '@storybook/react/types-6-0';
 // Decorators
 import ThemeDecorator from '../../../.storybook/decorators/ThemeDecorator';
 
-import { TodoListItemEdit } from '../../components/presentational/TodoList/TodoListItem/TodoListItemEdit/TodoListItemEdit';
+import TodoListItemEdit from '../../components/presentational/TodoList/TodoListItem/TodoListItemEdit/TodoListItemEdit';
 
 export default {
   title: 'Molecules/Todo list item edit',

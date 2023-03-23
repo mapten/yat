@@ -1,6 +1,5 @@
-import { useEffect, useState, useRef, useId } from 'react';
+import { useEffect, useState, useRef, useId, forwardRef, useImperativeHandle, Ref } from 'react';
 import { Icon } from '@iconify/react';
-import { v4 as uuidv4 } from 'uuid';
 
 // Styles
 import styles from './TodoListItemEdit.module.scss';
@@ -13,13 +12,9 @@ import { NEW_TASK_ID } from '../../../../../constants/common.constants';
 import { Priority } from '../../../../../models/priority.model';
 import { Task } from '../../../../../models/task.model';
 
-// Store
-import { useAuthStore } from '../../../../../store/auth.store';
-
 // Components
 import { Button } from '../../../UI/Button/Button';
 import Select from '../../../UI/Select/Select';
-import { useConfigurationStore } from '../../../../../store/configuration.store';
 
 type StateProps = {
   taskId?: string;
@@ -34,19 +29,20 @@ type DispatchProps = {
   onSave: (task: Partial<Task>) => void;
 }
 
+export type RefType = {
+  reset: () => void;
+}
+
 type Props = StateProps & DispatchProps;
 
-export const TodoListItemEdit: React.FC<Props> = ({ taskId, initialTaskName, initialTaskPriority, taskDone, placeholder, onCancelEdit, onSave }: Props) => {
+const TodoListItemEdit = ({ taskId, initialTaskName, initialTaskPriority, taskDone, placeholder, onCancelEdit, onSave }: Props, ref: Ref<RefType>) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const selectId = useId();
   const taskNameId = useId();
 
-  const [name, setName] = useState<string>('');
-  const [priority, setPriority] = useState<PRIORITY_ORDER_TYPE>(DEFAULT_PRIORITY);
+  const [name, setName] = useState<string>(initialTaskName || '');
+  const [priority, setPriority] = useState<PRIORITY_ORDER_TYPE>(initialTaskPriority || DEFAULT_PRIORITY);
   const [errorOnName, setErrorOnName] = useState<boolean>(false);
-
-  const { user } = useAuthStore((state) => state);
-  const { getStoreMode } = useConfigurationStore((state) => state);
 
   useEffect(() => {
     if (inputRef.current) {
@@ -54,17 +50,12 @@ export const TodoListItemEdit: React.FC<Props> = ({ taskId, initialTaskName, ini
     }
   }, []);
 
-  useEffect(() => {
-    if (initialTaskName !== undefined) {
-      setName(initialTaskName);
+  useImperativeHandle(ref, () => ({
+    reset() {
+      setName('');
+      setPriority(DEFAULT_PRIORITY);
     }
-  }, [initialTaskName]);
-
-  useEffect(() => {
-    if (initialTaskPriority !== undefined) {
-      setPriority(initialTaskPriority);
-    }
-  }, [initialTaskPriority]);
+  }));
 
   const inputChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setName(e.target.value);
@@ -130,3 +121,5 @@ export const TodoListItemEdit: React.FC<Props> = ({ taskId, initialTaskName, ini
     </div>
   );
 };
+
+export default forwardRef(TodoListItemEdit);

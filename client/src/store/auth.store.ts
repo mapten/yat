@@ -14,12 +14,13 @@ type State = {
 }
 
 type Actions = {
+  clear: () => void;
   createUser: (user: UserRequest) => Promise<void>;
   login: (user: Omit<UserRequest, 'name'>) => Promise<void>;
   logout: () => void;
   getToken: () => string | null;
   getUser: () => User | null;
-  isAuthorized: () => boolean;
+  isAuthenticated: () => boolean;
   setIsLoginVisible: (isLoginVisible: boolean) => void;
 }
 
@@ -30,6 +31,8 @@ export const useAuthStore = create<AuthState>()(
     user: null,
     token: null,
     isLoginVisible: false,
+
+    clear: () => set({ user: null, token: null }),
 
     createUser: async (user: UserRequest) => {
       const response = (await createUser(user)) as UserResponse;
@@ -56,13 +59,16 @@ export const useAuthStore = create<AuthState>()(
       set({ token: null });
       set({ isLoginVisible: true });
     },
+
     getToken: () => {
       return get().token;
     },
+
     getUser: () => {
       return get().user;
     },
-    isAuthorized: () => {
+
+    isAuthenticated: () => {
       return get().token !== null;
     },
 
@@ -70,7 +76,7 @@ export const useAuthStore = create<AuthState>()(
       set({ isLoginVisible });
     }
   })), {
-    name: 'user-storage',
+    name: 'auth-storage',
     storage: createJSONStorage(() => sessionStorage)
   })
 );
@@ -79,6 +85,6 @@ export const getTokenNonReactComponent = () => {
   const tokenZustardWrapper = useAuthStore.getState().getToken();
 
   if (tokenZustardWrapper) {
-    return (tokenZustardWrapper as unknown as { value: string}).value;
+    return (tokenZustardWrapper as unknown as { value: string }).value;
   }
 };

@@ -13,7 +13,7 @@ import userEvent from '@testing-library/user-event';
 
 vi.mock('../../../../store/task.store', () => ({
   useTaskStore: vi.fn(),
-  getPercentageCompletedTasks: vi.fn(),
+  getPercentageCompletedTasks: vi.fn().mockReturnValue(0),
 }));
 const mockTaskStore = useTaskStore as unknown as MockedFunction<typeof useTaskStore>;
 
@@ -141,7 +141,8 @@ describe('<TodoList />', () => {
   });
 
   it('should trigger updateTask when button Save is clicked on TodoListItemEdit', async () => {
-    // arrange 
+    // arrange
+    mockUpdateTask.mockImplementation(() => Promise.resolve('success'));
     renderUI();
 
     const pendingSection = within(screen.getByText(/Pending/i).closest('section') as HTMLDivElement);
@@ -161,6 +162,6 @@ describe('<TodoList />', () => {
     userEvent.type(input, 'New task name{enter}');
 
     // assert
-    waitFor(() => expect(mockUpdateTask).toHaveBeenCalledWith(expect.objectContaining({ id: '5' })));
+    await waitFor(() => expect(mockUpdateTask).toHaveBeenCalledWith(expect.objectContaining({ id: '5' })));
   });
 });

@@ -3,7 +3,7 @@ import { getAxiosApiInstance } from './axios.service';
 
 const API_ENDPOINT = `${import.meta.env.VITE_APP_API_ENDPOINT}/ping`;
 
-export const ping = async () => {
+export const pingToServer = async () => {
   return getAxiosApiInstance(API_ENDPOINT)
     .get<boolean>('')
     .then((response) => {

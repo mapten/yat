@@ -41,7 +41,7 @@ describe('<Auth />', () => {
       user: initialUser,
       login: vi.fn(),
       createUser: vi.fn(),
-      setIsloginVisible: vi.fn(),
+      setIsLoginVisible: vi.fn(),
     }));
     mockConfigurationStore.mockImplementation(() => ({
       setStoreMode: vi.fn(),
@@ -268,6 +268,7 @@ describe('<Auth />', () => {
         user: initialUser,
         login: vi.fn(),
         createUser: mockRegister,
+        setIsLoginVisible: vi.fn(),
       }));
 
       const mockSetStoreMode = vi.fn();
