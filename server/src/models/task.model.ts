@@ -4,4 +4,5 @@ export interface Task {
   displayName: string;
   priority: number;
   done: boolean;
+  deleted?: boolean;
 }
