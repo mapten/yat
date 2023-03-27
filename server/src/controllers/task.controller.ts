@@ -8,34 +8,46 @@ import { Task } from '../models/task.model';
 
 export const fetchUserTasks = async (req: Request, res: Response) => {
   const tasks = await taskQueries.fetchUserTasks(req.params.userid);
-  res.send(tasks);
+
+  return res.send(tasks);
 };
 
 export const createTask = async (req: Request, res: Response) => {
-  if (taskQueries.findTaskByNameAndUserId(req.body.displayName, req.body.userId) !== null) {
-    res.status(422).send('Task already exists');
+  const taskFromRequest: Task = req.body;
+
+  const existingTask = await taskQueries.findTaskByNameAndUserId(taskFromRequest.displayName, taskFromRequest.userId);
+  if (existingTask) {
+    return res.status(422).send('Task already exists');
   }
-  const createdTask = await taskQueries.createTask(req.body);
-  res.send(createdTask);
+  await taskQueries.createTask(taskFromRequest);
+
+  res.send(req.body);
 }
 
 export const updateTask = async (req: Request, res: Response) => {
-  if (taskQueries.findAnotherTaskByNameAndUserId(req.body.displayName, req.body.id, req.body.userId) !== null) {
-    res.status(422).send('Another task already exists with the same name');
+  const taskFromRequest: Task = req.body;
+
+  const existingAnotherTask = await taskQueries.findAnotherTaskByNameAndUserId(taskFromRequest.displayName, taskFromRequest.id, taskFromRequest.userId);
+  if (existingAnotherTask !== null) {
+    return res.status(422).send('Another task already exists with the same name');
   }
 
-  const updatedTask = await taskQueries.updateTask(req.body);
-  res.send(updatedTask);
+  // remove MongoDB _id from the object, if not it would throw an error
+  const taskToUpdate = (({ _id, ...o }) => o)(taskFromRequest);
+
+  await taskQueries.updateTask(taskToUpdate);
+
+  return res.send(req.body);
 }
 
 export const updateTaskStatus = async (req: Request, res: Response) => {
   const updatedTask = await taskQueries.updateTaskStatus(req.params.id, req.body.done);
-  res.send(updatedTask);
+  return res.send(updatedTask);
 }
 
 export const deleteTask = async (req: Request, res: Response) => {
   const deletedTask = await taskQueries.deleteTask(req.params.id);
-  res.send(deletedTask);
+  return res.send(deletedTask);
 }
 
 export const syncTasks = async (req: Request, res: Response) => {
@@ -56,8 +68,8 @@ export const syncTasks = async (req: Request, res: Response) => {
         await taskQueries.createTask({ ...taskInRequest, userId });
       }
     });
-    res.send('Synced');
+    return res.send('Synced');
   } catch (error) {
-    res.status(400).send('There was an error syncing the tasks');
+    return res.status(400).send('There was an error syncing the tasks');
   }
 }

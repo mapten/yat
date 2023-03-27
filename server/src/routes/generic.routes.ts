@@ -5,7 +5,7 @@ import { ping } from '../controllers/generic.controller';
 
 const router = express.Router();
 
-// /generic/ping -> PING
+// /generic/ping -> GET
 router.get('/ping', ping);
 
 export default router;
