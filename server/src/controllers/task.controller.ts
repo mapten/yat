@@ -9,7 +9,12 @@ import { Task } from '../models/task.model';
 export const fetchUserTasks = async (req: Request, res: Response) => {
   const tasks = await taskQueries.fetchUserTasks(req.params.userid);
 
-  return res.send(tasks);
+  const filteredTasks = tasks.map((task) => {
+    const { _id, ...taskWithoutId } = task;
+    return taskWithoutId;
+  });
+
+  return res.send(filteredTasks);
 };
 
 export const createTask = async (req: Request, res: Response) => {
@@ -19,7 +24,10 @@ export const createTask = async (req: Request, res: Response) => {
   if (existingTask) {
     return res.status(422).send('Task already exists');
   }
-  await taskQueries.createTask(taskFromRequest);
+
+  const taskToCreate = (({ _id, syncStatus, deleted, ...o }) => o)(taskFromRequest);
+
+  await taskQueries.createTask(taskToCreate);
 
   res.send(req.body);
 }
@@ -33,7 +41,7 @@ export const updateTask = async (req: Request, res: Response) => {
   }
 
   // remove MongoDB _id from the object, if not it would throw an error
-  const taskToUpdate = (({ _id, ...o }) => o)(taskFromRequest);
+  const taskToUpdate = (({ _id, syncStatus, deleted, ...o }) => o)(taskFromRequest);
 
   await taskQueries.updateTask(taskToUpdate);
 
@@ -51,7 +59,7 @@ export const deleteTask = async (req: Request, res: Response) => {
 }
 
 export const syncTasks = async (req: Request, res: Response) => {
-  const tasksInRequest: Task[] = req.body.tasks;
+  const tasksInRequest: Task[] = req.body;
   const userId = req.params.userid;
 
   const tasksInDatabase = await taskQueries.fetchUserTasks(userId);
@@ -65,11 +73,14 @@ export const syncTasks = async (req: Request, res: Response) => {
           await taskQueries.updateTask({ ...tasksInDatabase, ...taskInRequest });
         }
       } else {
-        await taskQueries.createTask({ ...taskInRequest, userId });
+        if (!taskInRequest.deleted) {
+          await taskQueries.createTask({ ...taskInRequest, userId });
+        }
       }
     });
     return res.send('Synced');
   } catch (error) {
+    console.log(error);
     return res.status(400).send('There was an error syncing the tasks');
   }
 }

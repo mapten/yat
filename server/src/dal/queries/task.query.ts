@@ -1,5 +1,3 @@
-import crypto from 'crypto';
-
 // Models
 import { Task } from '../../models/task.model';
 
@@ -23,8 +21,7 @@ export const findAnotherTaskByNameAndUserId = async (name: string, id: string, u
 
 
 export const createTask = async (task: Task) => {
-  const taskId = crypto.randomUUID();
-  return await getDb().collection<Task>(TASK_TABLE).insertOne({...task, id: taskId});
+  return await getDb().collection<Task>(TASK_TABLE).insertOne({...task});
 };
 
 export const updateTask = async (task: Task) => {
