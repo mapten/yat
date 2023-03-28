@@ -1,9 +1,7 @@
-/node_modules
-/server/node_modules
-/client/node_modules
-
-/client/coverage
-/client/build
+**/node_modules
+**/coverage
+**/build
+**/dist
 
 client/.vscode
 server/.vscode
