@@ -39,6 +39,8 @@ const users = new LiveStorage('users', [
 ] as (User & {password: string})[]);
 const token = new LiveStorage('token', '');
 
+const csrfToken = new LiveStorage('csrfToken', 'aaaaaaaa');
+
 export const isValidHeaderToken = (req: RestRequest<DefaultBodyType, PathParams<string>>) => {
   const tokenFromHeader = req.headers.get('Authorization')?.replace('Bearer ', '');
 
@@ -161,7 +163,7 @@ export const handlers = [
     return res(ctx.status(200));
   }),
 
-  rest.post(`${API_ENDPOINT}/user/login`, async (req, res, ctx) => {
+  rest.post(`${API_ENDPOINT}/auth/login`, async (req, res, ctx) => {
     const userRequest: UserRequest = await req.json<UserRequest>();
 
     const user = users.getValue().find((u) => u.email === userRequest.email && u.password === userRequest.password);
@@ -176,7 +178,7 @@ export const handlers = [
     return res(ctx.json({name: user.name, email: user.email, id: user.id, token}), ctx.status(200));
   }),
 
-  rest.post(`${API_ENDPOINT}/user/signin`, async (req, res, ctx) => {
+  rest.post(`${API_ENDPOINT}/auth/signin`, async (req, res, ctx) => {
     const userRequest = await req.json<UserRequest>();
 
     if (users.getValue().find((u) => u.email === userRequest.email)) {
@@ -200,5 +202,9 @@ export const handlers = [
     }
 
     return res(ctx.json({message: 'pong'}), ctx.status(200));
-  })
+  }),
+
+  rest.get(`${API_ENDPOINT}/token/csrf-token`, (req, res, ctx) => {
+    return res(ctx.json({token: csrfToken.getValue()}), ctx.status(200));
+  }),
 ];
