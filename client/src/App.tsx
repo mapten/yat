@@ -1,4 +1,4 @@
-import React, { lazy, Suspense } from 'react';
+import React, { Suspense, useEffect } from 'react';
 import { Toaster } from 'react-hot-toast';
 
 // Styles
@@ -7,29 +7,25 @@ import './App.scss';
 // Hooks
 import { useStore } from './hooks/useStore';
 
+// Store
+import { useAuthStore } from './store/auth.store';
+
 // Components
 import { useTheme } from './components/hoc/ThemeProvider/ThemeProvider';
 import Header from './components/presentational/Header/Header';
 import Auth from './components/containers/Auth/Auth';
+import TodoList from './components/containers/TodoList/TodoList';
 import LoadingScreen from './components/presentational/UI/LoadingScreen/LoadingScreen';
-
-const TodoList = lazy(async () => {
-  // to avoid flashing the loading screen for a split second
-  const [moduleExports] = await Promise.all([
-    import('./components/containers/TodoList/TodoList'),
-    new Promise(resolve => setTimeout(resolve, 700))
-  ]);
-  return moduleExports;
-});
 
 
 const App: React.FC = () => {
   const { theme } = useTheme();
+  const { isTaskStoreHydrated } = useStore();
 
-  const { storeHasLoaded, isLoginVisible } = useStore();
+  const { loginVisibleMode } = useAuthStore((state) => state);
 
   const renderTodoList = () => {
-    if (storeHasLoaded) {
+    if (isTaskStoreHydrated) {
       return <Suspense fallback={<LoadingScreen />}>
         <TodoList />
       </Suspense>;
@@ -45,7 +41,7 @@ const App: React.FC = () => {
           <Header />
         </header>
         <main>
-          {isLoginVisible ? <Auth /> : renderTodoList()}
+          {loginVisibleMode ? <Auth initialMode={loginVisibleMode} /> : renderTodoList()}
         </main>
         <footer>
         </footer>

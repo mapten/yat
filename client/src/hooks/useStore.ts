@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { createJSONStorage } from 'zustand/middleware';
 
 // Store
 import { useConfigurationStore } from '../store/configuration.store';
@@ -11,30 +12,16 @@ import { useOnlineStatus } from './useOnlineStatus';
 export const useStore = () => {
   const [isTaskStoreHydrated, setIsTaskStoreHydrated] = useState<boolean>(false);
 
-  const { storeMode, setConnectionState, reconnectedToServer } = useConfigurationStore((state) => state);
-  const { isLoginVisible } = useAuthStore((state) => state);
-  const { syncOfflineTasks } = useTaskStore((state) => state);
-  
- useOnlineStatus(setConnectionState);
+  const { setConnectionMode } = useConfigurationStore((state) => state);
+  const { loginVisibleMode } = useAuthStore((state) => state);
+
+  useOnlineStatus(setConnectionMode);
 
   useEffect(() => {
     useTaskStore.persist.onFinishHydration(() => {
       setIsTaskStoreHydrated(true);
     });
   }, []);
-
-  useEffect(() => {
-    reconnectedToServer(() => {
-      syncOfflineTasks();
-    });
-  }, []);
-
-  useEffect(() => {
-    /** This is a way to trigger a rehydration when the store changes between 
-     * online and offline mode (sessionStorage and localStorage).
-     */
-    setIsTaskStoreHydrated(false);
-  }, [storeMode]);
 
   useEffect(() => {
     /**
@@ -47,5 +34,5 @@ export const useStore = () => {
     }
   }, [isTaskStoreHydrated]);
 
-  return { storeHasLoaded: isTaskStoreHydrated, isLoginVisible };
+  return { isTaskStoreHydrated, loginVisibleMode };
 };

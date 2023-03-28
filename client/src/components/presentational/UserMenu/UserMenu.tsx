@@ -17,7 +17,7 @@ const UserMenu: React.FC = () => {
 
   const [menuOpen, setMenuOpen] = useState(false);
 
-  const { user, logout, isAuthenticated, setIsLoginVisible } = useAuthStore((state) => state);
+  const { user, logout, isAuthenticated, setLoginVisibleMode } = useAuthStore((state) => state);
   const { setStoreMode } = useConfigurationStore((state) => state);
 
   useOutsideClick(ref, () => setMenuOpen(false));
@@ -36,7 +36,7 @@ const UserMenu: React.FC = () => {
 
   const openLoginHandler = () => {
     setMenuOpen(false);
-    setIsLoginVisible(true);
+    setLoginVisibleMode('online');
   };
 
   const logoutHandler = () => {
@@ -52,17 +52,21 @@ const UserMenu: React.FC = () => {
       </div>
       {
         menuOpen && (
-          <div data-testid="userMenu__options" className={`themeBg themeBorder ${styles.userMenu__options}`}>
-            {
-              isAuthenticated() && (
-                <div className={`${styles.userMenu__option}`} onClick={logoutHandler} role="menuitem">
-                  <span>Logout</span>
-                  <Icon icon="websymbol:logout" />
-                </div>
-              )
-            }
-            <div className={`${styles.userMenu__option}`} onClick={openLoginHandler} role="menuitem">
-              <span>Select how to connect (online / offline)</span>
+          <div className={styles.userMenu__options}>
+            <div className={`${styles.userMenu__optionsSeparator}`} />
+            <div data-testid="userMenu__options" className={`themeBg themeBorder ${styles.userMenu__optionsContent}`}>
+              {
+                isAuthenticated() ? (
+                  <div className={`${styles.userMenu__option}`} onClick={logoutHandler} role="menuitem">
+                    <span>Logout</span>
+                    <Icon icon="websymbol:logout" />
+                  </div>
+                ) : (
+                  <div className={`${styles.userMenu__option}`} onClick={openLoginHandler} role="menuitem">
+                    <span>Login</span>
+                  </div>
+                )
+              }
             </div>
           </div>
         )

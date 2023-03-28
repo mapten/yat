@@ -34,9 +34,9 @@ const AuthOnlineOfflineSelector = ({ initialSelectedMode, onChange }: Props) => 
         initialValue={selectedMode === 'online' ? 'left' : 'right'}
         size='medium'
         leftName='Online'
-        leftIconName='material-symbols:network-wifi-rounded'
+        leftIconName='material-symbols:power-plug'
         rightName='Offline'
-        rightIconName='material-symbols:signal-wifi-off-outline'
+        rightIconName='material-symbols:power-plug-off'
         onChange={changeHandler} />
 
       <div className={`${styles.authOnlineOffline__description} ${styles.info}`}>

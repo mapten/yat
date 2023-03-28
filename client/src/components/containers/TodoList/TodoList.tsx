@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 // Styles
 import styles from './TodoList.module.scss';
@@ -22,11 +22,7 @@ import ProgressBar from '../../presentational/ProgressBar/ProgressBar';
 const TodoList: React.FC = () => {
   const [editTaskId, setEditTaskId] = useState<string | undefined>(undefined);
 
-  const { getCompletedTasks, getPendingTasks, fetchTasks, addTask, changeTaskStatus, updateTask, deleteTask } = useTaskStore((state) => state);
-
-  useEffect(() => {
-    fetchTasks();
-  }, []);
+  const { getCompletedTasks, addTask, changeTaskStatus, updateTask, deleteTask, getPendingTasks } = useTaskStore((state) => state);
 
   const updateTaskHandler = async (task: Partial<Task>) => {
     const result = await updateTask(task);

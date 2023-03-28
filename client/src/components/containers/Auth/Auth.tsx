@@ -9,7 +9,7 @@ import { STORE_MODE } from '../../../typings/common.types';
 // Store
 import { useAuthStore } from '../../../store/auth.store';
 import { useConfigurationStore } from '../../../store/configuration.store';
-import { useTaskStore } from '../../../store/task.store';
+import { useTokenStore } from '../../../store/token.store';
 
 // Components
 import { Button } from '../../presentational/UI/Button/Button';
@@ -26,9 +26,9 @@ const Auth: React.FC<Props> = ({ initialMode }: Props) => {
   const emailId = useId();
   const passwordId = useId();
 
-  const { createUser, login, setIsLoginVisible } = useAuthStore((state) => state);
-  const { setStoreMode, getStoreMode } = useConfigurationStore((state) => state);
-  const { syncOfflineTasks } = useTaskStore((state) => state);
+  const { createUser, login, setLoginVisibleMode } = useAuthStore((state) => state);
+  const { setStoreMode } = useConfigurationStore((state) => state);
+  const { fetchCsrfToken } = useTokenStore((state) => state);
 
   const [mode, setMode] = useState<STORE_MODE>(initialMode || 'offline');
   const [isLogin, setIsLogin] = useState<boolean>(true);
@@ -52,14 +52,6 @@ const Auth: React.FC<Props> = ({ initialMode }: Props) => {
   const changeNameHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setErrorName('');
     setName(e.target.value);
-  };
-
-  const changeStoreModeHandler = (mode: STORE_MODE) => {
-    const prevStoreMore = getStoreMode();
-    setStoreMode(mode);
-    if (mode === 'online' && prevStoreMore === 'offline') {
-      syncOfflineTasks();
-    }
   };
 
   const validateName = () => {
@@ -95,8 +87,8 @@ const Auth: React.FC<Props> = ({ initialMode }: Props) => {
 
   const submitHandler = async () => {
     if (mode === 'offline') {
-      changeStoreModeHandler('offline');
-      setIsLoginVisible(false);
+      setStoreMode('offline');
+      setLoginVisibleMode(undefined);
       return;
     }
 
@@ -110,13 +102,13 @@ const Auth: React.FC<Props> = ({ initialMode }: Props) => {
       return;
     }
 
-    if (isLogin) {
-      await login({ email, password });
-    } else {
-      await createUser({ name, email, password });
+    let singinSuccess = isLogin ? await login({ email, password }) : await createUser({ name, email, password });
+
+    if (singinSuccess) {
+      setLoginVisibleMode(undefined);
+      await fetchCsrfToken();
+      setStoreMode('online');
     }
-    changeStoreModeHandler('online');
-    setIsLoginVisible(false);
   };
 
   const resetForm = () => {
