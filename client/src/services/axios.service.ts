@@ -2,20 +2,31 @@ import axios, { AxiosInstance } from 'axios';
 import axiosRetry from 'axios-retry';
 
 // Store
-import { getTokenNonReactComponent } from '../store/auth.store';
+import { useTokenStore } from '../store/token.store';
 
-export const getAxiosApiInstance = (endpoint: string): AxiosInstance => {
+export const getAxiosApiInstance = (endpoint: string) => {
   const client = axios.create({
     baseURL: endpoint,
+    withCredentials: true,
     headers: {
       'Content-Type': 'application/json'
     }
   });
 
-  const token = getTokenNonReactComponent();
-  if (token) {
-    client.defaults.headers.common.Authorization = `Bearer ${token}`;
+  if (!client.defaults.headers.common.Authorization) {
+    const authToken = useTokenStore.getState().getAuthToken();
+    if (authToken) {
+      client.defaults.headers.common.Authorization = `Bearer ${authToken}`;
+    }
   }
+
+  if (!client.defaults.headers.common['x-csrf-token']) {
+    const csrfToken = useTokenStore.getState().getCsrfToken();
+    if (csrfToken) {
+      client.defaults.headers.common['x-csrf-token'] = csrfToken;
+    }
+  }
+
 
   configureRetry(client);
 
