@@ -7,7 +7,7 @@ export type BUTTON_SIZE = 'small' | 'medium' | 'big';
  * - online: the user is online and the app is connected to the server
  * - offline: the user is offline and the app is not connected to the server
  */
-export type STORE_MODE = 'online' | 'offline' | 'error';
+export type STORE_MODE = 'online' | 'offline';
 
 /**
  * The connection state of the app:
@@ -16,7 +16,9 @@ export type STORE_MODE = 'online' | 'offline' | 'error';
  * - disconnected: the app is not connected to the server
  * - serverError: the app is connected to the server but the server is not responding
  */
-export type CONNECTION_STATE = 'connected' | 'disconnected' | 'serverError';
+export type CONNECTION_MODE = 'connected' | 'disconnected';
+
+export type SERVER_CONNECTION_STATE = 'connected' | 'error';
 
 /**
  * The sync status of the task.
