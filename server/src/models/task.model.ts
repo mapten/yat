@@ -6,4 +6,5 @@ export interface Task {
   priority: number;
   done: boolean;
   deleted?: boolean;
+  syncStatus?: string;
 }
