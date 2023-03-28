@@ -1,51 +1,50 @@
 import { create } from 'zustand';
 import { createJSONStorage, devtools, persist } from 'zustand/middleware';
-import { toast } from 'react-hot-toast';
-
-// Services
-import { pingToServer } from '../services/general.service';
 
 // Types
-import { CONNECTION_STATE, STORE_MODE, THEME } from '../typings/common.types';
+import { CONNECTION_MODE, SERVER_CONNECTION_STATE, STORE_MODE, THEME } from '../typings/common.types';
+
+// Middleware
+import { interceptor } from './middleware/interceptor.middleware';
 
 export type State = {
-  isLoginVisible: boolean;
+  isLoading: boolean;
   theme: THEME;
   storeMode: STORE_MODE;
-  connectionState: CONNECTION_STATE;
+  connectionMode: CONNECTION_MODE;
+  serverConnectionState: SERVER_CONNECTION_STATE;
   connectionErrors: number;
-  reconnectToServerListeners: (() => void)[];
 }
 
 type Actions = {
+  setIsLoading: (isLoading: boolean) => void;
   clear: () => void;
   setTheme: (theme: THEME) => void;
   getStoreMode: () => STORE_MODE;
   setStoreMode: (storeMode: STORE_MODE) => void;
+  setConnectionMode: (connectionMode: CONNECTION_MODE) => void;
+  setServerConnectionState: (serverConnectionState: SERVER_CONNECTION_STATE) => void;
   increaseConnectionErrors: () => void;
-  tryToReconnectToServer: () => Promise<void>;
-  setConnectionState: (connectionState: CONNECTION_STATE) => void;
-  reconnectedToServer: (callback: () => void) => void;
 }
 
 export type ConfigurationState = State & Actions;
 
-export const useConfigurationStore = create<ConfigurationState>()(
-  // @ts-ignore
-  persist(devtools((set, get) => ({
-    storeMode: 'offline',
-    connectionState: 'connected',
-    theme: 'light',
-    connectionErrors: 0,
-    reconnectToServerListeners: [],
+const initialState: State = {
+  isLoading: false,
+  storeMode: 'offline',
+  connectionMode: 'connected',
+  serverConnectionState: 'connected',
+  theme: 'light',
+  connectionErrors: 0
+};
 
-    clear: () => set({
-      storeMode: 'offline',
-      connectionState: 'connected',
-      theme: 'light',
-      connectionErrors: 0,
-      reconnectToServerListeners: [],
-    }),
+export const useConfigurationStore = create<ConfigurationState>()(
+  persist(interceptor(devtools((set, get) => ({
+    ...initialState,
+
+    setIsLoading: (isLoading: boolean) => set({ isLoading }),
+
+    clear: () => set(initialState),
 
     setTheme: (theme: THEME) => set({ theme }),
 
@@ -53,78 +52,22 @@ export const useConfigurationStore = create<ConfigurationState>()(
       return get().storeMode;
     },
 
-    setStoreMode: (storeMode: STORE_MODE) => {
-      if (get().storeMode === 'offline' && storeMode === 'online') {
-        get().reconnectToServerListeners.forEach((cb) => cb());
-      }
-      set({
-        storeMode
-      });
+    setStoreMode: (storeMode: STORE_MODE) => set({ storeMode }),
+
+    setConnectionMode: (connectionState: CONNECTION_MODE) => {
+      set({ connectionMode: connectionState });
     },
 
-    tryToReconnectToServer: async () => {
-      let retries = 20;
-
-      const checkIsConnectedToServer = async () => {
-        const isOnline = await pingToServer().then(() => true).catch(() => false);
-        if (isOnline) {
-          set({ connectionErrors: 0 });
-          toast.success('Connection to the server has been restored');
-          get().reconnectToServerListeners.forEach((cb) => cb());
-          return true;
-        } else {
-          retries--;
-          return false;
-        }
-      };
-
-      while (retries > 0) {
-        await new Promise(resolve => setTimeout(() => resolve(true), 120000))
-
-        const connected = await checkIsConnectedToServer();
-        if (connected) {
-          get().setConnectionState('connected');
-          return;
-        }
-      }
+    setServerConnectionState: (serverConnectionState: SERVER_CONNECTION_STATE) => {
+      set({ serverConnectionState });
     },
 
     increaseConnectionErrors: () => {
-      set({ connectionErrors: get().connectionErrors + 1 });
-
-      if (get().connectionErrors > Number(import.meta.env.VITE_API_AXIOS_RETRIES)) {
-        set({ connectionErrors: 0 });
-        get().setConnectionState('serverError');
-      }
-    },
-
-    setConnectionState: (connectionState: CONNECTION_STATE) => {
-      if (get().connectionState === 'connected' && connectionState === 'serverError' && get().storeMode === 'online') {
-        toast.error('There is a problem with the connection to the server. You are working in offline mode. Your changes will be synchronized when the connection is restored');
-        set({ storeMode: 'error' });
-        get().tryToReconnectToServer();
-      }
-      if (get().connectionState === 'connected' && connectionState === 'disconnected' && get().storeMode === 'online') {
-        set({ storeMode: 'error' });
-        toast.error('There is no internet connection. You are working in offline mode. Your changes will be synchronized when the connection is restored');
-      }
-      if (get().connectionState !== 'connected' && connectionState === 'connected' && get().storeMode === 'error') {
-        toast.success('Internet connection has been restored');
-        get().setStoreMode('online');
-      }
-      set({ connectionState });
-    },
-
-    reconnectedToServer: (callback: () => void) => {
-      set((state) => ({ reconnectToServerListeners: [...new Set([...state.reconnectToServerListeners, callback])] }));
-
-      return () => {
-        set((state) => ({ reconnectToServerListeners: state.reconnectToServerListeners.filter((listener) => listener !== callback) }));
-      };
+      set((state) => ({ connectionErrors: state.connectionErrors + 1 }));
     }
-  })), {
+  }))), {
     name: 'configuration-storage',
     storage: createJSONStorage(() => localStorage),
-    partialize: (state) => ({ theme: state.theme }),
+    partialize: (state) => ({ theme: state.theme, storeMode: state.storeMode, connectionState: state.connectionMode, serverConnectionState: state.serverConnectionState }),
   })
 );

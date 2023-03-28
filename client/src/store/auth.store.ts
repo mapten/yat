@@ -4,64 +4,70 @@ import { devtools, persist, createJSONStorage } from 'zustand/middleware';
 // Models
 import { User, UserRequest, UserResponse } from '../models/user.model';
 
+//Types
+import { STORE_MODE } from '../typings/common.types';
+
+// Store
+import { useTokenStore } from './token.store';
+
+// Middleware
+import { interceptor } from './middleware/interceptor.middleware';
+
 // Services
-import { createUser, loginUser } from '../services/user.service';
+import { createUser, loginUser } from '../services/auth.service';
 
 type State = {
   user: User | null;
-  token: string | null;
-  isLoginVisible: boolean;
+  loginVisibleMode?: STORE_MODE;
 }
 
 type Actions = {
   clear: () => void;
-  createUser: (user: UserRequest) => Promise<void>;
-  login: (user: Omit<UserRequest, 'name'>) => Promise<void>;
+  createUser: (user: UserRequest) => Promise<boolean>;
+  login: (user: Omit<UserRequest, 'name'>) => Promise<boolean>;
   logout: () => void;
-  getToken: () => string | null;
   getUser: () => User | null;
   isAuthenticated: () => boolean;
-  setIsLoginVisible: (isLoginVisible: boolean) => void;
+  setLoginVisibleMode: (loginVisibleMode?: STORE_MODE) => void;
 }
 
 export type AuthState = State & Actions;
 
-export const useAuthStore = create<AuthState>()(
-  persist(devtools((set, get) => ({
-    user: null,
-    token: null,
-    isLoginVisible: false,
+const initialState = {
+  user: null,
+  loginVisibleMode: undefined,
+};
 
-    clear: () => set({ user: null, token: null }),
+export const useAuthStore = create<AuthState>()(
+  persist(interceptor(devtools((set, get) => ({
+    ...initialState,
+
+    clear: () => set({ user: null, loginVisibleMode: undefined }),
 
     createUser: async (user: UserRequest) => {
       const response = (await createUser(user)) as UserResponse;
       if (!response) {
-        return;
+        return false;
       }
       set({ user: { id: response.id, name: response.name, email: response.email } });
-      set({ token: response.token });
-      set({ isLoginVisible: false });
+      useTokenStore.getState().setAuthToken(response.token);
+      return true;
     },
 
     login: async (user: Omit<UserRequest, 'name'>) => {
       const response = (await loginUser(user)) as UserResponse;
       if (!response) {
-        return;
+        return false;
       }
       set({ user: { id: response.id, name: response.name, email: response.email } });
-      set({ token: response.token });
-      set({ isLoginVisible: false });
+      useTokenStore.getState().setAuthToken(response.token);
+      return true;
     },
 
     logout: () => {
       set({ user: null });
-      set({ token: null });
-      set({ isLoginVisible: true });
-    },
-
-    getToken: () => {
-      return get().token;
+      set({ loginVisibleMode: undefined });
+      useTokenStore.getState().setAuthToken(null);
     },
 
     getUser: () => {
@@ -69,22 +75,14 @@ export const useAuthStore = create<AuthState>()(
     },
 
     isAuthenticated: () => {
-      return get().token !== null;
+      return useTokenStore.getState().getAuthToken() !== null;
     },
 
-    setIsLoginVisible: (isLoginVisible: boolean) => {
-      set({ isLoginVisible });
+    setLoginVisibleMode: (loginVisibleMode?: STORE_MODE) => {
+      set({ loginVisibleMode });
     }
-  })), {
+  }))), {
     name: 'auth-storage',
     storage: createJSONStorage(() => sessionStorage)
   })
 );
-
-export const getTokenNonReactComponent = () => {
-  const tokenZustardWrapper = useAuthStore.getState().getToken();
-
-  if (tokenZustardWrapper) {
-    return (tokenZustardWrapper as unknown as { value: string }).value;
-  }
-};

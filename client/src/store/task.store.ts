@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import { createJSONStorage, devtools, persist } from 'zustand/middleware';
 import { toast } from 'react-hot-toast';
 import { v4 as uuidv4 } from 'uuid';
+import merge from 'ts-deepmerge';
 
 // Models
 import { Task } from '../models/task.model';
@@ -29,13 +30,13 @@ const getUser = () => useAuthStore.getState().getUser();
 
 type State = {
   tasks: Task[];
-  hasHydrated: boolean;
 }
 
 type Actions = {
   setTasks: (tasks: Task[]) => void;
   clearTasks: () => void;
   fetchTasks: () => Promise<void>;
+  syncOfflineTasks: () => Promise<void>;
   getTasks: () => Task[];
   getFilteredTasks: () => Task[];
   getCompletedTasks: () => Task[];
@@ -44,16 +45,17 @@ type Actions = {
   changeTaskStatus: (taskId: string, done: boolean) => Promise<void>;
   updateTask: (task: Partial<Task>) => Promise<STORE_RESULT>;
   deleteTask: (taskId: string) => Promise<STORE_RESULT>;
-  syncOfflineTasks: () => void;
 }
 
 export type TaskState = State & Actions;
 
+export const initialState = {
+  tasks: [],
+};
+
 export const useTaskStore = create<TaskState>()(
-  // @ts-ignore
   persist(devtools((set, get) => ({
-    tasks: [],
-    hasHydrated: false,
+    ...initialState,
 
     setTasks: (tasks: Task[]) => set({ tasks }),
 
@@ -71,38 +73,40 @@ export const useTaskStore = create<TaskState>()(
 
     fetchTasks: async () => {
       const user = getUser();
-      if (getStoreMode() === 'offline' || !user) {
+      if (!user) {
         return;
       }
 
-      const response = await fetchUserTasksService(user.id);
-      if (!response) {
-        return;
-      }
-
-      const { existingTasksFromResponse, newTaskFromResponse } =
-        response
-          .map((r) => ({ ...r, syncStatus: 'synced' } as Task))
-          .reduce((acc: { existingTasksFromResponse: Task[], newTaskFromResponse: Task[] }, task) => {
-            if (get().tasks.find((t) => t.id === task.id)) {
-              acc.existingTasksFromResponse.push(task);
-            } else {
-              acc.newTaskFromResponse.push(task);
-            }
-            return acc;
-          }, { existingTasksFromResponse: [], newTaskFromResponse: [] });
-
-      const mergedExistingTasks = get().tasks.map((task) => {
-        const matchingTaskFromResponse = existingTasksFromResponse.find((t) => t.id === task.id);
-        if (matchingTaskFromResponse) {
-          return { ...matchingTaskFromResponse, ...task };
+      const fetchTasks = () => fetchUserTasksService(user.id).then((response) => {
+        if (!response) {
+          return;
         }
-        return task;
+
+        const { existingTasksFromResponse, newTaskFromResponse } =
+          response
+            .reduce((acc: { existingTasksFromResponse: Task[], newTaskFromResponse: Task[] }, task) => {
+              if (get().tasks.find((t) => t.id === task.id)) {
+                acc.existingTasksFromResponse.push(task);
+              } else {
+                acc.newTaskFromResponse.push(task);
+              }
+              return acc;
+            }, { existingTasksFromResponse: [], newTaskFromResponse: [] });
+
+        const mergedExistingTasks = get().tasks.map((task) => {
+          const matchingTaskFromResponse = existingTasksFromResponse.find((t) => t.id === task.id);
+          if (matchingTaskFromResponse) {
+            return { ...matchingTaskFromResponse, ...task, syncStatus: 'synced' as SYNC_STATUS };
+          }
+          return task;
+        });
+
+        const finalTasks = mergedExistingTasks.concat(newTaskFromResponse);
+
+        set((state) => ({ ...state, tasks: finalTasks }));
       });
 
-      const finalTasks = mergedExistingTasks.concat(newTaskFromResponse);
-
-      set({ tasks: finalTasks });
+      await fetchTasks();
     },
 
     addTask: async (task: Partial<Task>) => {
@@ -244,9 +248,9 @@ export const useTaskStore = create<TaskState>()(
       return 'success';
     },
 
-    syncOfflineTasks: () => {
+    syncOfflineTasks: async () => {
       const user = getUser();
-      if (getStoreMode() !== 'online' || !user) {
+      if (!user) {
         return;
       }
 
@@ -259,11 +263,11 @@ export const useTaskStore = create<TaskState>()(
           })
         );
 
-      if (!tasksToSync.length) {
+      if (!tasksToSync?.length) {
         return;
       }
 
-      const syncingTasks = syncTasksService(user.id, tasksToSync).then(() => {
+      const syncTasks = () => syncTasksService(user.id, tasksToSync).then(() => {
         set((state) => {
           const updatedTasks = [...state.tasks].map((task) => {
             if (task.syncStatus !== 'synced') {
@@ -272,10 +276,11 @@ export const useTaskStore = create<TaskState>()(
             return task;
           }).filter((task) => task && !task.deleted) as Task[];
 
-          return { tasks: updatedTasks };
+          return { ...state, tasks: updatedTasks };
         });
       }).catch(() => {
         set((state) => ({
+          ...state,
           tasks: state.tasks.map((task) => {
             if (task.syncStatus === 'unsynced') {
               return { ...task, syncStatus: 'error' };
@@ -284,27 +289,21 @@ export const useTaskStore = create<TaskState>()(
           }),
         }));
       });
-
-      toast.promise(
-        syncingTasks,
-        {
-          loading: 'Syncing tasks...',
-          success: 'Tasks have been synced',
-          error: 'Error while syncing tasks',
-        },
-      );
-    }
+      await syncTasks();
+    },
   })), {
     name: 'task-storage',
-    storage: createJSONStorage(() => getStoreMode() === 'online' ? sessionStorage : localStorage)
+    storage: createJSONStorage(() => localStorage)
   })
 );
 
 // selectors
 export const getPercentageCompletedTasks = (state: State) => {
-  if (!state.tasks || state.tasks.length === 0) {
+  const nonDeletedTasks = state.tasks.filter(task => !task.deleted);
+
+  if (!nonDeletedTasks || nonDeletedTasks.length === 0) {
     return 0;
   }
 
-  return state.tasks.filter(task => task.done).length / state.tasks.length * 100;
+  return nonDeletedTasks.filter(task => task.done).length / nonDeletedTasks.length * 100;
 }
