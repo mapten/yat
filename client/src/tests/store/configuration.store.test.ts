@@ -6,7 +6,7 @@ import { toast } from 'react-hot-toast';
 import { useConfigurationStore } from '../../store/configuration.store';
 
 // Services
-import * as generalService from '../../services/general.service';
+import * as generalService from '../../services/generic.service';
 
 describe('ConfigurationStore', () => {
   beforeEach(() => {
@@ -25,7 +25,7 @@ describe('ConfigurationStore', () => {
 
       // assert
       expect(result.current.storeMode).toBe('offline');
-      expect(result.current.connectionState).toBe('connected');
+      expect(result.current.connectionMode).toBe('connected');
       expect(result.current.theme).toBe('light');
       expect(result.current.connectionErrors).toBe(0);
       expect(result.current.reconnectToServerListeners).toEqual([]);
@@ -116,7 +116,7 @@ describe('ConfigurationStore', () => {
 
         result.current.reconnectedToServer(listener1);
         result.current.increaseConnectionErrors();
-        result.current.setConnectionState('disconnected');
+        result.current.setConnectionMode('disconnected');
 
         // act
         await result.current.tryToReconnectToServer();
@@ -124,7 +124,7 @@ describe('ConfigurationStore', () => {
         rerender();
 
         // assert
-        expect(result.current.connectionState).toEqual('connected');
+        expect(result.current.connectionMode).toEqual('connected');
         expect(result.current.connectionErrors).toEqual(0);
         expect(listener1Called).toBeTruthy();
         expect(toastSpy).toHaveBeenCalledWith('Connection to the server has been restored');
@@ -162,7 +162,7 @@ describe('ConfigurationStore', () => {
         rerender();
 
         // assert
-        expect(result.current.connectionState).toEqual('serverError');
+        expect(result.current.connectionMode).toEqual('serverError');
 
         import.meta.env.VITE_API_AXIOS_RETRIES = originalViteApiAxiosRetriesEnv;
       });
@@ -180,7 +180,7 @@ describe('ConfigurationStore', () => {
         result.current.setStoreMode('online');
 
         // act
-        result.current.setConnectionState('serverError');
+        result.current.setConnectionMode('serverError');
 
         rerender();
 
@@ -199,7 +199,7 @@ describe('ConfigurationStore', () => {
         result.current.setStoreMode('online');
 
         // act
-        result.current.setConnectionState('disconnected');
+        result.current.setConnectionMode('disconnected');
 
         rerender();
 
@@ -216,9 +216,9 @@ describe('ConfigurationStore', () => {
 
         result.current.setStoreMode('error');
 
-        result.current.setConnectionState('disconnected');
+        result.current.setConnectionMode('disconnected');
         // act
-        result.current.setConnectionState('connected');
+        result.current.setConnectionMode('connected');
 
         rerender();
 
@@ -231,9 +231,9 @@ describe('ConfigurationStore', () => {
     describe('reconnectedToServer', () => {
       it('should add non duplicated listeners to the reconnectToServerListeners array', () => {
         // arrange
-        const fooCallback1 = () => {};
-        const fooCallback2 = () => {};
-        const fooCallback3 = () => {};
+        const fooCallback1 = () => { };
+        const fooCallback2 = () => { };
+        const fooCallback3 = () => { };
 
         const { result, rerender } = renderHook(() => useConfigurationStore());
 

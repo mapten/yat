@@ -3,7 +3,7 @@ import MockAdapter from 'axios-mock-adapter';
 import axios from 'axios';
 
 // Services
-import { pingToServer } from '../../services/general.service';
+import { pingToServer } from '../../services/generic.service';
 
 describe('general.service', () => {
   let mockAxios: MockAdapter;

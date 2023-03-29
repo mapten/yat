@@ -27,9 +27,13 @@ export const createTask = async (req: Request, res: Response) => {
 
   const taskToCreate = (({ _id, syncStatus, deleted, ...o }) => o)(taskFromRequest);
 
-  await taskQueries.createTask(taskToCreate);
+  const inserResult = await taskQueries.createTask(taskToCreate);
 
-  res.send(req.body);
+  if (!inserResult.acknowledged) {
+    return res.status(400).send('There was an error creating the task');
+  }
+
+  res.send(taskToCreate);
 }
 
 export const updateTask = async (req: Request, res: Response) => {
@@ -43,19 +47,33 @@ export const updateTask = async (req: Request, res: Response) => {
   // remove MongoDB _id from the object, if not it would throw an error
   const taskToUpdate = (({ _id, syncStatus, deleted, ...o }) => o)(taskFromRequest);
 
-  await taskQueries.updateTask(taskToUpdate);
+  const updateResult = await taskQueries.updateTask(taskToUpdate);
 
-  return res.send(req.body);
+  if (!updateResult.acknowledged) {
+    return res.status(400).send('There was an error updating the task');
+  }
+
+  return res.send(taskToUpdate);
 }
 
 export const updateTaskStatus = async (req: Request, res: Response) => {
-  const updatedTask = await taskQueries.updateTaskStatus(req.params.id, req.body.done);
-  return res.send(updatedTask);
+  const updateResult = await taskQueries.updateTaskStatus(req.params.id, req.body.done);
+
+  if (!updateResult.acknowledged) {
+    return res.status(400).send('There was an error updating the task status');
+  }
+
+  return res.status(200).send();
 }
 
 export const deleteTask = async (req: Request, res: Response) => {
-  const deletedTask = await taskQueries.deleteTask(req.params.id);
-  return res.send(deletedTask);
+  const deleteResult = await taskQueries.deleteTask(req.params.id);
+
+  if (!deleteResult.acknowledged) {
+    return res.status(400).send('There was an error deleting the task');
+  }
+
+  return res.status(200).send();
 }
 
 export const syncTasks = async (req: Request, res: Response) => {
@@ -64,7 +82,9 @@ export const syncTasks = async (req: Request, res: Response) => {
 
   const tasksInDatabase = await taskQueries.fetchUserTasks(userId);
   try {
-    tasksInRequest.forEach(async (taskInRequest) => {
+    // use a map to iterate over the tasks and await the result of each promise,
+    // in order to be able to catch any error that might happen
+    await Promise.all(tasksInRequest.map(async (taskInRequest) => {
       const taskInDatabase = tasksInDatabase.find((task) => task.id === taskInRequest.id);
       if (taskInDatabase) {
         if (taskInRequest.deleted) {
@@ -77,8 +97,9 @@ export const syncTasks = async (req: Request, res: Response) => {
           await taskQueries.createTask({ ...taskInRequest, userId });
         }
       }
-    });
-    return res.send('Synced');
+      return;
+    }));
+    return res.status(200).send('Synced');
   } catch (error) {
     console.log(error);
     return res.status(400).send('There was an error syncing the tasks');

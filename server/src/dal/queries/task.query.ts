@@ -19,7 +19,6 @@ export const findAnotherTaskByNameAndUserId = async (name: string, id: string, u
   return await getDb().collection<Task>(TASK_TABLE).findOne({ name, id, userId });
 };
 
-
 export const createTask = async (task: Task) => {
   return await getDb().collection<Task>(TASK_TABLE).insertOne({...task});
 };

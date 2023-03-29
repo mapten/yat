@@ -2,7 +2,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { renderHook } from '@testing-library/react';
 
 // Services
-import * as userServices from '../../services/user.service';
+import * as userServices from '../../services/auth.service';
 
 // Store
 import { useAuthStore } from '../../store/auth.store';
@@ -16,9 +16,6 @@ vi.mock('../../services/user.service', () => ({
 } as typeof userServices));
 
 describe('AuthStore', () => {
-    beforeEach(() => {
-  });
-
   afterEach(() => {
     const { result } = renderHook(() => useAuthStore());
     result.current.clear();
@@ -56,14 +53,14 @@ describe('AuthStore', () => {
 
         const { result } = renderHook(() => useAuthStore());
 
-        result.current.setIsLoginVisible(true);
+        result.current.setLoginVisibleMode(true);
 
         expect(result.current.user).toBeNull();
         expect(result.current.token).toBeNull();
 
         // act
-        await result.current.createUser({ name: 'Test user', email: 'test@test.com', password: 'password'});
-  
+        await result.current.createUser({ name: 'Test user', email: 'test@test.com', password: 'password' });
+
         const expectedStoredUser = {
           id: responseUser.id,
           name: responseUser.name,
@@ -73,7 +70,7 @@ describe('AuthStore', () => {
         // assert
         expect(result.current.user).toEqual(expectedStoredUser);
         expect(result.current.token).toBe(responseUser.token);
-        expect(result.current.isLoginVisible).toBe(false);
+        expect(result.current.loginVisibleMode).toBe(false);
       });
 
       it('should not store the user and token when service returns an error (no response)', async () => {
@@ -82,15 +79,15 @@ describe('AuthStore', () => {
 
         const { result } = renderHook(() => useAuthStore());
 
-        result.current.setIsLoginVisible(true);
+        result.current.setLoginVisibleMode(true);
 
         // act
-        await result.current.createUser({ name: 'Test user', email: 'test@test.com', password: 'password'});
+        await result.current.createUser({ name: 'Test user', email: 'test@test.com', password: 'password' });
 
         // assert
         expect(result.current.user).toBeNull();
         expect(result.current.token).toBeNull();
-        expect(result.current.isLoginVisible).toBe(true);
+        expect(result.current.loginVisibleMode).toBe(true);
       });
     });
 
@@ -108,13 +105,13 @@ describe('AuthStore', () => {
 
         const { result } = renderHook(() => useAuthStore());
 
-        result.current.setIsLoginVisible(true);
+        result.current.setLoginVisibleMode(true);
 
         expect(result.current.user).toBeNull();
         expect(result.current.token).toBeNull();
 
         // act
-        await result.current.login({ email: 'test@test.com', password: 'password'});
+        await result.current.login({ email: 'test@test.com', password: 'password' });
 
         const expectedStoredUser = {
           id: responseUser.id,
@@ -125,7 +122,7 @@ describe('AuthStore', () => {
         // assert
         expect(result.current.user).toEqual(expectedStoredUser);
         expect(result.current.token).toBe(responseUser.token);
-        expect(result.current.isLoginVisible).toBe(false);
+        expect(result.current.loginVisibleMode).toBe(false);
       });
 
       it('should not store the user and token when service returns an error (no response)', async () => {
@@ -134,18 +131,18 @@ describe('AuthStore', () => {
 
         const { result } = renderHook(() => useAuthStore());
 
-        result.current.setIsLoginVisible(true);
+        result.current.setLoginVisibleMode(true);
 
         expect(result.current.user).toBeNull();
         expect(result.current.token).toBeNull();
 
         // act
-        await result.current.login({ email: 'test@test.com', password: 'password'});
+        await result.current.login({ email: 'test@test.com', password: 'password' });
 
         // assert
         expect(result.current.user).toBeNull();
         expect(result.current.token).toBeNull();
-        expect(result.current.isLoginVisible).toBe(true);
+        expect(result.current.loginVisibleMode).toBe(true);
       });
     });
 
@@ -163,11 +160,11 @@ describe('AuthStore', () => {
 
         const { result, rerender } = renderHook(() => useAuthStore());
 
-        await result.current.login({ email: 'test@test.com', password: 'password'});
+        await result.current.login({ email: 'test@test.com', password: 'password' });
 
         expect(result.current.user).not.toBeNull();
         expect(result.current.token).toBe(responseUser.token);
-        expect(result.current.isLoginVisible).toBe(false);
+        expect(result.current.loginVisibleMode).toBe(false);
 
         // act
         result.current.logout();
@@ -177,7 +174,7 @@ describe('AuthStore', () => {
         // assert
         expect(result.current.user).toBeNull();
         expect(result.current.token).toBeNull();
-        expect(result.current.isLoginVisible).toBe(true);
+        expect(result.current.loginVisibleMode).toBe(true);
       });
     });
 
@@ -197,7 +194,7 @@ describe('AuthStore', () => {
 
         expect(result.current.isAuthenticated()).toBeFalsy();
 
-        await result.current.login({ email: 'test@test.com', password: 'password'});
+        await result.current.login({ email: 'test@test.com', password: 'password' });
 
         // act, assert
         expect(result.current.isAuthenticated()).toBeTruthy();

@@ -7,6 +7,8 @@ import { User } from '../models/user.model';
 
 // Queries
 import * as authQueries from '../dal/queries/auth.query';
+
+// Services
 import { createAuthToken } from '../services/token.service';
 
 
@@ -19,22 +21,24 @@ export const login = async (req: Request, res: Response) => {
     return res.status(401).send('Invalid credentials');
   }
 
-  const passwordMatch = await bcrypt.compare(password, loggedInUser?.password);
+  const passwordMatch = bcrypt.compareSync(password, loggedInUser?.password);
 
   if (!passwordMatch) {
     return res.status(401).send('Invalid credentials');
   }
 
-  return res.status(200).send({ ...loggedInUser, token: createAuthToken(loggedInUser) });
+  const responseUser = (({ _id, ...o }) => o)(loggedInUser);
+
+  return res.status(200).send({ ...responseUser, token: createAuthToken(loggedInUser) });
 }
 
 export const signIn = async (req: Request, res: Response) => {
   const { email, password, name } = req.body;
 
-  const hashedPassword = await bcrypt.hash(password, 12);
+  const hashedPassword = bcrypt.hashSync(password, 12);
 
   const id = crypto.randomUUID();
-  const creationDate = new Date().toISOString()
+  const creationDate = new Date().toISOString();
 
   const hasSignedIn = await authQueries.signin(id, email, hashedPassword, name, creationDate);
 

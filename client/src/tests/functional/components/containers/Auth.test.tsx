@@ -40,6 +40,7 @@ describe('<Auth />', () => {
     mockAuthStore.mockImplementation(() => ({
       user: initialUser,
       login: vi.fn(),
+      logout: vi.fn(),
       createUser: vi.fn(),
       setIsLoginVisible: vi.fn(),
     }));
@@ -300,28 +301,33 @@ describe('<Auth />', () => {
       expect(mockSyncOfflineTasks).not.toHaveBeenCalled();
     });
 
-    it('should call syncOfflineTasks when stored mode is "offline" and clicking on the submit button', () => {
+    it('should call to logout when clicking on "offline" button', () => {
       // arrange
-      const mockSyncOfflineTasks = vi.fn();
-      mockTaskStore.mockImplementation(() => ({
-        syncOfflineTasks: mockSyncOfflineTasks,
+      const mockLogout = vi.fn();
+      mockAuthStore.mockImplementation(() => ({
+        user: initialUser,
+        login: vi.fn(),
+        createUser: vi.fn(),
+        setIsLoginVisible: vi.fn(),
+        logout: mockLogout,
       }));
 
+      const mockSetStoreMode = vi.fn();
       mockConfigurationStore.mockImplementation(() => ({
-        setStoreMode: vi.fn(),
-        getStoreMode: () => 'offline',
+        setStoreMode: mockSetStoreMode,
+        getStoreMode: () => 'online',
       }));
 
       renderUI();
 
-      fireEvent.change(screen.getByLabelText('Email'), { target: { value: 'john@doe.com' } });
-      fireEvent.change(screen.getByLabelText('Password'), { target: { value: '12345678' } });
+      fireEvent.click(screen.getByRole('button', { name: /offline/i }));
 
       // act
-      fireEvent.click(screen.getByRole('button', { name: /Login/i }));
+      fireEvent.click(screen.getByRole('button', { name: /Start/i }));
 
       // assert
-      waitFor(() => expect(mockSyncOfflineTasks).toHaveBeenCalled());
+      expect(mockLogout).toHaveBeenCalled();
+      waitFor(() => expect(mockSetStoreMode).toHaveBeenCalledWith('offline'));
     });
   });
 
@@ -332,6 +338,32 @@ describe('<Auth />', () => {
       baseProps = {
         initialMode: 'offline',
       };
+    });
+
+    it('should call syncOfflineTasks when stored mode is "offline" and clicking on the submit button', () => {
+      // arrange
+      const mockSyncOfflineTasks = vi.fn();
+      mockTaskStore.mockImplementation(() => ({
+        syncOfflineTasks: mockSyncOfflineTasks
+      }));
+
+      mockConfigurationStore.mockImplementation(() => ({
+        setStoreMode: vi.fn(),
+        getStoreMode: () => 'offline',
+      }));
+
+      renderUI();
+
+      fireEvent.click(screen.getByRole('button', { name: /online/i }));
+
+      fireEvent.change(screen.getByLabelText('Email'), { target: { value: 'john@doe.com' } });
+      fireEvent.change(screen.getByLabelText('Password'), { target: { value: '12345678' } });
+
+      // act
+      fireEvent.click(screen.getByRole('button', { name: /Login/i }));
+
+      // assert
+      waitFor(() => expect(mockSyncOfflineTasks).toHaveBeenCalled());
     });
 
     const renderUI = (props: Partial<Props> = {}) => {

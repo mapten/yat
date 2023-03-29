@@ -16,13 +16,13 @@ import genericRoutes from './routes/generic.routes';
 import tokenRoutes from './routes/token.routes';
 
 // Controllers
-import { verifyCsrfToken, verifyToken } from './controllers/token.controller';
+import { verifyCsrfToken, verifyAuthToken } from './controllers/token.controller';
 
 dotenv.config();
 
 const PORT = process.env.PORT || 3001;
 
-const app = express();
+export const app = express();
 
 app.use(cors({
   origin: true,
@@ -32,23 +32,22 @@ app.use(cors({
 }));
 app.use(express.json());
 app.use(helmet());
-const COOKIE_PARSER_SECRET = process.env.COOKIE_PARSER_SECRET!;
+const COOKIE_PARSER_SECRET = process.env.COOKIE_PARSER_SECRET as string;
 app.use(cookieParser(COOKIE_PARSER_SECRET));
 
-const isProduction = process.env.NODE_ENV! === 'production';
+const isProduction = process.env.NODE_ENV as string === 'production';
 
 const limiter = rateLimit({
-	windowMs: 15 * 60 * 1000, // 15 minutes
-	max: 500, // Limit each IP to 500 requests per `window` (here, per 15 minutes)
-	standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
-	legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 500, // limit each IP to 500 requests per `window` (here, per 15 minutes)
+  standardHeaders: true,
+  legacyHeaders: false,
 });
 
-const COOKIE_SESSION_SECRET = process.env.COOKIE_SESSION_SECRET!;
+const COOKIE_SESSION_SECRET = process.env.COOKIE_SESSION_SECRET as string;
 app.use(cookieSesion({
   name: 'session',
   secret: COOKIE_SESSION_SECRET,
-  // Cookie Options
   maxAge: 24 * 60 * 60 * 1000 // 24 hours
 }));
 
@@ -59,8 +58,8 @@ if (isProduction) {
 
 app.use('/token', tokenRoutes);
 app.use('/auth', authRoutes);
-app.use('/generic', verifyCsrfToken, verifyToken, genericRoutes);
-app.use('/task', verifyCsrfToken, verifyToken, taskRoutes);
+app.use('/generic', verifyCsrfToken, verifyAuthToken, genericRoutes);
+app.use('/task', verifyCsrfToken, verifyAuthToken, taskRoutes);
 
 mongoConnect(() => {
   console.log('listening to port 3001');

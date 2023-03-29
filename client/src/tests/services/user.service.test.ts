@@ -4,9 +4,9 @@ import axios from 'axios';
 import { toast } from 'react-hot-toast';
 
 // Services
-import { createUser, loginUser } from '../../services/user.service';
+import { createUser, loginUser } from '../../services/auth.service';
 
-describe('user.service', ()  => {
+describe('user.service', () => {
   let mockAxios: MockAdapter;
 
   const originalViteApiAxiosRetriesEnv = import.meta.env.VITE_API_AXIOS_RETRIES;
@@ -25,11 +25,11 @@ describe('user.service', ()  => {
   describe('createUser', () => {
     it('should return an user when the response is 200', async () => {
       // arrange
-      const createdUser = {id: '1', email: 'john@doe.com', name: 'John Doe Created'};
+      const createdUser = { id: '1', email: 'john@doe.com', name: 'John Doe Created' };
       mockAxios.onPost().reply(201, createdUser);
 
       // act
-      const result = await createUser({email: 'john@doe.com', name: 'John Doe', password: '12345678'});
+      const result = await createUser({ email: 'john@doe.com', name: 'John Doe', password: '12345678' });
 
       // assert
       expect(result).toEqual(createdUser);
@@ -40,7 +40,7 @@ describe('user.service', ()  => {
       mockAxios.onPost().reply(500);
 
       // act, assert
-      expect(await createUser({email: 'john@doe.com', name: 'John Doe', password: '12345678'})).toBeUndefined();
+      expect(await createUser({ email: 'john@doe.com', name: 'John Doe', password: '12345678' })).toBeUndefined();
     });
 
     it('should display a toast when the user already exists', async () => {
@@ -49,7 +49,7 @@ describe('user.service', ()  => {
       mockAxios.onPost().reply(409);
 
       // act
-      await createUser({email: 'john@doe.com', name: 'John Doe', password: '12345678'});
+      await createUser({ email: 'john@doe.com', name: 'John Doe', password: '12345678' });
 
       // assert
       expect(toastSpy).toHaveBeenCalledWith('User already exists');
@@ -59,11 +59,11 @@ describe('user.service', ()  => {
   describe('loginUser', () => {
     it('should return an user when the response is 200', async () => {
       // arrange
-      const loggedInUser = {id: '1', email: 'john@doe.com', name: 'John Doe Logged in'};
+      const loggedInUser = { id: '1', email: 'john@doe.com', name: 'John Doe Logged in' };
       mockAxios.onPost().reply(200, loggedInUser);
-      
+
       // act
-      const result = await loginUser({email: 'john@doe.com', password: '12345678'});
+      const result = await loginUser({ email: 'john@doe.com', password: '12345678' });
 
       // assert
       expect(result).toEqual(loggedInUser);
@@ -74,7 +74,7 @@ describe('user.service', ()  => {
       mockAxios.onPost().reply(500);
 
       // act, assert
-      expect(await loginUser({email: 'john@doe.com', password: '12345678'})).toBeUndefined();
+      expect(await loginUser({ email: 'john@doe.com', password: '12345678' })).toBeUndefined();
     });
 
     it('should display a toast when the user credentials are wrong', async () => {
@@ -83,7 +83,7 @@ describe('user.service', ()  => {
       mockAxios.onPost().reply(401);
 
       // act
-      await loginUser({email: 'john@doe.com', password: '12345678'});
+      await loginUser({ email: 'john@doe.com', password: '12345678' });
 
       // assert
       expect(toastSpy).toHaveBeenCalledWith('Invalid credentials');

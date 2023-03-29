@@ -7,7 +7,7 @@ import { CSRF_COOKIE_NAME, CSRF_HEADERS_NAME } from '../constants/common';
 
 dotenv.config();
 
-export const verifyToken = (req: Request, res: Response, next: NextFunction) => {
+export const verifyAuthToken = (req: Request, res: Response, next: NextFunction) => {
   const token = req.headers.authorization?.split(' ')[1];
 
   if (!token) {
@@ -15,7 +15,7 @@ export const verifyToken = (req: Request, res: Response, next: NextFunction) => 
   }
 
   try {
-    const tokenSecret = process.env.TOKEN_SECRET!;
+    const tokenSecret = process.env.TOKEN_SECRET as string;
     jwt.verify(token, tokenSecret);
     next();
   } catch (error) {
@@ -46,5 +46,5 @@ export const generateCsrfToken = (req: Request, res: Response) => {
     maxAge: 24 * 60 * 60 * 1000,
   });
 
-  return res.send({csrfToken});
+  return res.send({ csrfToken });
 }
