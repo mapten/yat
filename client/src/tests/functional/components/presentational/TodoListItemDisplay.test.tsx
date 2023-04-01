@@ -30,7 +30,7 @@ describe(`<TodoListItemDisplay/>`, () => {
     cleanup();
   });
 
-  it(`should trigger onTaskChangeStatus when the checkbox changes`, async () => {
+  it(`should trigger onTaskChangeStatus when the checkbox changes`, () => {
     // arrange
     const props: Partial<Props> = { taskDone: false };
 
@@ -41,7 +41,7 @@ describe(`<TodoListItemDisplay/>`, () => {
     fireEvent.click(checkbox);
 
     // assert
-    await waitFor(() => expect(baseProps.onTaskChangeStatus).toHaveBeenCalled());
+    waitFor(() => expect(baseProps.onTaskChangeStatus).toHaveBeenCalled());
   });
 
   it(`should trigger onSetEdit when the edit button is clicked`, () => {

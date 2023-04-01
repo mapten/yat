@@ -1,0 +1,42 @@
+@import 'src/assets/styles/variables';
+
+.userMenu {
+  background-color: inherit;
+  position: relative;
+  cursor: pointer;
+  display: block;
+
+  &__displayName {
+    display: block;
+  }
+
+  &__options {
+    
+    position: absolute;
+    z-index: $z-index-dropdown;
+    right: 0;
+    
+    &Content {
+      border-radius: 7px;
+      border-width: 0.1rem;
+      border-style: solid;
+      border-top: 0;
+      border-top-left-radius: 0;
+      border-top-right-radius: 0;
+    }
+
+    &Separator {
+      height: 0.6rem;
+    }
+  }
+
+  &__option {
+    padding: 0.5rem;
+    display: flex;
+    gap: 1rem;
+
+    span {
+      white-space: nowrap;
+    }
+  }
+}

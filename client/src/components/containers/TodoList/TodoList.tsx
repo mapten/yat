@@ -1,7 +1,13 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
+
+// Styles
+import styles from './TodoList.module.scss';
 
 // Constants
 import { PRIORITY_LEVELS } from '../../../constants/priorityLevels.constants';
+
+// Models
+import { Task } from '../../../models/task.model';
 
 // Store
 import { useTaskStore } from '../../../store/task.store';
@@ -9,28 +15,31 @@ import { useTaskStore } from '../../../store/task.store';
 // Components
 import TodoListCreate from '../../presentational/TodoList/TodoListCreate/TodoListCreate';
 import TodoListCategory from '../../hoc/TodoListCategory/TodoListCategory';
-import { TodoListItemEdit } from '../../presentational/TodoList/TodoListItem/TodoListItemEdit/TodoListItemEdit';
+import TodoListItemEdit from '../../presentational/TodoList/TodoListItem/TodoListItemEdit/TodoListItemEdit';
 import { TodoListItemDisplay } from '../../presentational/TodoList/TodoListItem/TodoListItemDisplay/TodoListItemDisplay';
+import ProgressBar from '../../presentational/ProgressBar/ProgressBar';
 
 const TodoList: React.FC = () => {
   const [editTaskId, setEditTaskId] = useState<string | undefined>(undefined);
 
-  const { tasks, fetchTasks, addTask, changeTaskStatus, updateTask, deleteTask } = useTaskStore((state) => state);
+  const { getCompletedTasks, addTask, changeTaskStatus, updateTask, deleteTask, getPendingTasks } = useTaskStore((state) => state);
 
-  useEffect(() => {
-    fetchTasks();
-  }, []);
+  const updateTaskHandler = async (task: Partial<Task>) => {
+    const result = await updateTask(task);
 
-  const getTasks = (done: boolean) => {
-    return tasks
-      .filter((task) => task.done === done)
-      .sort((taskA, taskB) =>
-        (taskA.priority - taskB.priority)
-      );
-  };
+    if (result === 'success') {
+      setEditTaskId(undefined);
+    }
+  }
+
+  const addTaskHandler = async (task: Partial<Task>) => {
+    return await addTask(task);
+  }
 
   const renderTaskList = (done: boolean) => {
-    return getTasks(done)
+    const tasks = done ? getCompletedTasks() : getPendingTasks();
+
+    return tasks
       .map((task) => {
         const priorityColor =
           PRIORITY_LEVELS.find((priorityLevel) => priorityLevel.order === task.priority)?.displayColor as string;
@@ -43,7 +52,7 @@ const TodoList: React.FC = () => {
               taskDone={task.done}
               initialTaskPriority={task.priority}
               onCancelEdit={() => setEditTaskId(undefined)}
-              onSave={updateTask} />
+              onSave={async (task: Partial<Task>) => updateTaskHandler(task)} />
             : <TodoListItemDisplay
               taskId={task.id}
               taskName={task.displayName}
@@ -59,15 +68,20 @@ const TodoList: React.FC = () => {
 
   return (
     <>
-      <TodoListCategory displayCount={false} category='create task'>
-        <TodoListCreate onAddTask={addTask} />
-      </TodoListCategory>
-      <TodoListCategory category='pending' itemCount={getTasks(false).length} displayCount={true} initialShowList={true}>
-        {renderTaskList(false)}
-      </TodoListCategory>
-      <TodoListCategory category='completed' itemCount={getTasks(true).length} displayCount={true} initialShowList={false}>
-        {renderTaskList(true)}
-      </TodoListCategory>
+      <div className={styles.todoList}>
+        <TodoListCategory displayCount={false} category='create task'>
+          <TodoListCreate onAddTask={addTaskHandler} />
+        </TodoListCategory>
+        <TodoListCategory category='pending' itemCount={getPendingTasks().length} displayCount={true} initialShowList={true}>
+          {renderTaskList(false)}
+        </TodoListCategory>
+        <TodoListCategory category='completed' itemCount={getCompletedTasks().length} displayCount={true} initialShowList={false}>
+          {renderTaskList(true)}
+        </TodoListCategory>
+      </div>
+      <div className={styles.progressBarWrapper}>
+        <ProgressBar />
+      </div>
     </>
   );
 };

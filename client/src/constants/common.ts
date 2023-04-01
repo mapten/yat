@@ -1,1 +1,0 @@
-export const NEW_TASK_ID = 'new';

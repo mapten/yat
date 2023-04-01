@@ -1,32 +1,39 @@
-import { useState } from 'react';
+import { useRef } from 'react';
 
 // Models
 import { Task } from '../../../../models/task.model';
 
+// Types
+import { STORE_RESULT } from '../../../../typings/common.types';
+
 // Components
-import { TodoListItemEdit } from '../TodoListItem/TodoListItemEdit/TodoListItemEdit';
+import TodoListItemEdit, { RefType } from '../TodoListItem/TodoListItemEdit/TodoListItemEdit';
 
 type DispatchProps = {
-  onAddTask: (task: Task) => void;
+  onAddTask: (task: Partial<Task>) => Promise<STORE_RESULT>;
 }
 
 type Props = DispatchProps;
 
 const TodoListCreate = ({ onAddTask }: Props) => {
-  const [key, setKey] = useState<number>(0);
+  const todoListEditRef = useRef<RefType>(null);
 
-  // Reset the task edit form changing the key
   const resetTaskHandler = () => {
-    setKey((key) => key === 0 ? 1 : 0);
+    if (todoListEditRef.current) {
+      todoListEditRef.current!.reset();
+    }
   };
 
-  const addTaskHandler = (task: Task) => {
-    onAddTask(task);
-    resetTaskHandler();
+  const addTaskHandler = async (task: Partial<Task>) => {
+    const result = await onAddTask(task);
+
+    if (result === 'success'){
+      resetTaskHandler();
+    }
   };
 
   return (
-    <TodoListItemEdit key={key} onCancelEdit={resetTaskHandler} onSave={addTaskHandler} />
+    <TodoListItemEdit ref={todoListEditRef} onCancelEdit={resetTaskHandler} onSave={addTaskHandler} />
   );
 };
 

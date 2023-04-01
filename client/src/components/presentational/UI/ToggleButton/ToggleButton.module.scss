@@ -1,0 +1,18 @@
+.toggleButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &__left {
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px;
+    transition: background-color 0.1s ease-in-out;
+  }
+
+  &__right {
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
+    border-left: 0px;
+    transition: background-color 0.1s ease-in-out;
+  }
+}

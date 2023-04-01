@@ -1,1 +1,0 @@
-export type BUTTON_STYLE = 'default' | 'add' | 'dismiss';

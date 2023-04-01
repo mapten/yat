@@ -1,0 +1,69 @@
+@import 'src/assets/styles/colors.scss';
+@import 'src/assets/styles/variables.scss';
+
+.authContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 50%;
+  width: 100%;
+
+  .auth {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    max-width: 35rem;
+    padding: 2rem;
+    margin: 1rem 0;
+  
+    @media screen and (max-width: $breakpoint-mobile) {
+      margin-top: 0.5rem;
+      min-width: calc($breakpoint-mobile - 5rem);
+    }
+
+    h2 {
+      margin-bottom: 1rem;
+    }
+
+    h3 {
+      margin-bottom: 1rem;
+    }
+
+    .formControl {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      margin-bottom: 1rem;
+
+      label {
+        margin-bottom: 0.3rem;
+      }
+
+      input {
+        margin-bottom: 0.2rem;
+      }
+    }
+
+    .formActions {
+      width: 100%;
+      display: flex;
+      align-items: center;
+
+      a {
+        text-decoration: none;
+        color: $principal-color;
+        font-size: 0.9rem;
+
+        &:hover {
+          font-weight: bold;
+        }
+      }
+    }
+
+    .errorText {
+      font-size: 0.8rem;
+    }
+  }
+}

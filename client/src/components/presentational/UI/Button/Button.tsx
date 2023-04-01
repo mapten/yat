@@ -1,11 +1,12 @@
+import { useCallback } from 'react';
+
 import { Icon } from '@iconify/react';
 
 // Styles
 import './Button.scss';
 
-// Constants
-import { BUTTON_STYLE } from '../../../../constants/buttonStyles.constants';
-import { useCallback } from 'react';
+// Types
+import { BUTTON_SIZE, BUTTON_STYLE } from '../../../../typings/common.types';
 
 type CommonProps = {
   displayText: string;
@@ -16,10 +17,11 @@ type CommonProps = {
    * 'dismiss': to actions related to delete or cancel
    */
   buttonStyle: BUTTON_STYLE;
-  size: 'small' | 'medium' | 'big';
+  size: BUTTON_SIZE;
 
   /** the tooltip to display when the mouse is over the button */
   tooltip?: string;
+  className?: string;
 }
 
 type StateIconButtonProps = {
@@ -38,7 +40,7 @@ type DispatchProps = {
 
 type Props = (StateIconButtonProps | StateButtonProps) & CommonProps & DispatchProps;
 
-export const Button: React.FC<Props> = ({displayText, buttonStyle, size = 'medium', buttonType = 'button', iconName, tooltip, onClick}: Props) => {
+export const Button: React.FC<Props> = ({displayText, buttonStyle, size = 'medium', buttonType = 'button', iconName, tooltip, className, onClick}: Props) => {
 
   const getTooltip = useCallback(() => {
     if (tooltip) {
@@ -60,6 +62,8 @@ export const Button: React.FC<Props> = ({displayText, buttonStyle, size = 'mediu
     }
 
     style += ` button--${size}`;
+
+    style += ` ${className}`;
 
     return style;
   }, [buttonType, buttonStyle, size]);

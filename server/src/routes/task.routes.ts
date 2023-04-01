@@ -1,12 +1,12 @@
 import express from 'express';
 
 // Controllers
-import { getAllTasks, createTask, updateTaskStatus, updateTask, deleteTask } from '../controllers/task.controller';
+import { fetchUserTasks, createTask, updateTaskStatus, updateTask, deleteTask, syncTasks } from '../controllers/task.controller';
 
 const router = express.Router();
 
-// /task/ -> GET
-router.get('/', getAllTasks);
+// /task/:userid -> GET
+router.get('/:userid', fetchUserTasks);
 
 // /task/ -> POST
 router.post('/', createTask);
@@ -19,5 +19,8 @@ router.patch('/:id', updateTaskStatus);
 
 // /task/ -> DELETE
 router.delete('/:id', deleteTask);
+
+// /task/sync/:userid -> POST
+router.post('/sync/:userid', syncTasks);
 
 export default router;

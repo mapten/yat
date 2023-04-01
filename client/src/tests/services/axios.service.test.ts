@@ -1,6 +1,9 @@
-import { afterEach, beforeEach, describe, it, expect } from 'vitest';
+import { afterEach, beforeEach, describe, vi, it, expect } from 'vitest';
 import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
+
+// Store
+import { TokenState, useTokenStore } from '../../store/token.store';
 
 // Services
 import { getAxiosApiInstance } from '../../services/axios.service';
@@ -8,18 +11,41 @@ import { getAxiosApiInstance } from '../../services/axios.service';
 describe('getAxiosApiInstance', () => {
   let mockAxios: MockAdapter;
 
+  const originalViteApiAxiosRetriesEnv = import.meta.env.VITE_API_AXIOS_RETRIES;
+
   beforeEach(() => {
     mockAxios = new MockAdapter(axios);
   });
 
   afterEach(() => {
+    import.meta.env.VITE_API_AXIOS_RETRIES = originalViteApiAxiosRetriesEnv;
     mockAxios.restore();
+  });
+
+  it('should contain the Bearer token and csrf token in the header', async () => {
+    // arrange
+    const mockTokenState = {
+      getAuthToken: vi.fn(() => 'footoken'),
+      getCsrfToken: vi.fn(() => 'foocsrftoken'),
+    };
+    vi.spyOn(useTokenStore, 'getState').mockReturnValue(mockTokenState as unknown as TokenState);
+
+    mockAxios.onGet().reply(200);
+
+    // act
+    const result = await getAxiosApiInstance('foo').get('/foo');
+
+    // assert
+    expect(result.config.headers.Authorization).toBe('Bearer footoken');
+    expect(result.config.headers['x-csrf-token']).toBe('foocsrftoken');
   });
 
   it('should return a 200 code when fails less than 5 times and the last time is a success code (200)', async () => {
     // arrange
+    import.meta.env.VITE_API_AXIOS_RETRIES = 5;
+
     mockAxios.onGet().replyOnce(500)
-      .onGet().replyOnce(400)
+      .onGet().replyOnce(510)
       .onGet().replyOnce(200, 'foo');
 
     // act
@@ -29,22 +55,26 @@ describe('getAxiosApiInstance', () => {
     expect(result.data).toBe('foo');
   }, 30000);
 
-  it('should return an error code when fails less than 5 times and the last time is an error', async() => {
+  it('should return an error code when fails less than "import.meta.env.VITE_API_AXIOS_RETRIES" times and the last time is an error', async() => {
     // arrange
-    mockAxios.onGet().replyOnce(500)
+    import.meta.env.VITE_API_AXIOS_RETRIES = 3;
+
+    mockAxios.onGet().reply(500)
       .onGet().replyOnce(() => {
-        throw new Error('foo error');
+        throw new Error();
       });
 
     // act
     const result = getAxiosApiInstance('').get('/foo');
 
     // assert
-    await expect(result).rejects.toThrow('foo error');
+    await expect(result).rejects.toThrow('Request failed with status code 500');
   }, 30000);
 
   it('should return an error code when fails more than 5 times and the 5th time is an error code', async () => {
     // arrange
+    import.meta.env.VITE_API_AXIOS_RETRIES = 5;
+
     expect.assertions(3);
 
     let count = 0;
@@ -83,12 +113,12 @@ describe('getAxiosApiInstance', () => {
     // act
     await getAxiosApiInstance('').get('/foo').catch((error) => {
       // assert
-      expect(error.response.status).toBe(500);
-      expect(error.response.data).toBe(4);
+      expect(error.response.status).toBe(512);
+      expect(error.response.data).toBe(6);
     });
 
     // assert
-    expect(count).toBe(4);
+    expect(count).toBe(6);
 
     // assert
   }, 30000);

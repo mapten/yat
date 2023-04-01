@@ -6,6 +6,9 @@ import ThemeDecorator from '../../../.storybook/decorators/ThemeDecorator';
 // Components
 import ProgressBar from '../../components/presentational/ProgressBar/ProgressBar';
 
+// Models
+import { Task } from '../../models/task.model';
+
 // Store
 import { useTaskStore } from '../../store/task.store';
 
@@ -22,7 +25,7 @@ type Props = {
 const Wrapper = ({percent}: Props) => {
   const setTasks = useTaskStore(state => state.setTasks);
 
-  const tasks = Array.from({ length: 100 }, (_, i) => ({  id: `${i}`, displayName: `Task ${i}`, priority: 3, done: i < percent }));
+  const tasks = Array.from({ length: 100 }, (_, i) => ({ id: `${i}`, displayName: `Task ${i}`, priority: 3, deleted: false, syncStatus: 'unsynced', done: i < percent } as Task));
 
   setTasks(tasks);
 

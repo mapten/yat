@@ -2,26 +2,7 @@
 @import 'src/assets/styles/variables.scss';
 
 .app {
-  height: 100vh;
-}
-
-footer {
-  max-height: 3rem;
-  position: fixed;
-  bottom: 0.3rem;
-  width: 100%;
-}
-
-main {
-  padding: 0rem 7rem 3rem 7rem;
-
-  @media screen and (max-width: $breakpoint-laptop) {
-    padding: 0rem 2rem 3rem 2rem;
-  }
-
-  @media screen and (max-width: $breakpoint-mobile) {
-    padding: 0rem 0.5rem 3rem 0.5rem;
-  }
+  min-height: 100vh;
 }
 
 .dark-theme {
@@ -32,16 +13,36 @@ main {
     box-shadow: 0px 2px 7px darken($black-light, 10%);
   }
 
+  .themeBg {
+    background-color: $black;
+  }
+
+  .themeOppositeBg {
+    background-color: $gray-light;
+  }
+
   .themeText {
     color: $gray-light;
   }
 
-  .task, .select, .progressBar, header, input[type = 'text'] {
+  .themeBorder {
+    border-color: $gray;
+  }
+
+  .themeWrapper, .select, .progressBar, header, input {
     background-color: $black;
     color: $gray-light;
   }
 
-  .option {
+  .themeWrapper {
+    border: solid 0.1rem $gray;
+  }
+
+  .errorText {
+    color: lighten($red, 20%);
+  }
+
+  .options {
     div:hover {
       background-color: $black-light;
     }
@@ -64,12 +65,32 @@ main {
     color: $black;
   }
 
-  .task, .select, .progressBar, header, input[ type = 'text'] {
+  .themeBg {
+    background-color: $white;
+  }
+
+  .themeOppositeBg {
+    background-color: $black;
+  }
+
+  .themeBorder {
+    border-color: $gray;
+  }
+
+  .themeWrapper, .select, .progressBar, header, input {
     background-color: $white;
     color: $black;
   }
 
-  .option {
+  .themeWrapper {
+    border: solid 0.1rem $gray;
+  }
+
+  .errorText {
+    color: $red;
+  }
+
+  .options {
     div:hover {
       background-color: $gray-light;
     }
@@ -78,4 +99,8 @@ main {
   input[type = 'text']::placeholder {
     color: $black;
   }
+}
+
+.toaster {
+  z-index: $z-index-toast;
 }

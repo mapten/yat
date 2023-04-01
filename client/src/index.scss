@@ -7,7 +7,7 @@
 *,
 *::after,
 *::before {
-  box-sizing: inherit;
+  box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
@@ -78,12 +78,36 @@ h2 {
   }
 }
 
+h3 {
+  font-size: 1.4rem;
+
+  @media screen and (max-width: $breakpoint-mobile) {
+    font-size: 1.25rem;
+  }
+  @media screen and (max-width: $breakpoint-laptop) {
+    font-size: 1.1rem;
+  }
+}
+
 .task {
   display: flex;
   justify-content: space-between;
   background-color: $white;
-  border-radius: 7px;
-  border: solid 0.1rem $gray;
   padding: 0.5rem;
 }
 
+.themeWrapper {
+  border-radius: 0.5rem;
+}
+
+.select, input {
+  font-size: 1rem;
+  border: 1px solid $gray;
+  background-color: inherit;
+  border-radius: 0.3rem;
+  padding: 0.3em;
+}
+
+input.danger {
+  border: solid 2px $red;
+}

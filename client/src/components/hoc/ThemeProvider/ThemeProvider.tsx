@@ -1,8 +1,11 @@
 
 import { createContext, useContext, useState } from 'react';
 
-// Constants
-import { THEME } from '../../../constants/theme.constants';
+// Types
+import { THEME } from '../../../typings/common.types';
+
+// Store
+import { useConfigurationStore } from '../../../store/configuration.store';
 
 type ThemeContextType = {
   theme: THEME;
@@ -18,7 +21,7 @@ type Props = {
 }
 
 export const ThemeProvider: React.FC<Props> = ({ children }: Props) => {
-  const [theme, setTheme] = useState<THEME>('light');
+  const { theme, setTheme } = useConfigurationStore(state => state);
 
   const toggleTheme = () => {
     setTheme(theme === 'light' ? 'dark' : 'light');

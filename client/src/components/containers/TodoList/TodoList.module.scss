@@ -1,0 +1,20 @@
+@import 'src/assets/styles/variables.scss';
+
+.todoList {
+  padding: 0rem 7rem 3rem 7rem;
+
+  @media screen and (max-width: $breakpoint-laptop) {
+    padding: 0rem 2rem 3rem 2rem;
+  }
+
+  @media screen and (max-width: $breakpoint-mobile) {
+    padding: 0rem 0.5rem 3rem 0.5rem;
+  }
+}
+
+.progressBarWrapper {
+  max-height: 3rem;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+}

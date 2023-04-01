@@ -25,7 +25,7 @@ describe('<TodoListCreate/>', () => {
     cleanup();
   });
 
-  it('should trigger onAddTask when the input changes and saves it', async () => {
+  it('should trigger onAddTask when the input changes and saves it', () => {
     // arrange
     renderUI();
 
@@ -35,7 +35,7 @@ describe('<TodoListCreate/>', () => {
     userEvent.type(input, 'foo{enter}');
 
     // assert
-    await waitFor(() => expect(baseProps.onAddTask).toHaveBeenCalledWith(expect.objectContaining({ displayName: 'foo' })));
+    waitFor(() => expect(baseProps.onAddTask).toHaveBeenCalledWith(expect.objectContaining({ displayName: 'foo' })));
   });
 
   it('should reset the form when clicks on Cancel', () => {

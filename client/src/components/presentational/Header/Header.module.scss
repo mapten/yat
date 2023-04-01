@@ -1,6 +1,6 @@
 @import 'src/assets/styles/variables.scss';
 
-.todoList__Header {
+.todoListHeader {
   display: flex;
   justify-content: space-between;
   padding: 0.8rem 7rem;
@@ -11,5 +11,11 @@
 
   @media screen and (max-width: $breakpoint-mobile) {
     padding: 0.4rem 0.5rem;
+  }
+
+  &__menuGroup {
+    display: flex;
+    align-items: flex-end;
+    gap: 2rem;
   }
 }

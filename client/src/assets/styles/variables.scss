@@ -1,2 +1,10 @@
 $breakpoint-mobile: 375px;
 $breakpoint-laptop: 1300px;
+
+$z-index-dropdown: 1;
+$z-index-toast: 100;
+$z-index-loading: 200;
+
+:export {
+  zIndexToast: $z-index-toast;
+}
