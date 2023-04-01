@@ -34,7 +34,7 @@ type State = {
 
 type Actions = {
   setTasks: (tasks: Task[]) => void;
-  clearTasks: () => void;
+  reset: () => void;
   fetchTasks: () => Promise<void>;
   syncOfflineTasks: () => Promise<void>;
   getTasks: () => Task[];
@@ -59,7 +59,7 @@ export const useTaskStore = create<TaskState>()(
 
     setTasks: (tasks: Task[]) => set({ tasks }),
 
-    clearTasks: () => set({ tasks: [] }),
+    reset: () => set({ tasks: [] }),
 
     getTasks: () => get().tasks,
 
@@ -96,12 +96,12 @@ export const useTaskStore = create<TaskState>()(
         const mergedExistingTasks = get().tasks.map((task) => {
           const matchingTaskFromResponse = existingTasksFromResponse.find((t) => t.id === task.id);
           if (matchingTaskFromResponse) {
-            return { ...matchingTaskFromResponse, ...task, syncStatus: 'synced' as SYNC_STATUS };
+            return { ...matchingTaskFromResponse, ...task };
           }
           return task;
         });
 
-        const finalTasks = mergedExistingTasks.concat(newTaskFromResponse);
+        const finalTasks = mergedExistingTasks.concat(newTaskFromResponse).map((task) => ({...task, syncStatus: 'synced' as SYNC_STATUS}));
 
         set((state) => ({ ...state, tasks: finalTasks }));
       });
@@ -163,7 +163,7 @@ export const useTaskStore = create<TaskState>()(
         }).catch(() => {
           return 'error';
         });
-        
+
         updatedTask.syncStatus = syncStatus as SYNC_STATUS;
       }
       set((state) => ({
@@ -299,6 +299,10 @@ export const useTaskStore = create<TaskState>()(
 
 // selectors
 export const getPercentageCompletedTasks = (state: State) => {
+  if (!state.tasks || state.tasks.length === 0) {
+    return 0;
+  }
+
   const nonDeletedTasks = state.tasks.filter(task => !task.deleted);
 
   if (!nonDeletedTasks || nonDeletedTasks.length === 0) {

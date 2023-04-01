@@ -14,7 +14,6 @@ export type STORE_MODE = 'online' | 'offline';
  * 
  * - connected: the app is connected to the server
  * - disconnected: the app is not connected to the server
- * - serverError: the app is connected to the server but the server is not responding
  */
 export type CONNECTION_MODE = 'connected' | 'disconnected';
 

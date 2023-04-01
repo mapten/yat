@@ -27,7 +27,6 @@ export const getAxiosApiInstance = (endpoint: string) => {
     }
   }
 
-
   configureRetry(client);
 
   return client;

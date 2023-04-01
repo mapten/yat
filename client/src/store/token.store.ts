@@ -12,6 +12,7 @@ export type State = {
 }
 
 type Actions = {
+  reset: () => void;
   setAuthToken: (authToken: string | null) => void;
   setCsrfToken: (csrfToken: string) => void;
   getAuthToken: () => string | null;
@@ -29,6 +30,7 @@ const initialState: State = {
 export const useTokenStore = create<TokenState>()(
   persist(devtools((set, get) => ({
     ...initialState,
+    reset: () => set(initialState),
     setAuthToken: (authToken: string | null) => set({ authToken }),
     getAuthToken: () => get().authToken,
     setCsrfToken: (csrfToken: string) => set({ csrfToken }),
@@ -46,17 +48,3 @@ export const useTokenStore = create<TokenState>()(
     storage: createJSONStorage(() => cookiesStorage)
   })
 );
-
-export const getTokenNonReactComponent = () => {
-  const tokenZustardWrapper = useTokenStore.getState().getAuthToken();
-
-  if (!tokenZustardWrapper) {
-    return null;
-  }
-
-  if (typeof tokenZustardWrapper === 'string') {
-    return tokenZustardWrapper;
-  }
-
-  return (tokenZustardWrapper as unknown as { value: string }).value;
-};

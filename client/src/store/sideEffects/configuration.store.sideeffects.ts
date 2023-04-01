@@ -25,21 +25,14 @@ const tryToReconnectToServer = async (state: StoreApi<ConfigurationState>) => {
       set({ connectionErrors: 0 });
       set({ serverConnectionState: 'connected' });
       toast.success('Connection to the server has been restored');
-      return true;
     } else {
       retries--;
-      return false;
     }
   };
 
   while (retries > 0) {
-    await new Promise(resolve => setTimeout(() => resolve(true), 120000))
-
-    const connected = await checkIsConnectedToServer();
-    if (connected) {
-      get().setConnectionMode('connected');
-      return;
-    }
+    await new Promise(resolve => setTimeout(() => resolve(true), 120000));
+    await checkIsConnectedToServer();
   }
 }
 
@@ -62,10 +55,16 @@ export const connectionModeBeforeChange = (store: StoreApi<ConfigurationState>, 
     toast.error('There is no internet connection. You are working in offline mode. Your changes will be synchronized when the connection is restored');
     return;
   }
-  if (get().connectionMode !== 'connected' && newConnectionMode === 'connected' && get().serverConnectionState === 'error') {
+  if (get().connectionMode !== 'connected' && newConnectionMode === 'connected') {
     toast.success('Internet connection has been restored');
-    set({ storeMode: 'online' });
-    return;
+
+    import('../auth.store').then(({ useAuthStore }) => {
+      if (useAuthStore().isAuthenticated()) {
+        set({ storeMode: 'online' });
+        return;
+      }
+      toast('Log in again to synchronize your data');
+    });
   }
 }
 
@@ -77,14 +76,14 @@ export const connectionErrorsAfterChange = (store: StoreApi<ConfigurationState>,
   }
 };
 
-export const storeModeBeforeChange = (store: StoreApi<ConfigurationState>, newStoreMode: 'online' | 'offline') => {
+export const storeModeBeforeChange = async (store: StoreApi<ConfigurationState>, newStoreMode: 'online' | 'offline') => {
   if (newStoreMode === store.getState().storeMode) {
     return;
   }
 
   if (newStoreMode === 'offline' && store.getState().storeMode === 'online') {
     import('../auth.store').then(({ useAuthStore }) => {
-      useAuthStore.getState().logout();
+      useAuthStore().logout();
     });
   }
 
@@ -94,12 +93,13 @@ export const storeModeBeforeChange = (store: StoreApi<ConfigurationState>, newSt
     });
 
     if (newStoreMode === 'offline') {
+      // when the user goes offline, we remove the task storage in order to avoid conflicts
       sessionStorage.removeItem('task-storage');
       return;
     }
 
-    import('./task.store.sideefffect').then(({ syncAndFetchTasks }) => {
-      syncAndFetchTasks(useTaskStore, store, true);
+    import('./task.store.sideefffects').then(({ syncAndFetchTasks }) => {
+      syncAndFetchTasks(useTaskStore, true);
     });
   });
 }

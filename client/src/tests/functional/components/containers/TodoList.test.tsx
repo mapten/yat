@@ -31,14 +31,12 @@ describe('<TodoList />', () => {
   const mockAddTask = vi.fn();
   const mockDeleteTask = vi.fn();
   const mockUpdateTask = vi.fn();
-  const mockFetchTasks = vi.fn();
 
   beforeEach(() => {
     mockTaskStore.mockImplementation(() => ({
       getPendingTasks: () => initialTaskList.filter((task) => !task.done).sort((a, b) => a.priority - b.priority),
       getCompletedTasks: () => initialTaskList.filter((task) => task.done).sort((a, b) => a.priority - b.priority),
       addTask: mockAddTask,
-      fetchTasks: mockFetchTasks,
       changeTaskStatus: mockChangeTaskStatus,
       deleteTask: mockDeleteTask,
       updateTask: mockUpdateTask,
@@ -85,14 +83,6 @@ describe('<TodoList />', () => {
     expect(todoItemList[0].textContent).toContain('Create a todoList demo application');
     expect(todoItemList[1].textContent).toContain('Buy an ukelele');
     expect(todoItemList[2].textContent).toContain('Sell ukelele');
-  });
-
-  it('should fetch the task list the first time the component is loaded', async () => {
-    // arrange, act
-    renderUI();
-
-    // assert
-    expect(mockFetchTasks).toHaveBeenCalledTimes(1);
   });
 
   it('should trigger changeTaskStatus when a task is marked as done/undone', () => {

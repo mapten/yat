@@ -50,7 +50,7 @@ describe('TaskStore', () => {
 
   afterEach(() => {
     const { result } = renderHook(() => useTaskStore());
-    result.current.clearTasks();
+    result.current.reset();
     vi.restoreAllMocks();
   });
 
@@ -126,10 +126,10 @@ describe('TaskStore', () => {
         expect(result.current.tasks).toContainEqual({ id: '1', displayName: 'Test task 1', done: true, priority: 3, syncStatus: 'synced' });
         expect(result.current.tasks).toContainEqual({ id: '2', displayName: 'Test task 2', done: false, priority: 1, syncStatus: 'synced' });
         expect(result.current.tasks).toContainEqual({ id: '3', displayName: 'Test task 3', done: false, priority: 2, syncStatus: 'synced' });
-        expect(result.current.tasks).toContainEqual({ id: '4', displayName: 'Test task 4', done: false, priority: 1 });
+        expect(result.current.tasks).toContainEqual({ id: '4', displayName: 'Test task 4', done: false, priority: 1, syncStatus: 'synced' });
       });
 
-      it('should not call to fetch tasks service when user is null and storeMode is "online"', async () => {
+      it('should not call to fetch tasks service when user is null', async () => {
         // arrange
         vi.spyOn(useConfigurationStore, 'getState').mockReturnValue({
           getStoreMode: vi.fn().mockReturnValue('online'),
@@ -137,25 +137,6 @@ describe('TaskStore', () => {
 
         vi.spyOn(useAuthStore, 'getState').mockReturnValue({
           getUser: vi.fn().mockReturnValue(null),
-        } as unknown as AuthState);
-
-        const { result } = renderHook(() => useTaskStore());
-
-        // act
-        await result.current.fetchTasks();
-
-        // assert
-        expect(mockFetchTasks).toHaveBeenCalledTimes(0);
-      });
-
-      it('should not call to fetch tasks service when user is not null and storeMode is "offline"', async () => {
-        // arrange
-        vi.spyOn(useConfigurationStore, 'getState').mockReturnValue({
-          getStoreMode: vi.fn().mockReturnValue('offline'),
-        } as unknown as ConfigurationState);
-
-        vi.spyOn(useAuthStore, 'getState').mockReturnValue({
-          getUser: vi.fn().mockReturnValue(user),
         } as unknown as AuthState);
 
         const { result } = renderHook(() => useTaskStore());

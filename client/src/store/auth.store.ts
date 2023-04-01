@@ -22,7 +22,7 @@ type State = {
 }
 
 type Actions = {
-  clear: () => void;
+  reset: () => void;
   createUser: (user: UserRequest) => Promise<boolean>;
   login: (user: Omit<UserRequest, 'name'>) => Promise<boolean>;
   logout: () => void;
@@ -42,7 +42,7 @@ export const useAuthStore = create<AuthState>()(
   persist(interceptor(devtools((set, get) => ({
     ...initialState,
 
-    clear: () => set({ user: null, loginVisibleMode: undefined }),
+    reset: () => set({ user: null, loginVisibleMode: undefined }),
 
     createUser: async (user: UserRequest) => {
       const response = (await createUser(user)) as UserResponse;
@@ -75,7 +75,7 @@ export const useAuthStore = create<AuthState>()(
     },
 
     isAuthenticated: () => {
-      return useTokenStore.getState().getAuthToken() !== null;
+      return get().user !== null && useTokenStore.getState().getAuthToken() !== null;
     },
 
     setLoginVisibleMode: (loginVisibleMode?: STORE_MODE) => {

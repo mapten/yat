@@ -42,7 +42,7 @@ describe('<Auth />', () => {
       login: vi.fn(),
       logout: vi.fn(),
       createUser: vi.fn(),
-      setIsLoginVisible: vi.fn(),
+      setLoginVisibleMode: vi.fn(),
     }));
     mockConfigurationStore.mockImplementation(() => ({
       setStoreMode: vi.fn(),
@@ -233,7 +233,7 @@ describe('<Auth />', () => {
         user: initialUser,
         login: mockLogin,
         createUser: vi.fn(),
-        setIsLoginVisible: vi.fn(),
+        setLoginVisibleMode: vi.fn(),
       }));
 
       const mockSetStoreMode = vi.fn();
@@ -269,7 +269,7 @@ describe('<Auth />', () => {
         user: initialUser,
         login: vi.fn(),
         createUser: mockRegister,
-        setIsLoginVisible: vi.fn(),
+        setLoginVisibleMode: vi.fn(),
       }));
 
       const mockSetStoreMode = vi.fn();
@@ -303,13 +303,11 @@ describe('<Auth />', () => {
 
     it('should call to logout when clicking on "offline" button', () => {
       // arrange
-      const mockLogout = vi.fn();
       mockAuthStore.mockImplementation(() => ({
         user: initialUser,
         login: vi.fn(),
         createUser: vi.fn(),
-        setIsLoginVisible: vi.fn(),
-        logout: mockLogout,
+        setLoginVisibleMode: vi.fn(),
       }));
 
       const mockSetStoreMode = vi.fn();
@@ -326,7 +324,6 @@ describe('<Auth />', () => {
       fireEvent.click(screen.getByRole('button', { name: /Start/i }));
 
       // assert
-      expect(mockLogout).toHaveBeenCalled();
       waitFor(() => expect(mockSetStoreMode).toHaveBeenCalledWith('offline'));
     });
   });

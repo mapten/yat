@@ -18,7 +18,7 @@ export type State = {
 
 type Actions = {
   setIsLoading: (isLoading: boolean) => void;
-  clear: () => void;
+  reset: () => void;
   setTheme: (theme: THEME) => void;
   getStoreMode: () => STORE_MODE;
   setStoreMode: (storeMode: STORE_MODE) => void;
@@ -44,7 +44,7 @@ export const useConfigurationStore = create<ConfigurationState>()(
 
     setIsLoading: (isLoading: boolean) => set({ isLoading }),
 
-    clear: () => set(initialState),
+    reset: () => set(initialState),
 
     setTheme: (theme: THEME) => set({ theme }),
 
@@ -54,8 +54,8 @@ export const useConfigurationStore = create<ConfigurationState>()(
 
     setStoreMode: (storeMode: STORE_MODE) => set({ storeMode }),
 
-    setConnectionMode: (connectionState: CONNECTION_MODE) => {
-      set({ connectionMode: connectionState });
+    setConnectionMode: (connectionMode: CONNECTION_MODE) => {
+      set({ connectionMode: connectionMode });
     },
 
     setServerConnectionState: (serverConnectionState: SERVER_CONNECTION_STATE) => {

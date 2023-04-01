@@ -3,7 +3,7 @@ import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
 
 // Store
-import * as authStore from '../../store/auth.store';
+import { TokenState, useTokenStore } from '../../store/token.store';
 
 // Services
 import { getAxiosApiInstance } from '../../services/axios.service';
@@ -22,9 +22,13 @@ describe('getAxiosApiInstance', () => {
     mockAxios.restore();
   });
 
-  it('should contain the Bearer token in the header', async () => {
+  it('should contain the Bearer token and csrf token in the header', async () => {
     // arrange
-    vi.spyOn(authStore, 'getTokenNonReactComponent').mockReturnValueOnce('footoken');
+    const mockTokenState = {
+      getAuthToken: vi.fn(() => 'footoken'),
+      getCsrfToken: vi.fn(() => 'foocsrftoken'),
+    };
+    vi.spyOn(useTokenStore, 'getState').mockReturnValue(mockTokenState as unknown as TokenState);
 
     mockAxios.onGet().reply(200);
 
@@ -33,6 +37,7 @@ describe('getAxiosApiInstance', () => {
 
     // assert
     expect(result.config.headers.Authorization).toBe('Bearer footoken');
+    expect(result.config.headers['x-csrf-token']).toBe('foocsrftoken');
   });
 
   it('should return a 200 code when fails less than 5 times and the last time is a success code (200)', async () => {

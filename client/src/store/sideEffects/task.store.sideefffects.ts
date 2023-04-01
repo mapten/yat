@@ -8,9 +8,7 @@ import { TaskState } from '../task.store';
 /**
  * Sync the offline tasks and fetch the tasks from the server
  */
-export const syncAndFetchTasks = async (taskStore: StoreApi<TaskState>, configurationStore: StoreApi<ConfigurationState>, displayToast: boolean) => {
-  configurationStore.getState().setIsLoading(true);
-  
+export const syncAndFetchTasks = async (taskStore: StoreApi<TaskState>, displayToast: boolean) => {
   const functionArray = [
     () => taskStore.getState().syncOfflineTasks(), 
     () => taskStore.getState().fetchTasks()
@@ -31,7 +29,7 @@ export const syncAndFetchTasks = async (taskStore: StoreApi<TaskState>, configur
         error: 'Error while syncing tasks',
       },
     );
+  } else {
+    await secuentiallyExecute();
   }
-
-  configurationStore.getState().setIsLoading(false);
 }

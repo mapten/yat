@@ -1,6 +1,6 @@
 import { StateCreator, StoreMutatorIdentifier } from 'zustand';
 
-import { sideEffectFactory } from '../helpers/sideEffects.factory';
+import { sideEffectsFactory } from '../helpers/sideEffects.factory';
 
 type Interceptor = <
   T extends object,
@@ -18,8 +18,6 @@ type SetterFn<T> = (state: T) => T | Partial<T>;
 
 /**
  * Zustand middleware to intercept state changes (before and after)
- * @param stateCreator
- * @returns 
  */
 const impl: InterceptorImpl = (stateCreator) => (set, get, store) => {
   const newSet: typeof set = function (...args) {
@@ -28,7 +26,7 @@ const impl: InterceptorImpl = (stateCreator) => (set, get, store) => {
     const propertyName = Object.keys(newState)[0];
     const propertyValue = Object.values(newState)[0];
 
-    sideEffectFactory(`${propertyName}.beforeChange`, store, propertyValue);
+    sideEffectsFactory(`${propertyName}.beforeChange`, store, propertyValue);
 
     if (isSetterFunction(newState)) {
       newState = newState(get());
@@ -37,7 +35,7 @@ const impl: InterceptorImpl = (stateCreator) => (set, get, store) => {
     const newResult = { ...newState };
     set(newResult, args[1]);
 
-    sideEffectFactory(`${propertyName}.afterChange`, store, propertyValue);
+    sideEffectsFactory(`${propertyName}.afterChange`, store, propertyValue);
   };
 
   store.setState = newSet;

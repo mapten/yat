@@ -145,7 +145,7 @@ describe('<UserMenu/>', () => {
 
   it('should call openLoginHandler when clicking on the "Select how to connect (online / offline)" option', async () => {
     // arrange
-    const mockSetIsLoginVisible = vi.fn();
+    const mockSetLoginVisibleMode = vi.fn();
     mockAuthStore.mockReturnValue({
       user: {
         id: '1',
@@ -154,17 +154,17 @@ describe('<UserMenu/>', () => {
       },
       logout: vi.fn(),
       isAuthenticated: vi.fn(),
-      setIsLoginVisible: mockSetIsLoginVisible,
+      setLoginVisibleMode: mockSetLoginVisibleMode,
     });
     
     renderUI();
 
     fireEvent.click(screen.getAllByRole('menuitem')[0]);
     // act
-    fireEvent.click(screen.getByText('Select how to connect (online / offline)'));
+    fireEvent.click(screen.getByText('Login'));
 
     // assert
-    expect(mockSetIsLoginVisible).toHaveBeenCalledWith(true);
+    expect(mockSetLoginVisibleMode).toHaveBeenCalledWith('online');
     expect(screen.queryByTestId('userMenu__options')).toBeNull();
   });
 });

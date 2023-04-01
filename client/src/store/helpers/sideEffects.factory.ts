@@ -7,7 +7,7 @@ import {
   serverConnectionStateAfterChange,
   storeModeBeforeChange
 }
-  from '../sideEffects/configuration.store.sideeffect';
+  from '../sideEffects/configuration.store.sideeffects';
 import { userAfterChange } from '../sideEffects/user.store.sideeffects';
 
 type SideEffect<T> = (store: StoreApi<T>, ...otherProps: unknown[]) => void;
@@ -28,7 +28,7 @@ const getFactoryMapping = <T>() => {
  * @param store The store instance @example useAuthStore
  * @param otherProps The props that are passed to the mapped side effect
  */
-export const sideEffectFactory = <T>(fullName: string, store: StoreApi<T>, ...otherProps: any) => {
+export const sideEffectsFactory = <T>(fullName: string, store: StoreApi<T>, ...otherProps: any) => {
   const sideEffect = getFactoryMapping<T>()[fullName];
 
   if (!sideEffect) {

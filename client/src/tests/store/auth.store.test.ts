@@ -6,37 +6,24 @@ import * as userServices from '../../services/auth.service';
 
 // Store
 import { useAuthStore } from '../../store/auth.store';
+import { TokenState, useTokenStore } from '../../store/token.store';
 
-const mockCreateUser = vi.fn();
-const mockLoginUser = vi.fn();
-
-vi.mock('../../services/user.service', () => ({
-  createUser: () => mockCreateUser(),
-  loginUser: () => mockLoginUser(),
-} as typeof userServices));
 
 describe('AuthStore', () => {
   afterEach(() => {
     const { result } = renderHook(() => useAuthStore());
-    result.current.clear();
-    vi.restoreAllMocks();
+    result.current.reset();
+    vi.clearAllMocks();
   });
 
   describe('actions', () => {
-    it('should have an initial null user', () => {
+    it('should have initial values', () => {
       // arrange, act
       const { result } = renderHook(() => useAuthStore());
 
       // assert
       expect(result.current.user).toBeNull();
-    });
-
-    it('should have an initial null token', () => {
-      // arrange, act
-      const { result } = renderHook(() => useAuthStore());
-
-      // assert
-      expect(result.current.token).toBeNull();
+      expect(result.current.loginVisibleMode).toBeUndefined();
     });
 
     describe('createUser', () => {
@@ -48,15 +35,19 @@ describe('AuthStore', () => {
           email: 'test@test.com',
           token: 'token',
         }
-
+        const mockCreateUser = vi.spyOn(userServices, 'createUser');
         mockCreateUser.mockResolvedValue(responseUser);
+
+        const mockSetAuthToken = vi.fn();
+        const mockTokenStore = vi.spyOn(useTokenStore, 'getState');
+        mockTokenStore.mockReturnValue({
+          setAuthToken: mockSetAuthToken,
+        } as unknown as TokenState);
 
         const { result } = renderHook(() => useAuthStore());
 
-        result.current.setLoginVisibleMode(true);
-
         expect(result.current.user).toBeNull();
-        expect(result.current.token).toBeNull();
+        expect(mockSetAuthToken).not.toHaveBeenCalled();
 
         // act
         await result.current.createUser({ name: 'Test user', email: 'test@test.com', password: 'password' });
@@ -69,25 +60,28 @@ describe('AuthStore', () => {
 
         // assert
         expect(result.current.user).toEqual(expectedStoredUser);
-        expect(result.current.token).toBe(responseUser.token);
-        expect(result.current.loginVisibleMode).toBe(false);
+        expect(mockSetAuthToken).toHaveBeenCalledWith('token');
       });
 
       it('should not store the user and token when service returns an error (no response)', async () => {
         // arrange
+        const mockCreateUser = vi.spyOn(userServices, 'createUser');
         mockCreateUser.mockResolvedValue(undefined);
 
-        const { result } = renderHook(() => useAuthStore());
+        const mockSetAuthToken = vi.fn();
+        const mockTokenStore = vi.spyOn(useTokenStore, 'getState');
+        mockTokenStore.mockReturnValue({
+          setAuthToken: mockSetAuthToken,
+        } as unknown as TokenState);
 
-        result.current.setLoginVisibleMode(true);
+        const { result } = renderHook(() => useAuthStore());
 
         // act
         await result.current.createUser({ name: 'Test user', email: 'test@test.com', password: 'password' });
 
         // assert
         expect(result.current.user).toBeNull();
-        expect(result.current.token).toBeNull();
-        expect(result.current.loginVisibleMode).toBe(true);
+        expect(mockSetAuthToken).not.toHaveBeenCalled();
       });
     });
 
@@ -101,14 +95,18 @@ describe('AuthStore', () => {
           token: 'token',
         }
 
-        mockLoginUser.mockResolvedValue(responseUser);
+        vi.spyOn(userServices, 'loginUser').mockResolvedValue(responseUser);
+
+        const mockSetAuthToken = vi.fn();
+        const mockTokenStore = vi.spyOn(useTokenStore, 'getState');
+        mockTokenStore.mockReturnValue({
+          setAuthToken: mockSetAuthToken,
+        } as unknown as TokenState);
 
         const { result } = renderHook(() => useAuthStore());
 
-        result.current.setLoginVisibleMode(true);
-
         expect(result.current.user).toBeNull();
-        expect(result.current.token).toBeNull();
+        expect(mockSetAuthToken).not.toHaveBeenCalled();
 
         // act
         await result.current.login({ email: 'test@test.com', password: 'password' });
@@ -121,28 +119,29 @@ describe('AuthStore', () => {
 
         // assert
         expect(result.current.user).toEqual(expectedStoredUser);
-        expect(result.current.token).toBe(responseUser.token);
-        expect(result.current.loginVisibleMode).toBe(false);
+        expect(mockSetAuthToken).toHaveBeenCalledWith('token');
       });
 
       it('should not store the user and token when service returns an error (no response)', async () => {
         // arrange
-        mockLoginUser.mockResolvedValue(undefined);
+        vi.spyOn(userServices, 'loginUser').mockResolvedValue(undefined);
+
+        const mockSetAuthToken = vi.fn();
+        const mockTokenStore = vi.spyOn(useTokenStore, 'getState');
+        mockTokenStore.mockReturnValue({
+          setAuthToken: mockSetAuthToken,
+        } as unknown as TokenState);
 
         const { result } = renderHook(() => useAuthStore());
 
-        result.current.setLoginVisibleMode(true);
-
         expect(result.current.user).toBeNull();
-        expect(result.current.token).toBeNull();
 
         // act
         await result.current.login({ email: 'test@test.com', password: 'password' });
 
         // assert
         expect(result.current.user).toBeNull();
-        expect(result.current.token).toBeNull();
-        expect(result.current.loginVisibleMode).toBe(true);
+        expect(mockSetAuthToken).not.toHaveBeenCalled();
       });
     });
 
@@ -156,15 +155,19 @@ describe('AuthStore', () => {
           token: 'token',
         }
 
-        mockLoginUser.mockResolvedValue(responseUser);
+        vi.spyOn(userServices, 'loginUser').mockResolvedValue(responseUser);
+
+        const mockSetAuthToken = vi.fn();
+        const mockTokenStore = vi.spyOn(useTokenStore, 'getState');
+        mockTokenStore.mockReturnValue({
+          setAuthToken: mockSetAuthToken,
+        } as unknown as TokenState);
 
         const { result, rerender } = renderHook(() => useAuthStore());
 
         await result.current.login({ email: 'test@test.com', password: 'password' });
 
         expect(result.current.user).not.toBeNull();
-        expect(result.current.token).toBe(responseUser.token);
-        expect(result.current.loginVisibleMode).toBe(false);
 
         // act
         result.current.logout();
@@ -173,13 +176,13 @@ describe('AuthStore', () => {
 
         // assert
         expect(result.current.user).toBeNull();
-        expect(result.current.token).toBeNull();
-        expect(result.current.loginVisibleMode).toBe(true);
+        expect(mockSetAuthToken).toHaveBeenCalledWith(null);
+        expect(result.current.loginVisibleMode).toBeUndefined();
       });
     });
 
     describe('isAuthenticated', () => {
-      it('should return true if token is not null', async () => {
+      it('should return true if token is not null and user is not null', async () => {
         // arrange
         const responseUser = {
           id: '1',
@@ -188,16 +191,80 @@ describe('AuthStore', () => {
           token: 'token',
         }
 
-        mockLoginUser.mockResolvedValue(responseUser);
+        vi.spyOn(userServices, 'loginUser').mockResolvedValue(responseUser);
 
+        const mockGetAuthToken = vi.fn();
+        const mockTokenStore = vi.spyOn(useTokenStore, 'getState');
+        mockTokenStore.mockReturnValue({
+          getAuthToken: mockGetAuthToken,
+          setAuthToken: vi.fn(),
+        } as unknown as TokenState);
+
+        mockGetAuthToken.mockReturnValue('token');
+
+        // act
+        const { result, rerender } = renderHook(() => useAuthStore());
+
+        await result.current.login({
+          email: 'test@test.com',
+          password: 'password',
+        });
+
+        rerender();
+
+        // assert
+        expect(result.current.isAuthenticated()).toBeTruthy();
+      });
+
+      it('should return false if token is null and user is not null', async () => {
+        // arrange
+        const responseUser = {
+          id: '1',
+          name: 'Test user',
+          email: 'test@test.com',
+          token: 'token',
+        }
+
+        vi.spyOn(userServices, 'loginUser').mockResolvedValue(responseUser);
+
+        const mockGetAuthToken = vi.fn();
+        const mockTokenStore = vi.spyOn(useTokenStore, 'getState');
+        mockTokenStore.mockReturnValue({
+          getAuthToken: mockGetAuthToken,
+          setAuthToken: vi.fn(),
+        } as unknown as TokenState);
+
+        mockGetAuthToken.mockReturnValue(null);
+
+        // act
+        const { result, rerender } = renderHook(() => useAuthStore());
+
+        await result.current.login({
+          email: 'test@test.com',
+          password: 'password',
+        });
+
+        rerender();
+
+        // assert
+        expect(result.current.isAuthenticated()).toBeFalsy();
+      });
+
+      it('should return false if token is not null and user is null', async () => {
+        // arrange
+        const mockGetAuthToken = vi.fn();
+        const mockTokenStore = vi.spyOn(useTokenStore, 'getState');
+        mockTokenStore.mockReturnValue({
+          getAuthToken: mockGetAuthToken,
+        } as unknown as TokenState);
+
+        mockGetAuthToken.mockReturnValue('token');
+
+        // act
         const { result } = renderHook(() => useAuthStore());
 
+        // assert
         expect(result.current.isAuthenticated()).toBeFalsy();
-
-        await result.current.login({ email: 'test@test.com', password: 'password' });
-
-        // act, assert
-        expect(result.current.isAuthenticated()).toBeTruthy();
       });
     });
   });
