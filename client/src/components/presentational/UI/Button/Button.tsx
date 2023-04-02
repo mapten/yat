@@ -34,11 +34,16 @@ type StateButtonProps = {
   iconName?: string;
 }
 
+type StateLinkTypeButtonProps = {
+  buttonType?: 'link';
+  iconName?: string;
+}
+
 type DispatchProps = {
   onClick: () => void;
 }
 
-type Props = (StateIconButtonProps | StateButtonProps) & CommonProps & DispatchProps;
+type Props = (StateIconButtonProps | StateButtonProps | StateLinkTypeButtonProps) & CommonProps & DispatchProps;
 
 export const Button: React.FC<Props> = ({displayText, buttonStyle, size = 'medium', buttonType = 'button', iconName, tooltip, className, onClick}: Props) => {
 
@@ -57,6 +62,8 @@ export const Button: React.FC<Props> = ({displayText, buttonStyle, size = 'mediu
 
     if (buttonType === 'icon') {
       style += 'button--icon';
+    } else if (buttonType === 'link') {
+      style += 'button--link';
     } else {
       style += `button--${buttonStyle}`;
     }
@@ -70,7 +77,7 @@ export const Button: React.FC<Props> = ({displayText, buttonStyle, size = 'mediu
 
   return (
     <button title={getTooltip()} className={getClassNames()} onClick={onClick}>
-      { buttonType === 'button' && (
+      { (buttonType === 'button' || buttonType === 'link') && (
         <span>{displayText}</span>
       )}
       {iconName && <Icon role="img" icon={iconName} />}

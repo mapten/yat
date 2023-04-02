@@ -111,7 +111,7 @@ describe('<Button/>', () => {
     expect(screen.getByTitle('Test')).not.toBeNull();
   });
 
-  it(`should display the button with the class "button--icon" when props.buttonType is 'icon'`, () => {
+  it('should display the button with the class "button--icon" when props.buttonType is "icon"', () => {
     // arrange, act
     render(
       <Button
@@ -184,7 +184,7 @@ describe('<Button/>', () => {
     expect(span).not.toBeNull();
   });
 
-  it(`should display the button with the class 'button--default' when props.buttonStyle is default `, () => {
+  it('should display the button with the class "button--default" when props.buttonStyle is default', () => {
     // arrange, act
     render(
       <Button
@@ -200,7 +200,7 @@ describe('<Button/>', () => {
     expect(Array.from(button.classList).find(f => f.includes('--default'))).toBeTruthy();
   });
 
-  it(`should display the button with the class 'button--small' when props.size is small `, () => {
+  it('should display the button with the class "button--small" when props.size is small', () => {
     // arrange, act
     render(
       <Button
@@ -214,5 +214,22 @@ describe('<Button/>', () => {
 
     // assert
     expect(Array.from(button.classList).find(f => f.includes('--small'))).toBeTruthy();
+  });
+
+  it('should display the button with the class "button--link" when props.buttonType is "link"', () => {
+    // arrange, act
+    render(
+      <Button
+        buttonStyle='default'
+        buttonType='link'
+        displayText='Test'
+        size='small'
+        onClick={vi.fn()} />
+    );
+
+    const button = screen.getByRole('button') as HTMLButtonElement;
+
+    // assert
+    expect(Array.from(button.classList).find(f => f.includes('--link'))).toBeTruthy();
   });
 });

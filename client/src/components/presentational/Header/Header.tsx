@@ -8,7 +8,6 @@ import UserMenu from '../UserMenu/UserMenu';
 import StoreMode from '../StoreMode/StoreMode';
 
 const Header: React.FC = () => {
-
   return (
     <div className={styles.todoListHeader}>
       <HeaderLogo />

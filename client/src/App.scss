@@ -26,7 +26,13 @@
   }
 
   .themeBorder {
-    border-color: $gray;
+    border-color: rgba($gray, 0.3);
+  }
+
+  .themeHover {
+    &:hover {
+      background-color: lighten($black, 5%);
+    }
   }
 
   .themeWrapper, .select, .progressBar, header, input {
@@ -34,8 +40,12 @@
     color: $gray-light;
   }
 
+  input, .select {
+    border: solid 0.05rem rgba($gray, 0.3);
+  }
+
   .themeWrapper {
-    border: solid 0.1rem $gray;
+    border: solid 0.1rem rgba($gray, 0.3);
   }
 
   .errorText {
@@ -74,7 +84,13 @@
   }
 
   .themeBorder {
-    border-color: $gray;
+    box-shadow: rgba($gray-darker, 0.25) 0px 2px 5px -1px, rgba($black, 0.3) 0px 1px 3px -1px;
+  }
+
+  .themeHover {
+    &:hover {
+      background-color: lighten($gray-light, 5%);
+    }
   }
 
   .themeWrapper, .select, .progressBar, header, input {
@@ -82,8 +98,12 @@
     color: $black;
   }
 
+  input, .select {
+    box-shadow: rgba($black, 0.02) 0px 1px 3px 0px, rgba($gray-darker, 0.15) 0px 0px 0px 1px;
+  }
+
   .themeWrapper {
-    border: solid 0.1rem $gray;
+    box-shadow: rgba($gray-darker, 0.25) 0px 2px 5px -1px, rgba($black, 0.3) 0px 1px 3px -1px;
   }
 
   .errorText {

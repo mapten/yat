@@ -8,6 +8,16 @@
   height: 50%;
   width: 100%;
 
+  @media screen and (max-width: $breakpoint-mobile) {
+    margin: 0.5rem;
+    width: auto;
+  }
+
+  @media screen and (max-width: $breakpoint-laptop) {
+    margin: 1rem;
+    width: auto;
+  }
+
   .auth {
     display: flex;
     flex-direction: column;
