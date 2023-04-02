@@ -12,7 +12,7 @@ import { useConfigurationStore } from '../../../store/configuration.store';
 import { useTokenStore } from '../../../store/token.store';
 
 // Components
-import { Button } from '../../presentational/UI/Button/Button';
+import Button from '../../presentational/UI/Button/Button';
 import AuthOnlineOfflineSelector from '../../presentational/AuthOnlineOfflineSelector/AuthOnlineOfflineSelector';
 
 type StateProps = {

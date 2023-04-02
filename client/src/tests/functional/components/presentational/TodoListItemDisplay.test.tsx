@@ -3,7 +3,7 @@ import { describe, it, vi, beforeEach, afterEach, expect } from 'vitest';
 import { render, cleanup, fireEvent, screen, waitFor } from '@testing-library/react';
 
 // Components
-import { TodoListItemDisplay } from '../../../../components/presentational/TodoList/TodoListItem/TodoListItemDisplay/TodoListItemDisplay';
+import TodoListItemDisplay from '../../../../components/presentational/TodoList/TodoListItem/TodoListItemDisplay/TodoListItemDisplay';
 
 type Props = React.ComponentProps<typeof TodoListItemDisplay>;
 

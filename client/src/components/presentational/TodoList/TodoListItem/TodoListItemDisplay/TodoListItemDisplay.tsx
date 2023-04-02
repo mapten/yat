@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import styles from './TodoListItemDisplay.module.scss';
 
 // Components
-import { Button } from '../../../UI/Button/Button';
+import Button from '../../../UI/Button/Button';
 import CheckBoxCrossed from '../../../../presentational/UI/CheckBoxCrossed/CheckBoxCrossed';
 
 type StateProps = {
@@ -22,7 +22,7 @@ type DispatchProps = {
 
 type Props = StateProps & DispatchProps;
 
-export const TodoListItemDisplay: React.FC<Props> = (props: Props) => {
+const TodoListItemDisplay: React.FC<Props> = (props: Props) => {
   const [taskDone, setTaskDone] = useState<boolean>(false);
 
   useEffect(() => {
@@ -52,3 +52,5 @@ export const TodoListItemDisplay: React.FC<Props> = (props: Props) => {
     </div>
   );
 };
+
+export default TodoListItemDisplay;

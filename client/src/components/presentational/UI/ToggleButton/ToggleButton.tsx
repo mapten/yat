@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 
 // Constants
-import { BUTTON_SIZE } from '../../../../constants/buttonStyles.constants';
+import { BUTTON_SIZE } from '../../../../typings/common.types';
 
 // Components
-import { Button } from '../Button/Button';
+import Button from '../Button/Button';
 
 // Styles
 import styles from './ToggleButton.module.scss';
