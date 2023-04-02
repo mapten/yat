@@ -11,22 +11,28 @@
   }
 
   &__options {
-    
+    width: 100%;
     position: absolute;
     z-index: $z-index-dropdown;
     right: 0;
     
     &Content {
       border-radius: 7px;
-      border-width: 0.1rem;
-      border-style: solid;
       border-top: 0;
       border-top-left-radius: 0;
       border-top-right-radius: 0;
     }
 
     &Separator {
-      height: 0.6rem;
+      height: 0.8rem;
+
+      @media screen and (max-width: $breakpoint-laptop) {
+        height: 0.55rem;
+      }
+
+      @media screen and (max-width: $breakpoint-mobile) {
+        height: 0.4rem;
+      }
     }
   }
 

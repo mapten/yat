@@ -179,7 +179,7 @@ const Auth: React.FC<Props> = ({ initialMode }: Props) => {
           )}
         <div className={styles.formActions} style={{ justifyContent: mode === 'online' ? 'space-between' : 'flex-end' }}>
           {mode === 'online' && (
-            <a href="#" onClick={toggleLogin}>{isLogin ? 'Create an account' : 'Log in'}</a>
+            <Button displayText={isLogin ? 'Create an account' : 'Log in'} size="big" buttonType="link" buttonStyle="default" onClick={toggleLogin} />
           )}
           <Button displayText={getSubmitButtonText()} size="big" buttonStyle="default" onClick={submitHandler} />
         </div>

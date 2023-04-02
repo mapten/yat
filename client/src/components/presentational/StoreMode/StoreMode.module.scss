@@ -1,6 +1,14 @@
+@import 'src/assets/styles/variables.scss';
+
 .storeMode {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
+
+  &__title {
+    @media screen and (max-width: $breakpoint-tablet) {
+      display: none;
+    }
+  }
 }

@@ -38,12 +38,12 @@ export const TodoListItemDisplay: React.FC<Props> = (props: Props) => {
     props.onSetEdit(props.taskId);
   };
 
-  const deleteTaskHandler = () => {
+  const deleteTaskHandler = async () => {
     props.onDelete(props.taskId);
   };
 
   return (
-    <div data-testid="todoItemDisplay" className={`themeWrapper task ${styles.itemDisplay}`}>
+    <div data-testid="todoItemDisplay" className={`themeWrapper themeHover task ${styles.itemDisplay}`}>
       <CheckBoxCrossed onChange={checkboxChangeHandler} text={props.taskName} initialChecked={taskDone} color={props.taskPriorityColor} />
       <div className={styles.itemDisplay__buttonGroup}>
         <Button size="big" displayText="Edit" buttonStyle="default" onClick={editTaskHandler} buttonType="icon" iconName="material-symbols:edit" />

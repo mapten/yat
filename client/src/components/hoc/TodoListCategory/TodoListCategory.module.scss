@@ -1,5 +1,17 @@
 .todoListCategory {
-  padding-top: 1rem;
+  padding-top: 0.5rem;
+
+  &__Text {
+    font-size: 1.3rem;
+    padding-bottom: 0.5rem;
+    cursor: pointer;
+    display: inline-flex;
+    gap: 0.3rem;
+
+    svg {
+      font-size: 1.5rem;
+    }
+  }
 
   &__Items {
     display: flex;

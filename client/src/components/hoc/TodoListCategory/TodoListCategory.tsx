@@ -34,16 +34,24 @@ const TodoListCategory = ({ category, displayCount = true, itemCount, initialSho
   }, [initialShowList]);
 
   const toggleShowListHandler = () => {
+    if (itemCount === 0) return;
     setShowList((prevState) => !prevState);
   };
 
+  const iconStyle = {
+    transform: showList ? '' : 'rotate(-90deg)', 
+    transition: 'transform 170ms ease'
+   }
+
   return (
     <section className={styles.todoListCategory}>
-      <h2 role="button" onClick={toggleShowListHandler}>
-        <Icon icon="material-symbols:keyboard-arrow-down-rounded" rotate={showList ? 4 : 3} />
-        <span>{capitalizeCategory()}</span>
-        <span>{displayCount ? ` (${itemCount})` : ''}</span>
-      </h2>
+      <div>
+        <div className={styles.todoListCategory__Text} role="button" onClick={toggleShowListHandler}>
+          <Icon icon="material-symbols:keyboard-arrow-down-rounded" rotate={4} style={iconStyle} />
+          <span>{capitalizeCategory()}</span>
+          <span>{displayCount ? ` (${itemCount})` : ''}</span>
+        </div>
+      </div>
       {
         showList && <div className={styles.todoListCategory__Items}>{children}</div>
       }
