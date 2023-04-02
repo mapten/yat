@@ -11,7 +11,7 @@ const StoreMode = () => {
 
   const getTitle = () => {
     return getStoreMode() === 'online' ? 'Connected to the server' : 'Disconnected from the server';
-  }
+  };
 
   return (
     <div className={styles.storeMode} title={getTitle()}>
@@ -19,6 +19,6 @@ const StoreMode = () => {
       <span className={styles.storeMode__title}>{ getStoreMode() === 'online' ? 'Online' : 'Offline' }</span>
     </div>
   );
-}
+};
 
 export default StoreMode;

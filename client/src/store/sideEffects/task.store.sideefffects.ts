@@ -21,7 +21,7 @@ export const syncAndFetchTasks = async (taskStore: StoreApi<TaskState>, displayT
   };
 
   if (displayToast) {
-     toast.promise(
+    toast.promise(
       secuentiallyExecute(),
       {
         loading: 'Syncing tasks...',

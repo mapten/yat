@@ -23,6 +23,7 @@ const ProgressBar: React.FC<Props> = ({ ...otherProps }: Props) => {
       {...otherProps}
       className={`progressBar ${styles.progressBar}`}
       role="progressbar"
+      aria-label="completed tasks"
       aria-valuenow={progress}
       aria-valuemin={0}
       aria-valuemax={100}>

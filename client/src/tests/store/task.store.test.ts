@@ -469,7 +469,7 @@ describe('TaskStore', () => {
           getStoreMode: vi.fn().mockReturnValue('online'),
         } as unknown as ConfigurationState);
 
-        const { result, rerender } = renderHook(() => useTaskStore());
+        const { result } = renderHook(() => useTaskStore());
 
         const storeTasks = [
           { id: '1', displayName: 'Test task 1', done: false, priority: 3 },

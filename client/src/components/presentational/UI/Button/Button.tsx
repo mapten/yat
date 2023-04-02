@@ -43,9 +43,9 @@ type DispatchProps = {
   onClick: () => void;
 }
 
-type Props = (StateIconButtonProps | StateButtonProps | StateLinkTypeButtonProps) & CommonProps & DispatchProps;
+type Props = (StateIconButtonProps | StateButtonProps | StateLinkTypeButtonProps) & CommonProps & DispatchProps & React.ButtonHTMLAttributes<HTMLButtonElement>;
 
-export const Button: React.FC<Props> = ({displayText, buttonStyle, size = 'medium', buttonType = 'button', iconName, tooltip, className, onClick}: Props) => {
+export const Button: React.FC<Props> = ({displayText, buttonStyle, size = 'medium', buttonType = 'button', iconName, tooltip, className, onClick, ...otherProps}: Props) => {
 
   const getTooltip = useCallback(() => {
     if (tooltip) {
@@ -76,7 +76,7 @@ export const Button: React.FC<Props> = ({displayText, buttonStyle, size = 'mediu
   }, [buttonType, buttonStyle, size]);
 
   return (
-    <button title={getTooltip()} className={getClassNames()} onClick={onClick}>
+    <button title={getTooltip()} className={getClassNames()} onClick={onClick} {...otherProps}>
       { (buttonType === 'button' || buttonType === 'link') && (
         <span>{displayText}</span>
       )}

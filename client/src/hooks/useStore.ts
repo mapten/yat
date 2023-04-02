@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { createJSONStorage } from 'zustand/middleware';
 
 // Store
 import { useConfigurationStore } from '../store/configuration.store';

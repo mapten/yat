@@ -1,5 +1,5 @@
 
-import { createContext, useContext, useState } from 'react';
+import { createContext, useContext } from 'react';
 
 // Types
 import { THEME } from '../../../typings/common.types';

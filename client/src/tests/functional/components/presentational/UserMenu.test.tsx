@@ -1,7 +1,7 @@
 import { describe, it, vi, beforeEach, afterEach, expect, MockedFunction } from 'vitest';
 
 import React from 'react';
-import { render, cleanup, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, cleanup, screen, fireEvent } from '@testing-library/react';
 
 // Components
 import UserMenu from '../../../../components/presentational/UserMenu/UserMenu';

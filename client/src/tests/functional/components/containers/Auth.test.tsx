@@ -1,5 +1,5 @@
 import { describe, it, vi, afterEach, expect, MockedFunction, beforeEach } from 'vitest';
-import { render, cleanup, screen, fireEvent, within, waitFor } from '@testing-library/react';
+import { render, cleanup, screen, fireEvent, waitFor } from '@testing-library/react';
 
 // Models
 import { User } from '../../../../models/user.model';
