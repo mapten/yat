@@ -1,5 +1,4 @@
 import { Meta, Story } from '@storybook/react/types-6-0';
-import { MemoryRouter } from 'react-router-dom';
 
 // Decorators
 import ThemeDecorator from '../../../.storybook/decorators/ThemeDecorator';
@@ -19,9 +18,7 @@ export default {
   component: TodoList,
   decorators: [
     (Story, context) => (
-      <MemoryRouter initialEntries={['/', '/create']}>
-        <Story {...context} />
-      </MemoryRouter>
+      <Story {...context} />
     ),
     ThemeDecorator,
     MswDecorator

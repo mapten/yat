@@ -13,7 +13,7 @@ import { Priority } from '../../../../../models/priority.model';
 import { Task } from '../../../../../models/task.model';
 
 // Components
-import { Button } from '../../../UI/Button/Button';
+import Button from '../../../UI/Button/Button';
 import Select from '../../../UI/Select/Select';
 
 type StateProps = {

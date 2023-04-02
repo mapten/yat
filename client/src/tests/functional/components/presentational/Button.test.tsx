@@ -6,7 +6,7 @@ import { render, screen, fireEvent, cleanup } from '@testing-library/react';
 import { wait } from '../../../helpers';
 
 // Components
-import { Button } from '../../../../components/presentational/UI/Button/Button';
+import Button from '../../../../components/presentational/UI/Button/Button';
 
 describe('<Button/>', () => {
 

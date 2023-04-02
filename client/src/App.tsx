@@ -1,4 +1,4 @@
-import React, { Suspense } from 'react';
+import React, { Suspense, lazy } from 'react';
 import { Toaster } from 'react-hot-toast';
 
 // Styles
@@ -13,9 +13,23 @@ import { useAuthStore } from './store/auth.store';
 // Components
 import { useTheme } from './components/hoc/ThemeProvider/ThemeProvider';
 import Header from './components/presentational/Header/Header';
-import Auth from './components/containers/Auth/Auth';
-import TodoList from './components/containers/TodoList/TodoList';
 import LoadingScreen from './components/presentational/UI/LoadingScreen/LoadingScreen';
+
+const TodoList = lazy(async () => {
+  const [moduleExports] = await Promise.all([
+    import('./components/containers/TodoList/TodoList'),
+    new Promise(resolve => setTimeout(resolve, 500))
+  ]);
+  return moduleExports;
+});
+
+const Auth = lazy(async () => {
+  const [moduleExports] = await Promise.all([
+    import('./components/containers/Auth/Auth'),
+    new Promise(resolve => setTimeout(resolve, 500))
+  ]);
+  return moduleExports;
+});
 
 
 const App: React.FC = () => {

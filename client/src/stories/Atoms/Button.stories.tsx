@@ -5,7 +5,7 @@ import { Story, Meta } from '@storybook/react/types-6-0';
 import ThemeDecorator from '../../../.storybook/decorators/ThemeDecorator';
 
 // Components
-import { Button } from '../../components/presentational/UI/Button/Button';
+import Button from '../../components/presentational/UI/Button/Button';
 
 export default {
   title: 'Atoms/Button',

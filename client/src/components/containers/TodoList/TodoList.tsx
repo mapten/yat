@@ -16,7 +16,7 @@ import { useTaskStore } from '../../../store/task.store';
 import TodoListCreate from '../../presentational/TodoList/TodoListCreate/TodoListCreate';
 import TodoListCategory from '../../hoc/TodoListCategory/TodoListCategory';
 import TodoListItemEdit from '../../presentational/TodoList/TodoListItem/TodoListItemEdit/TodoListItemEdit';
-import { TodoListItemDisplay } from '../../presentational/TodoList/TodoListItem/TodoListItemDisplay/TodoListItemDisplay';
+import TodoListItemDisplay from '../../presentational/TodoList/TodoListItem/TodoListItemDisplay/TodoListItemDisplay';
 import ProgressBar from '../../presentational/ProgressBar/ProgressBar';
 
 const TodoList: React.FC = () => {
