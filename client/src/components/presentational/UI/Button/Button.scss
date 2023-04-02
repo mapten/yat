@@ -12,7 +12,7 @@
   gap: 0.5rem;
   transition: background-color 0.2s ease-in-out;
 
-  &:hover {
+  &:hover, &:focus {
     background-color: darken($color, 10%);
   }
 }
@@ -38,7 +38,7 @@
   
   &--dismiss {
     @include button($secondary-color);
-    color: $white;
+    color: $black;
   }
 
   &--disabled {
@@ -66,6 +66,11 @@
     &:hover {
       color: $gray-darker;
     }
+
+    &:focus {
+      border: solid 0.1rem $gray;
+      border-radius: 0.5rem;
+    }
   }
 
   &--link {
@@ -75,6 +80,11 @@
 
     &:hover {
       font-weight: bold;
+    }
+
+    &:focus {
+      border: solid 0.1rem $principal-color;
+      border-radius: 0.5rem;
     }
   }
 }

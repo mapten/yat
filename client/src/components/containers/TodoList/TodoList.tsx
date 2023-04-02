@@ -30,11 +30,11 @@ const TodoList: React.FC = () => {
     if (result === 'success') {
       setEditTaskId(undefined);
     }
-  }
+  };
 
   const addTaskHandler = async (task: Partial<Task>) => {
     return await addTask(task);
-  }
+  };
 
   const renderTaskList = (done: boolean) => {
     const tasks = done ? getCompletedTasks() : getPendingTasks();

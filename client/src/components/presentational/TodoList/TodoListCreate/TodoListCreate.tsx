@@ -20,7 +20,7 @@ const TodoListCreate = ({ onAddTask }: Props) => {
 
   const resetTaskHandler = () => {
     if (todoListEditRef.current) {
-      todoListEditRef.current!.reset();
+      todoListEditRef.current.reset();
     }
   };
 

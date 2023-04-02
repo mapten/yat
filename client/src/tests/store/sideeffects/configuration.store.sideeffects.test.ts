@@ -208,7 +208,6 @@ describe('configuration store side effects', () => {
       };
 
       const mockLogout = vi.fn();
-      let foo = 0;
       const authStore = await import('../../../store/auth.store'); 
       vi.spyOn(authStore, 'useAuthStore').mockImplementation(() => ({
         logout: mockLogout,
@@ -261,7 +260,7 @@ describe('configuration store side effects', () => {
       vi.mock('../../../store/task.store', () => ({
         useTaskStore: {
           persist: {
-            setOptions: () => {}
+            setOptions: () => ({foo: 'bar'})
           }
         }
       }));
@@ -292,7 +291,7 @@ describe('configuration store side effects', () => {
       vi.mock('../../../store/task.store', () => ({
         useTaskStore: {
           persist: {
-            setOptions: () => {}
+            setOptions: () => ({foo: 'bar'})
           }
         }
       }));

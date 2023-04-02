@@ -40,7 +40,17 @@ const CheckBoxCrossed: React.FC<Props> = ({initialChecked, text, color, onChange
   };
 
   return (
-    <div onMouseLeave={mouseLeaveHandler} onMouseEnter={mouseHoverHandler} data-testid="checkboxCrossed" className={styles.checkboxCrossed} role="checkbox" onClick={checkedHandler}>
+    <div
+      onMouseLeave={mouseLeaveHandler}
+      onMouseEnter={mouseHoverHandler}
+      data-testid="checkboxCrossed"
+      className={styles.checkboxCrossed}
+      role="checkbox"
+      tabIndex={0}
+      aria-checked={checked}
+      onClick={checkedHandler}
+      onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && checkedHandler()}
+    >
       <Icon role="img" color={color} icon={icon} />
       <span className={checked ? styles.crossed : ''}>{text}</span>
     </div>

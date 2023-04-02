@@ -3,6 +3,7 @@
 .checkboxCrossed {
   display: inline-flex;
   cursor: pointer;
+  min-width: 10rem;
   gap: 0.5rem;
 
   svg {

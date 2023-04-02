@@ -1,4 +1,5 @@
 @import 'src/assets/styles/variables.scss';
+@import 'src/assets/styles/colors.scss';
 
 .themeToggleButton {
   all: unset;
@@ -16,5 +17,10 @@
     @media screen and (max-width: $breakpoint-tablet) {
       display: none;
     }
+  }
+
+  &:focus {
+    border: solid 0.1rem $gray;
+    border-radius: 0.5rem;
   }
 }

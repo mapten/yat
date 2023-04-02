@@ -39,6 +39,7 @@ const TodoListItemEdit = ({ taskId, initialTaskName, initialTaskPriority, taskDo
   const inputRef = useRef<HTMLInputElement>(null);
   const selectId = useId();
   const taskNameId = useId();
+  const selectLabelId = useId();
 
   const [name, setName] = useState<string>(initialTaskName || '');
   const [priority, setPriority] = useState<PRIORITY_ORDER_TYPE>(initialTaskPriority || DEFAULT_PRIORITY);
@@ -96,16 +97,17 @@ const TodoListItemEdit = ({ taskId, initialTaskName, initialTaskPriority, taskDo
           placeholder={placeholder}
           onBlur={() => setErrorOnName(false)}
           onChange={inputChangeHandler}
-          onKeyDown={(e) => e.key === 'Enter' && saveHandler()}
+          onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && saveHandler()}
           value={name}
           type='text'
           className={`${errorOnName ? 'danger' : ''}`} />
       </div>
       <div className={styles.itemEdit__formItem}>
-        <label htmlFor={selectId}>Priority: </label>
+        <label id={selectLabelId} htmlFor={selectId}>Priority: </label>
         <Select
           id={selectId}
           className={styles.itemEdit__select}
+          aria-labelledby={selectLabelId}
           items={PRIORITY_LEVELS}
           initialItem={priority}
           keyExtractor={(item) => item.order}

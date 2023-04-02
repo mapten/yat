@@ -41,12 +41,17 @@ const TodoListCategory = ({ category, displayCount = true, itemCount, initialSho
   const iconStyle = {
     transform: showList ? '' : 'rotate(-90deg)', 
     transition: 'transform 170ms ease'
-   }
+  };
 
   return (
     <section className={styles.todoListCategory}>
       <div>
-        <div className={styles.todoListCategory__Text} role="button" onClick={toggleShowListHandler}>
+        <div className={styles.todoListCategory__Text}
+          role="button"
+          tabIndex={0}
+          onClick={toggleShowListHandler}
+          onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && toggleShowListHandler()}
+        >
           <Icon icon="material-symbols:keyboard-arrow-down-rounded" rotate={4} style={iconStyle} />
           <span>{capitalizeCategory()}</span>
           <span>{displayCount ? ` (${itemCount})` : ''}</span>

@@ -46,8 +46,14 @@ const UserMenu: React.FC = () => {
   };
 
   return (
-    <div ref={ref} role="menu" className={styles.userMenu} onMouseEnter={openMenuHandler} onMouseLeave={closeMenuHandler}>
-      <div role="menuitem" className={`${styles.userMenu__displayName}`} onClick={toggleMenuHandler}>
+    <div ref={ref} role="menu" tabIndex={0} className={styles.userMenu} onMouseEnter={openMenuHandler} onMouseLeave={closeMenuHandler}>
+      <div
+        role="menuitem"
+        tabIndex={0}
+        className={`${styles.userMenu__displayName}`}
+        onClick={toggleMenuHandler}
+        onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && toggleMenuHandler()}
+      >
         <span>Hi, {user?.name || 'Anonymous'}</span>
       </div>
       {
@@ -57,12 +63,24 @@ const UserMenu: React.FC = () => {
             <div data-testid="userMenu__options" className={`themeBg themeBorder ${styles.userMenu__optionsContent}`}>
               {
                 isAuthenticated() ? (
-                  <div className={`${styles.userMenu__option}`} onClick={logoutHandler} role="menuitem">
+                  <div
+                    className={`${styles.userMenu__option}`}
+                    onClick={logoutHandler}
+                    onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && logoutHandler()}
+                    role="menuitem"
+                    tabIndex={0}
+                  >
                     <span>Logout</span>
                     <Icon icon="websymbol:logout" />
                   </div>
                 ) : (
-                  <div className={`${styles.userMenu__option}`} onClick={openLoginHandler} role="menuitem">
+                  <div
+                    className={`${styles.userMenu__option}`}
+                    onClick={openLoginHandler}
+                    onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && openLoginHandler()}
+                    role="menuitem"
+                    tabIndex={0}
+                  >
                     <span>Login</span>
                   </div>
                 )

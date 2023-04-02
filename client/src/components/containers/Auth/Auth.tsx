@@ -1,4 +1,4 @@
-import { useEffect, useId, useState } from 'react';
+import { useId, useState } from 'react';
 
 // Styles
 import styles from './Auth.module.scss';
@@ -102,7 +102,7 @@ const Auth: React.FC<Props> = ({ initialMode }: Props) => {
       return;
     }
 
-    let singinSuccess = isLogin ? await login({ email, password }) : await createUser({ name, email, password });
+    const singinSuccess = isLogin ? await login({ email, password }) : await createUser({ name, email, password });
 
     if (singinSuccess) {
       setLoginVisibleMode(undefined);
@@ -155,7 +155,12 @@ const Auth: React.FC<Props> = ({ initialMode }: Props) => {
               {!isLogin && (
                 <div className={styles.formControl}>
                   <label htmlFor={nameId}>Name</label>
-                  <input className={`${errorName ? 'danger' : ''}`} value={name} onChange={changeNameHandler} type="text" id={nameId} />
+                  <input
+                    className={`${errorName ? 'danger' : ''}`}
+                    value={name} onChange={changeNameHandler}
+                    type="text"
+                    id={nameId}
+                  />
                   {errorName && (
                     <p className={`errorText ${styles.errorText}`}>{errorName}</p>
                   )}
@@ -163,14 +168,26 @@ const Auth: React.FC<Props> = ({ initialMode }: Props) => {
               )}
               <div className={styles.formControl}>
                 <label htmlFor={emailId}>Email</label>
-                <input className={`${errorEmail ? 'danger' : ''}`} value={email} onChange={changeEmailHandler} type="email" id={emailId} />
+                <input
+                  className={`${errorEmail ? 'danger' : ''}`}
+                  value={email}
+                  onChange={changeEmailHandler}
+                  type="email"
+                  id={emailId}
+                />
                 {errorEmail && (
                   <p className={`errorText ${styles.errorText}`}>{errorEmail}</p>
                 )}
               </div>
               <div className={styles.formControl}>
                 <label htmlFor={passwordId}>Password</label>
-                <input className={`${errorPassword ? 'danger' : ''}`} value={password} onChange={changePasswordHandler} type="password" id={passwordId} />
+                <input
+                  className={`${errorPassword ? 'danger' : ''}`}
+                  value={password}
+                  onChange={changePasswordHandler}
+                  type="password"
+                  id={passwordId}
+                />
                 {errorPassword && (
                   <p className={`errorText ${styles.errorText}`}>{errorPassword}</p>
                 )}
@@ -181,7 +198,7 @@ const Auth: React.FC<Props> = ({ initialMode }: Props) => {
           {mode === 'online' && (
             <Button displayText={isLogin ? 'Create an account' : 'Log in'} size="big" buttonType="link" buttonStyle="default" onClick={toggleLogin} />
           )}
-          <Button displayText={getSubmitButtonText()} size="big" buttonStyle="default" onClick={submitHandler} />
+          <Button displayText={getSubmitButtonText()} size="big" buttonStyle="default" onClick={submitHandler}/>
         </div>
       </div>
     </div>

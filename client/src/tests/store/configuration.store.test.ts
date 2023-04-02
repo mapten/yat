@@ -1,17 +1,10 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import { renderHook } from '@testing-library/react';
-import { toast } from 'react-hot-toast';
 
 // Store
 import { useConfigurationStore } from '../../store/configuration.store';
 
-// Services
-import * as generalService from '../../services/generic.service';
-
 describe('ConfigurationStore', () => {
-  beforeEach(() => {
-  });
-
   afterEach(() => {
     const { result } = renderHook(() => useConfigurationStore());
     result.current.reset();
