@@ -55,7 +55,7 @@ const App: React.FC = () => {
           <Header />
         </header>
         <main>
-          {loginVisibleMode ? <Auth initialMode={loginVisibleMode} /> : renderTodoList()}
+          {loginVisibleMode ? <Suspense fallback={<LoadingScreen />}><Auth initialMode={loginVisibleMode} /></Suspense> : renderTodoList()}
         </main>
         <footer>
         </footer>

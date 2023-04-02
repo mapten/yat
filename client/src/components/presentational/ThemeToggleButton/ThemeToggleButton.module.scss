@@ -19,7 +19,7 @@
     }
   }
 
-  &:focus {
+  &:focus-visible {
     border: solid 0.1rem $gray;
     border-radius: 0.5rem;
   }
