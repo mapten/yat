@@ -37,5 +37,10 @@
   &__option {
     padding: 0.5rem;
     transition: background-color 0.1s ease-in-out;
+
+    &:focus-visible {
+      outline: none;
+      border: none;
+    }
   }
 }

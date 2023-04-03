@@ -80,7 +80,7 @@ const TodoListItemEdit = ({ taskId, initialTaskName, initialTaskPriority, taskDo
   };
 
   const selectDisplay = (priority: Priority) => {
-    return (<div className={styles.itemEdit__selectOption}>
+    return (<div className={`${styles.itemEdit__selectOption}`}>
       <Icon icon="map:circle" color={priority.displayColor} />
       <span className={styles.select__item}>{priority.displayText}</span>
     </div>);
