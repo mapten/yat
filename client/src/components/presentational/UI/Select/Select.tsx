@@ -29,20 +29,20 @@ const Select = <T,I extends Index>({ items, initialItem, keyExtractor, textExtra
   const selectRef = useRef<HTMLDivElement>(null);
 
   const [menuOpen, setMenuOpen] = useState(false);
-  const [item, setItem] = useState<I>(initialItem);
+  const [selectedItem, setSelectedItem] = useState<I>(initialItem);
   const [preselectedItem, setPreselectedItem] = useState<I | undefined>(undefined);
 
   useOutsideClick(selectRef, () => setMenuOpen(false));
 
   const selectNextItem = () => {
-    const currentIndex = items.findIndex((i) => keyExtractor(i) === item);
+    const currentIndex = items.findIndex((i) => keyExtractor(i) === selectedItem);
     const nextIndex = currentIndex + 1;
     const nextItem = items[nextIndex] || items[0];
     itemChangeHandler(nextItem);
   };
 
   const selectPrevItem = () => {
-    const currentIndex = items.findIndex((i) => keyExtractor(i) === item);
+    const currentIndex = items.findIndex((i) => keyExtractor(i) === selectedItem);
     const prevIndex = currentIndex - 1;
     const prevItem = items[prevIndex] || items[items.length - 1];
     itemChangeHandler(prevItem);
@@ -69,10 +69,10 @@ const Select = <T,I extends Index>({ items, initialItem, keyExtractor, textExtra
   const itemChangeHandler = (newSelectedItem: T) => {
     setMenuOpen(false);
     const newSelectedId = keyExtractor(newSelectedItem);
-    if (newSelectedId === item) {
+    if (newSelectedId === selectedItem) {
       return;
     }
-    setItem(newSelectedId);
+    setSelectedItem(newSelectedId);
     onSelect(newSelectedId);
   };
 
@@ -83,18 +83,24 @@ const Select = <T,I extends Index>({ items, initialItem, keyExtractor, textExtra
   };
 
   useEffect(() => {
-    setItem(initialItem);
-  }, [initialItem]);
-
-  useEffect(() => {
     document.addEventListener('keydown', keydownDocumentHandler, true);
     return () => {
       document.removeEventListener('keydown', keydownDocumentHandler, true);
     };
   });
 
+  useEffect(() => {
+    setSelectedItem(initialItem);
+  }, [initialItem]);
+
+  useEffect(() => {
+    if (!menuOpen) {
+      setPreselectedItem(undefined);
+    }
+  }, [menuOpen]);
+
   const getSelectedItem = () => {
-    return items.find((i) => keyExtractor(i) === item) as T;
+    return items.find((i) => keyExtractor(i) === selectedItem) as T;
   };
 
   const getSelectedTitle = () => {
@@ -140,8 +146,11 @@ const Select = <T,I extends Index>({ items, initialItem, keyExtractor, textExtra
       return;
     }
     if (e.key === 'Enter' || e.key === ' ') {
-      itemChangeHandler(item);
-      return;
+      if (preselectedItem) {
+        const pi = items.find((i) => keyExtractor(i) === preselectedItem) as T;
+        itemChangeHandler(pi);
+        return;
+      }
     }
     if (e.key === 'Tab') {
       if (e.shiftKey) {
@@ -171,8 +180,8 @@ const Select = <T,I extends Index>({ items, initialItem, keyExtractor, textExtra
   };
 
   const renderSelectedItemHandler = () => {
-    const selectedItem = items.find((i) => keyExtractor(i) === item) as T;
-    return renderItem(selectedItem);
+    const si = items.find((i) => keyExtractor(i) === selectedItem) as T;
+    return renderItem(si);
   };
 
   return (

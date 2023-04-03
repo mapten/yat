@@ -45,6 +45,25 @@ const UserMenu: React.FC = () => {
     logout();
   };
 
+  const keyDownHandler = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      toggleMenuHandler();
+      return;
+    }
+    if (e.key === 'Esc') {
+      setMenuOpen(false);
+      return;
+    }
+    if (e.key === 'ArrowDown') {
+      setMenuOpen(true);
+      return;
+    }
+    if (e.key === 'ArrowUp') {
+      setMenuOpen(false);
+      return;
+    }
+  };
+
   return (
     <div ref={ref} role="menu" tabIndex={0} className={styles.userMenu} onMouseEnter={openMenuHandler} onMouseLeave={closeMenuHandler}>
       <div
@@ -52,7 +71,7 @@ const UserMenu: React.FC = () => {
         tabIndex={0}
         className={`${styles.userMenu__displayName}`}
         onClick={toggleMenuHandler}
-        onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && toggleMenuHandler()}
+        onKeyDown={keyDownHandler}
       >
         <span>Hi, {user?.name || 'Anonymous'}</span>
       </div>
