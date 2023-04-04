@@ -50,7 +50,7 @@ const UserMenu: React.FC = () => {
       toggleMenuHandler();
       return;
     }
-    if (e.key === 'Esc') {
+    if (e.key === 'Escape') {
       setMenuOpen(false);
       return;
     }
