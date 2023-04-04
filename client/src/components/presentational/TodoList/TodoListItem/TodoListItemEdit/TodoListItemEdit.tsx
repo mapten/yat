@@ -79,6 +79,17 @@ const TodoListItemEdit = ({ taskId, initialTaskName, initialTaskPriority, taskDo
     }
   };
 
+  const keyDownHandler = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      saveHandler();
+      return;
+    }
+    if (e.key === 'Escape') {
+      onCancelEdit();
+      return;
+    }
+  };
+
   const selectDisplay = (priority: Priority) => {
     return (<div className={`${styles.itemEdit__selectOption}`}>
       <Icon icon="map:circle" color={priority.displayColor} />
@@ -97,7 +108,7 @@ const TodoListItemEdit = ({ taskId, initialTaskName, initialTaskPriority, taskDo
           placeholder={placeholder}
           onBlur={() => setErrorOnName(false)}
           onChange={inputChangeHandler}
-          onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && saveHandler()}
+          onKeyDown={keyDownHandler}
           value={name}
           type='text'
           className={`${errorOnName ? 'danger' : ''}`} />
