@@ -1,5 +1,3 @@
-import { useCallback } from 'react';
-
 import { Icon } from '@iconify/react';
 
 // Styles
@@ -47,7 +45,7 @@ type Props = (StateIconButtonProps | StateButtonProps | StateLinkTypeButtonProps
 
 const Button: React.FC<Props> = ({displayText, buttonStyle, size = 'medium', buttonType = 'button', iconName, tooltip, className, onClick}: Props) => {
 
-  const getTooltip = useCallback(() => {
+  const getTooltip = () => {
     if (tooltip) {
       return tooltip;
     }
@@ -55,9 +53,9 @@ const Button: React.FC<Props> = ({displayText, buttonStyle, size = 'medium', but
       return displayText;
     }
     return '';
-  }, [tooltip, buttonType, displayText]);
+  };
 
-  const getClassNames = useCallback(() => {
+  const getClassNames = () => {
     let style = '';
 
     if (buttonType === 'icon') {
@@ -73,7 +71,7 @@ const Button: React.FC<Props> = ({displayText, buttonStyle, size = 'medium', but
     style += ` ${className}`;
 
     return style;
-  }, [buttonType, buttonStyle, size]);
+  };
 
   return (
     <button title={getTooltip()} className={getClassNames()} onClick={onClick}>
