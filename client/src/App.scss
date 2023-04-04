@@ -52,10 +52,8 @@
     color: lighten($red, 20%);
   }
 
-  .options {
-    div:hover {
-      background-color: $black-light;
-    }
+  .preselected {
+    background-color: $black-light;
   }
 
   input[type = 'text']::placeholder {
@@ -110,10 +108,8 @@
     color: $red;
   }
 
-  .options {
-    div:hover {
-      background-color: $gray-light;
-    }
+  .preselected {
+    background-color: $gray-light;
   }
 
   input[type = 'text']::placeholder {

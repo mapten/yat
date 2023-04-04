@@ -38,6 +38,24 @@ const TodoListCategory = ({ category, displayCount = true, itemCount, initialSho
     setShowList((prevState) => !prevState);
   };
 
+  const keyDownHandler = (e: React.KeyboardEvent) => {
+    if (itemCount === 0) {
+      return;
+    }
+
+    if (e.key === 'Enter' || e.key === ' ') {
+      toggleShowListHandler();
+    }
+
+    if (e.key === 'Escape' || e.key === 'Esc' || e.key === 'ArrowUp') {
+      setShowList(false);
+    }
+
+    if (e.key === 'ArrowDown') {
+      setShowList(true);
+    }
+  };
+
   const iconStyle = {
     transform: showList ? '' : 'rotate(-90deg)', 
     transition: 'transform 170ms ease'
@@ -50,7 +68,7 @@ const TodoListCategory = ({ category, displayCount = true, itemCount, initialSho
           role="button"
           tabIndex={0}
           onClick={toggleShowListHandler}
-          onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && toggleShowListHandler()}
+          onKeyDown={keyDownHandler}
         >
           <Icon icon="material-symbols:keyboard-arrow-down-rounded" rotate={4} style={iconStyle} />
           <span>{capitalizeCategory()}</span>

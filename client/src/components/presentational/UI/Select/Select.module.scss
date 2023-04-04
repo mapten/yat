@@ -21,8 +21,6 @@
 
   &__options {
     border-radius: 0.4rem;
-    border-width: 1px;
-    border-style: solid;
     background-color: inherit;
     padding: 0;
     cursor: pointer;
@@ -37,5 +35,10 @@
   &__option {
     padding: 0.5rem;
     transition: background-color 0.1s ease-in-out;
+
+    &:focus-visible {
+      outline: none;
+      border: none;
+    }
   }
 }
