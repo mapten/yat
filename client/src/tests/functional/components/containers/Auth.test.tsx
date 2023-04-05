@@ -71,16 +71,16 @@ describe('<Auth />', () => {
       return render(<Auth {...baseProps} {...props} />);
     };
 
-    it('should change to sign in when clicking on the link', () => {
+    it('should change to sign in when clicking on create account button', () => {
       // arrange
       renderUI();
 
-      const link = screen.getByRole('link', { name: /Create an account/i });
+      const button = screen.getByRole('button', { name: /Create an account/i });
 
       expect(screen.getByRole('heading', { name: /Hello/i })).toBeTruthy();
 
       // act
-      fireEvent.click(link);
+      fireEvent.click(button);
 
       // assert
       expect(screen.getByRole('heading', { name: /Welcome/i })).toBeTruthy();
@@ -91,8 +91,8 @@ describe('<Auth />', () => {
       // arrange
       renderUI();
 
-      const link = screen.getByRole('link', { name: /Create an account/i });
-      fireEvent.click(link);
+      const createAccountButton = screen.getByRole('button', { name: /Create an account/i });
+      fireEvent.click(createAccountButton);
 
       const submitButton = screen.getByRole('button', { name: /Create Account/i });
 
@@ -136,8 +136,8 @@ describe('<Auth />', () => {
       // arrange
       renderUI();
 
-      const link = screen.getByRole('link', { name: /Create an account/i });
-      fireEvent.click(link);
+      const createAccountButton = screen.getByRole('button', { name: /Create an account/i });
+      fireEvent.click(createAccountButton);
 
       const passwordInput = screen.getByLabelText('Password');
       fireEvent.change(passwordInput, { target: { value: '1111' } });
@@ -180,12 +180,12 @@ describe('<Auth />', () => {
       expect(screen.getByText(/Password is required/i)).toBeTruthy();
     });
 
-    it('should reset the form when clicking on the link', () => {
+    it('should reset the form when clicking on create account button', () => {
       // arrange
       renderUI();
 
-      const link = screen.getByRole('link');
-      fireEvent.click(link);
+      const createAcountButton = screen.getByRole('button', { name: /Create an account/i });
+      fireEvent.click(createAcountButton);
 
       const button = screen.getByRole('button', { name: /Create Account/i });
       fireEvent.click(button);
@@ -199,8 +199,8 @@ describe('<Auth />', () => {
       expect(screen.getByText(/Password is required/i)).toBeTruthy();
 
       // click twice, in order to go back to Sign in mode
-      fireEvent.click(link);
-      fireEvent.click(link);
+      fireEvent.click(createAcountButton);
+      fireEvent.click(createAcountButton);
 
       expect(Array.from(screen.getByLabelText('Name').classList).find(f => f.includes('danger'))).toBeFalsy();
       expect(Array.from(screen.getByLabelText('Email').classList).find(f => f.includes('danger'))).toBeFalsy();
@@ -215,14 +215,14 @@ describe('<Auth />', () => {
       fireEvent.change(screen.getByLabelText('Password'), { target: { value: '1234' } });
 
       // act
-      fireEvent.click(link);
+      fireEvent.click(createAcountButton);
 
       // assert
       expect((screen.getByLabelText('Email') as HTMLInputElement).value).toBe('');
       expect((screen.getByLabelText('Password') as HTMLInputElement).value).toBe('');
 
-      // click on the link again, in order make name visible
-      fireEvent.click(link);
+      // click on the create account button again, in order make name visible
+      fireEvent.click(createAcountButton);
       expect((screen.getByLabelText('Name') as HTMLInputElement).value).toBe('');
     });
 
@@ -285,8 +285,8 @@ describe('<Auth />', () => {
 
       renderUI();
 
-      const link = screen.getByRole('link');
-      fireEvent.click(link);
+      const createAccountButton = screen.getByRole('button', { name: /Create an account/i} );
+      fireEvent.click(createAccountButton);
 
       fireEvent.change(screen.getByLabelText('Name'), { target: { value: 'John Doe' } });
       fireEvent.change(screen.getByLabelText('Email'), { target: { value: 'john@doe.com' } });

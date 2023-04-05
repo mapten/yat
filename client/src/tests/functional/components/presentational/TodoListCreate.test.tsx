@@ -1,7 +1,6 @@
 import React from 'react';
 import { describe, it, vi, beforeEach, afterEach, expect } from 'vitest';
 import { render, cleanup, screen, waitFor, fireEvent } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
 
 // Components
 import TodoListCreate from '../../../../components/presentational/TodoList/TodoListCreate/TodoListCreate';
@@ -23,19 +22,40 @@ describe('<TodoListCreate/>', () => {
 
   afterEach(() => {
     cleanup();
+    vi.restoreAllMocks();
   });
 
-  it('should trigger onAddTask when the input changes and saves it', () => {
+  it('should trigger onAddTask when the input changes and saves it and should reset the form when addTask returns "success"', async () => {
     // arrange
-    renderUI();
+    const mockAddTask = vi.fn().mockResolvedValue('success');
+    renderUI({ onAddTask: mockAddTask });
 
     const input = screen.getByRole('textbox') as HTMLInputElement;
 
     // act
-    userEvent.type(input, 'foo{enter}');
+    fireEvent.change(input, { target: { value: 'foo' }});
+    fireEvent.keyDown(input, { key: 'Enter', code: 'Enter' });
 
     // assert
-    waitFor(() => expect(baseProps.onAddTask).toHaveBeenCalledWith(expect.objectContaining({ displayName: 'foo' })));
+    await waitFor(() => expect(mockAddTask).toHaveBeenCalledWith(expect.objectContaining({ displayName: 'foo' })));
+
+    expect(input.value).toBe('');
+  });
+
+  it('should not reset the form when addTask does not return "success"', async () => {
+    // arrange
+    const mockAddTask = vi.fn().mockResolvedValue('error');
+    renderUI({ onAddTask: mockAddTask });
+
+    const input = screen.getByRole('textbox') as HTMLInputElement;
+
+    // act
+    fireEvent.change(input, { target: { value: 'foo' }});
+    fireEvent.keyDown(input, { key: 'Enter', code: 'Enter' });
+
+    // assert
+    expect(mockAddTask).toHaveBeenCalled();
+    expect(input.value).toBe('foo');
   });
 
   it('should reset the form when clicks on Cancel', () => {

@@ -81,7 +81,7 @@ const TodoListItemEdit = ({ taskId, initialTaskName, initialTaskPriority, taskDo
   };
 
   const keyDownHandler = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' || e.key === ' ') {
+    if (e.key === 'Enter') {
       saveHandler();
       return;
     }

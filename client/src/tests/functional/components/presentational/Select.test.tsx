@@ -136,33 +136,294 @@ describe('<Select/>', () => {
     expect(screen.queryByRole('option')).toBeNull();
   });
 
-  it('should hide the options when click outside the component', () => {
-    // arrange
-    renderUI();
+  describe('mouse events', () => {
+    describe('selected', () => {
+      it('should hide the options when click outside the component', () => {
+        // arrange
+        renderUI();
+    
+        fireEvent.click(screen.getByTestId('select__selected'));
+    
+        // act
+        fireEvent.click(document.body);
+    
+        // assert
+        waitFor(() => {
+          expect(screen.queryByRole('option')).toBeNull();
+        });
+      });
 
-    fireEvent.click(screen.getByTestId('select__selected'));
+      it('should add /remove preselect an option when mouse enters / leaves it', () => {
+        // arrange
+        renderUI();
 
-    // act
-    fireEvent.click(document.body);
+        const selected = screen.getByTestId('select__selected');
 
-    // assert
-    waitFor(() => {
-      expect(screen.queryByRole('option')).toBeNull();
+        expect(selected.textContent).toBe('Low');
+
+        fireEvent.click(selected);
+
+        const options = screen.getAllByRole('option');
+
+        // act
+        fireEvent.mouseOver(options[1]);
+
+        // assert
+        expect(options[1].classList.contains('preselected')).toBeTruthy();
+
+        // act
+        fireEvent.mouseLeave(options[1]);
+
+        // assert
+        expect(options[1].classList.contains('preselected')).toBeFalsy();
+      });
     });
   });
 
-  it('should hide the options when press escape', () => {
-    // arrange
-    renderUI();
+  describe('keyboard events', () => {
+    describe('selected', () => {
+      it('should hide the options when click outside the component', () => {
+        // arrange
+        renderUI();
+    
+        fireEvent.click(screen.getByTestId('select__selected'));
+    
+        // act
+        fireEvent.click(document.body);
+    
+        // assert
+        waitFor(() => {
+          expect(screen.queryByRole('option')).toBeNull();
+        });
+      });
+    
+      it('should hide the options when press escape', () => {
+        // arrange
+        renderUI();
 
-    fireEvent.click(screen.getByTestId('select__selected'));
+        const selected = screen.getByTestId('select__selected');
+    
+        // act
+        fireEvent.keyDown(selected, { key: 'Escape', code: 'Escape' });
+    
+        // assert
+        waitFor(() => {
+          expect(screen.queryByRole('option')).toBeNull();
+        });
+      });
+    
+      it('should select the next option when press arrow down', () => {
+        // arrange
+        renderUI();
+    
+        const selected = screen.getByTestId('select__selected');
+    
+        expect(selected.textContent).toBe('Low');
+    
+        // act
+        fireEvent.keyDown(selected, { key: 'ArrowDown', code: 'ArrowDown' });
+    
+        // assert
+        expect(selected.textContent).toBe('Mid');
+      });
+    
+      it('should select the previous option when press arrow up', () => {
+        // arrange
+        renderUI();
+    
+        const selected = screen.getByTestId('select__selected');
+    
+        expect(selected.textContent).toBe('Low');
+    
+        // act
+        fireEvent.keyDown(selected, { key: 'ArrowUp', code: 'ArrowUp' });
+    
+        // assert
+        expect(selected.textContent).toBe('High');
+    
+        // act
+        fireEvent.keyDown(selected, { key: 'ArrowUp', code: 'ArrowUp' });
+    
+        // assert
+        expect(selected.textContent).toBe('Mid');
+      });
+    
+      it('should select the first option when press arrow down and the last option is selected', () => {
+        // arrange
+        renderUI();
+    
+        const selected = screen.getByTestId('select__selected');
+    
+        expect(selected.textContent).toBe('Low');
+    
+        // act
+        fireEvent.keyDown(selected, { key: 'ArrowDown', code: 'ArrowDown' });
+        fireEvent.keyDown(selected, { key: 'ArrowDown', code: 'ArrowDown' });
+        fireEvent.keyDown(selected, { key: 'ArrowDown', code: 'ArrowDown' });
+    
+        // assert
+        expect(selected.textContent).toBe('Low');
+      });
+    
+      it('should select the last option when press arrow up and the first option is selected', () => {
+        // arrange
+        renderUI();
+    
+        const selected = screen.getByTestId('select__selected');
+    
+        expect(selected.textContent).toBe('Low');
+    
+        // act
+        fireEvent.keyDown(selected, { key: 'ArrowUp', code: 'ArrowUp' });
+    
+        // assert
+        expect(selected.textContent).toBe('High');
+      });
+    
+      it('should select the option when press enter', () => {
+        // arrange
+        renderUI();
+    
+        const selected = screen.getByTestId('select__selected');
+    
+        expect(selected.textContent).toBe('Low');
+    
+        // act
+        fireEvent.keyDown(selected, { key: 'ArrowDown', code: 'ArrowDown' });
+        fireEvent.keyDown(selected, { key: 'Enter', code: 'Enter' });
+    
+        // assert
+        expect(selected.textContent).toBe('Mid');
+      });
+    });
 
-    // act
-    fireEvent.keyDown(document.body, { key: 'Escape', code: 'Escape' });
+    describe('options', () => {
+      it('should preselect the next option when press arrow down', () => {
+        // arrange
+        renderUI();
+    
+        fireEvent.click(screen.getByTestId('select__selected'));
+    
+        const options = screen.getAllByRole('option');
+    
+        expect(options[0].classList.contains('preselected')).toBeTruthy();  // "Low"
+    
+        // act
+        fireEvent.keyDown(options[0], { key: 'ArrowDown', code: 'ArrowDown' });
+    
+        // assert
+        expect(options[1].classList.contains('preselected')).toBeTruthy(); // "Mid"
+        expect(options[0].classList.contains('preselected')).toBeFalsy();
+      });
 
-    // assert
-    waitFor(() => {
-      expect(screen.queryByRole('option')).toBeNull();
+      it('should preselect the previous option when press arrow up', () => {
+        // arrange
+        renderUI();
+    
+        fireEvent.click(screen.getByTestId('select__selected'));
+    
+        const options = screen.getAllByRole('option');
+    
+        expect(options[0].classList.contains('preselected')).toBeTruthy();  // "Low"
+    
+        // act
+        fireEvent.keyDown(options[0], { key: 'ArrowUp', code: 'ArrowUp' });
+    
+        // assert
+        expect(options[2].classList.contains('preselected')).toBeTruthy(); // "High"
+        expect(options[0].classList.contains('preselected')).toBeFalsy();
+      });
+
+      it('should select the preselected option when press enter', () => {
+        // arrange
+        renderUI();
+    
+        fireEvent.click(screen.getByTestId('select__selected'));
+    
+        const options = screen.getAllByRole('option');
+    
+        expect(options[0].classList.contains('preselected')).toBeTruthy();  // "Low"
+    
+        // act
+        fireEvent.keyDown(options[0], { key: 'ArrowDown', code: 'ArrowDown' });
+        fireEvent.keyDown(options[1], { key: 'Enter', code: 'Enter' });
+    
+        // assert
+        expect(options[0].classList.contains('preselected')).toBeFalsy();
+        expect(options[1].classList.contains('preselected')).toBeTruthy();
+        expect(screen.getByTestId('select__selected').textContent).toBe('Mid');
+      });
+
+      it('should select the preselected option when click', () => {
+        // arrange
+        renderUI();
+    
+        fireEvent.click(screen.getByTestId('select__selected'));
+    
+        const options = screen.getAllByRole('option');
+    
+        expect(options[0].classList.contains('preselected')).toBeTruthy();  // "Low"
+    
+        // act
+        fireEvent.keyDown(options[0], { key: 'ArrowDown', code: 'ArrowDown' });
+        fireEvent.click(options[1]);
+    
+        // assert
+        expect(options[0].classList.contains('preselected')).toBeFalsy();
+        expect(options[1].classList.contains('preselected')).toBeTruthy();
+        expect(screen.getByTestId('select__selected').textContent).toBe('Mid');
+      });
+
+      it('should hide the options when press escape', () => {
+        // arrange
+        renderUI();
+
+        fireEvent.click(screen.getByTestId('select__selected'));
+
+        const options = screen.getAllByRole('option');
+    
+        // act
+        fireEvent.keyDown(options[0], { key: 'Escape', code: 'Escape' });
+    
+        // assert
+        waitFor(() => {
+          expect(screen.queryByRole('option')).toBeNull();
+        });
+      });
+
+      it('should hide the options when press "Tab" in the last option', () => {
+        // arrange
+        renderUI();
+
+        fireEvent.click(screen.getByTestId('select__selected'));
+
+        const options = screen.getAllByRole('option');
+    
+        // act
+        fireEvent.keyDown(options[2], { key: 'Tab', code: 'Tab' });
+    
+        // assert
+        waitFor(() => {
+          expect(screen.queryByRole('option')).toBeNull();
+        });
+      });
+
+      it('should hide the options when press "Shift" + "Tab" in the first option', () => {
+        // arrange
+        renderUI();
+
+        fireEvent.click(screen.getByTestId('select__selected'));
+
+        const options = screen.getAllByRole('option');
+    
+        // act
+        fireEvent.keyDown(options[0], { key: 'Tab', code: 'Tab', shiftKey: true });
+    
+        // assert
+        waitFor(() => {
+          expect(screen.queryByRole('option')).toBeNull();
+        });
+      });
     });
   });
 });

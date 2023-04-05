@@ -73,4 +73,81 @@ describe('<TodoListCategory/>', () => {
     // assert
     expect(screen.queryByText('(0)')).toBeNull();
   });
+
+  describe('key events', () => {
+    it('should show the children when Enter is pressed', () => {
+      // arrange
+      render(<TodoListCategory category='pending' displayCount={false} initialShowList={false}>
+        <div data-testid="foo">foo</div>
+      </TodoListCategory>);
+
+      expect(screen.queryByTestId('foo')).toBeNull();
+
+      // act
+      fireEvent.keyDown(screen.getByRole('button'), { key: 'Enter', code: 'Enter' });
+
+      // assert
+      expect(screen.getByTestId('foo')).toBeTruthy();
+    });
+
+    it('should show the children when Space is pressed', () => {
+      // arrange
+      render(<TodoListCategory category='pending' displayCount={false} initialShowList={false}>
+        <div data-testid="foo">foo</div>
+      </TodoListCategory>);
+
+      expect(screen.queryByTestId('foo')).toBeNull();
+
+      // act
+      fireEvent.keyDown(screen.getByRole('button'), { key: ' ', code: 'Space' });
+
+      // assert
+      expect(screen.getByTestId('foo')).toBeTruthy();
+    });
+
+    it('should show the children when ArrowDown is pressed', () => {
+      // arrange
+      render(<TodoListCategory category='pending' displayCount={false} initialShowList={false}>
+        <div data-testid="foo">foo</div>
+      </TodoListCategory>);
+
+      expect(screen.queryByTestId('foo')).toBeNull();
+
+      // act
+      fireEvent.keyDown(screen.getByRole('button'), { key: 'ArrowDown', code: 'ArrowDown' });
+
+      // assert
+      expect(screen.getByTestId('foo')).toBeTruthy();
+    });
+
+    it('should hide the children when Escape is pressed', () => {
+      // arrange
+      render(<TodoListCategory category='pending' displayCount={false} initialShowList={true}>
+        <div data-testid="foo">foo</div>
+      </TodoListCategory>);
+
+      expect(screen.getByTestId('foo')).toBeTruthy();
+
+      // act
+      fireEvent.keyDown(screen.getByRole('button'), { key: 'Escape', code: 'Escape' });
+
+      // assert
+      expect(screen.queryByTestId('foo')).toBeNull();
+    });
+
+    it('should hide the children when ArrowUp is pressed', () => {
+      // arrange
+      render(<TodoListCategory category='pending' displayCount={false} initialShowList={true}>
+        <div data-testid="foo">foo</div>
+      </TodoListCategory>);
+
+      expect(screen.getByTestId('foo')).toBeTruthy();
+
+      // act
+      fireEvent.keyDown(screen.getByRole('button'), { key: 'ArrowUp', code: 'ArrowUp' });
+
+      // assert
+      expect(screen.queryByTestId('foo')).toBeNull();
+    });
+  });
 });
