@@ -1,6 +1,4 @@
 import { describe, it, vi, beforeEach, afterEach, expect, MockedFunction } from 'vitest';
-
-import React from 'react';
 import { render, cleanup, screen, fireEvent } from '@testing-library/react';
 
 // Components
@@ -128,8 +126,7 @@ describe('<UserMenu/>', () => {
         email: 'john@doe.com',
       },
       logout: mockLogout,
-      isAuthenticated: () => true,
-      setIsLoginModalOpen: vi.fn(),
+      isAuthenticated: () => true
     });
 
     renderUI();
@@ -143,7 +140,7 @@ describe('<UserMenu/>', () => {
     expect(screen.queryByTestId('userMenu__options')).toBeNull();
   });
 
-  it('should call openLoginHandler when clicking on the "Select how to connect (online / offline)" option', async () => {
+  it('should call openLoginHandler when clicking on "Login"', async () => {
     // arrange
     const mockSetLoginVisibleMode = vi.fn();
     mockAuthStore.mockReturnValue({
@@ -154,7 +151,7 @@ describe('<UserMenu/>', () => {
       },
       logout: vi.fn(),
       isAuthenticated: vi.fn(),
-      setLoginVisibleMode: mockSetLoginVisibleMode,
+      setLoginVisibleMode: mockSetLoginVisibleMode
     });
     
     renderUI();
@@ -166,5 +163,159 @@ describe('<UserMenu/>', () => {
     // assert
     expect(mockSetLoginVisibleMode).toHaveBeenCalledWith('online');
     expect(screen.queryByTestId('userMenu__options')).toBeNull();
+  });
+
+  describe('keyboard events', () => {
+    it('should show / hide the menu when pressing the "Enter" key', () => {
+      // arrange
+      renderUI();
+
+      // act
+      fireEvent.keyDown(screen.getAllByRole('menuitem')[0], { key: 'Enter' });
+      // assert
+      expect(screen.getByTestId('userMenu__options')).toBeTruthy();
+
+      // act
+      fireEvent.keyDown(screen.getAllByRole('menuitem')[0], { key: 'Enter' });
+      // assert
+      expect(screen.queryByTestId('userMenu__options')).toBeNull();
+    });
+
+    it('should show / hide the menu when pressing the "Space" key', () => {
+      // arrange
+      renderUI();
+
+      // act
+      fireEvent.keyDown(screen.getAllByRole('menuitem')[0], { key: ' ' });
+      // assert
+      expect(screen.getByTestId('userMenu__options')).toBeTruthy();
+
+      // act
+      fireEvent.keyDown(screen.getAllByRole('menuitem')[0], { key: ' ' });
+      // assert
+      expect(screen.queryByTestId('userMenu__options')).toBeNull();
+    });
+
+    it('should show the menu when pressing the "ArrowDown" key', () => {
+      // arrange
+      renderUI();
+
+      // act
+      fireEvent.keyDown(screen.getAllByRole('menuitem')[0], { key: 'ArrowDown' });
+      // assert
+      expect(screen.getByTestId('userMenu__options')).toBeTruthy();
+    });
+
+    it('should hide the menu when pressing the "Escape" key', () => {
+      // arrange
+      renderUI();
+
+      // act
+      fireEvent.keyDown(screen.getAllByRole('menuitem')[0], { key: 'Escape' });
+      // assert
+      expect(screen.queryByTestId('userMenu__options')).toBeNull();
+    });
+
+    it('should hide the menu when pressing the "ArrowUp" key', () => {
+      // arrange
+      renderUI();
+
+      // act
+      fireEvent.keyDown(screen.getAllByRole('menuitem')[0], { key: 'ArrowUp' });
+      // assert
+      expect(screen.queryByTestId('userMenu__options')).toBeNull();
+    });
+
+    it('should logout when pressing the "Enter" key on the logout option', () => {
+      // arrange
+      const mockLogout = vi.fn();
+      mockAuthStore.mockReturnValue({
+        user: {
+          id: '1',
+          name: 'John Doe',
+          email: 'john@doe.com',
+        },
+        logout: mockLogout,
+        isAuthenticated: () => true
+      });
+      renderUI();
+
+      fireEvent.click(screen.getAllByRole('menuitem')[0]);
+      // act
+      fireEvent.keyDown(screen.getByText('Logout'), { key: 'Enter' });
+  
+      // assert
+      expect(mockLogout).toHaveBeenCalled();
+      expect(screen.queryByTestId('userMenu__options')).toBeNull();
+    });
+
+    it('should logout when pressing the "Space" key on the logout option', () => {
+      // arrange
+      const mockLogout = vi.fn();
+      mockAuthStore.mockReturnValue({
+        user: {
+          id: '1',
+          name: 'John Doe',
+          email: 'john@doe.com',
+        },
+        logout: mockLogout,
+        isAuthenticated: () => true
+      });
+      renderUI();
+
+      fireEvent.click(screen.getAllByRole('menuitem')[0]);
+      // act
+      fireEvent.keyDown(screen.getByText('Logout'), { key: ' ' });
+  
+      // assert
+      expect(mockLogout).toHaveBeenCalled();
+      expect(screen.queryByTestId('userMenu__options')).toBeNull();
+    });
+
+    it('should login when pressing "Enter" on the login option', () => {
+      // arrange
+      const mockSetLoginVisibleMode = vi.fn();
+      mockAuthStore.mockReturnValue({
+        user: {
+          id: '1',
+          name: 'John Doe',
+          email: 'john@doe.com',
+        },
+        isAuthenticated: () => false,
+        setLoginVisibleMode: mockSetLoginVisibleMode,
+      });
+      renderUI();
+
+      fireEvent.click(screen.getAllByRole('menuitem')[0]);
+      // act
+      fireEvent.keyDown(screen.getByText('Login'), { key: 'Enter' });
+  
+      // assert
+      expect(mockSetLoginVisibleMode).toHaveBeenCalled();
+      expect(screen.queryByTestId('userMenu__options')).toBeNull();
+    });
+
+    it('should login when pressing "Space" on the login option', () => {
+      // arrange
+      const mockSetLoginVisibleMode = vi.fn();
+      mockAuthStore.mockReturnValue({
+        user: {
+          id: '1',
+          name: 'John Doe',
+          email: 'john@doe.com',
+        },
+        isAuthenticated: () => false,
+        setLoginVisibleMode: mockSetLoginVisibleMode,
+      });
+      renderUI();
+
+      fireEvent.click(screen.getAllByRole('menuitem')[0]);
+      // act
+      fireEvent.keyDown(screen.getByText('Login'), { key: ' ' });
+  
+      // assert
+      expect(mockSetLoginVisibleMode).toHaveBeenCalled();
+      expect(screen.queryByTestId('userMenu__options')).toBeNull();
+    });
   });
 });

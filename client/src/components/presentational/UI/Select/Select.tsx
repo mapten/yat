@@ -4,27 +4,14 @@ import { Icon } from '@iconify/react';
 // Styles
 import styles from './Select.module.scss';
 
+// Types
+import { SelectIndex, SelectProps } from './Select.types';
+
 // Hooks
 import { useOutsideClick } from '../../../../hooks/useOutsideClick';
 import { useEscape } from '../../../../hooks/useEscape';
 
-type StateProps<Item, Key> = {
-  items: Item[];
-  initialItem: Key;
-}
-
-type DispatchProps<Item, Key> = {
-  keyExtractor: (item: Item) => Key;
-  textExtractor: (item: Item) => string;
-  renderItem: (item: Item, ref?: React.RefObject<HTMLElement>) => React.ReactNode;
-  onSelect: (item: Key) => void;
-}
-
-type Index = React.Key | null | undefined;
-
-type Props<Item, Key> = StateProps<Item, Key> & DispatchProps<Item, Key> & Pick<React.HTMLAttributes<HTMLSelectElement>, 'className' | 'id' | 'aria-labelledby'>;
-
-const Select = <Item, Key extends Index>({ items, initialItem, keyExtractor, textExtractor, onSelect, renderItem, ...otherProps }: Props<Item, Key>) => {
+const Select = <Item, Key extends SelectIndex>({ items, initialItem, keyExtractor, textExtractor, onSelect, renderItem, ...otherProps }: SelectProps<Item, Key>) => {
   const optionsId = useId();
 
   const selectRef = useRef<HTMLDivElement>(null);
@@ -63,7 +50,7 @@ const Select = <Item, Key extends Index>({ items, initialItem, keyExtractor, tex
     return items[prevIndex] || items[items.length - 1];
   };
 
-  const selectNextItem = () => {  
+  const selectNextItem = () => {
     selectedItemChangeHandler(getNextItem(selectedItem));
   };
 
@@ -74,7 +61,7 @@ const Select = <Item, Key extends Index>({ items, initialItem, keyExtractor, tex
   const preselectNextItem = () => {
     const nextItem = preselectedItem !== undefined ? getNextItem(preselectedItem) : items[0];
     setPreselectedItem(keyExtractor(nextItem));
-  };  
+  };
 
   const preselectPrevItem = () => {
     const previousItem = preselectedItem !== undefined ? getPrevItem(preselectedItem) : items[0];
@@ -83,10 +70,6 @@ const Select = <Item, Key extends Index>({ items, initialItem, keyExtractor, tex
 
   const getSelectedItem = () => {
     return items.find((i) => keyExtractor(i) === selectedItem) as Item;
-  };
-
-  const getSelectedTitle = () => {
-    return textExtractor(getSelectedItem());
   };
 
   const toggleMenuHandler = () => {
@@ -103,16 +86,7 @@ const Select = <Item, Key extends Index>({ items, initialItem, keyExtractor, tex
     onSelect(newSelectedId);
   };
 
-  const keydownDocumentHandler = (e: KeyboardEvent) => {
-    if (e.key === 'Escape') {
-      setMenuOpen(false);
-    }
-  };
-
   const keyDownSelectHandler = (e: React.KeyboardEvent) => {
-    if (!items?.length) {
-      return;
-    }
     if (e.key === 'Escape') {
       setMenuOpen(false);
       return;
@@ -122,27 +96,16 @@ const Select = <Item, Key extends Index>({ items, initialItem, keyExtractor, tex
       return;
     }
     if (e.key === 'ArrowDown') {
-      if (!menuOpen) {
-        selectNextItem();
-        return;
-      }
-      preselectNextItem();
+      selectNextItem();
       return;
     }
     if (e.key === 'ArrowUp') {
-      if (!menuOpen) {
-        selectPrevItem();
-        return;
-      }
-      preselectPrevItem();
+      selectPrevItem();
       return;
     }
   };
 
   const keyDownOptionHandler = (e: React.KeyboardEvent, item: Item) => {
-    if (!items?.length) {
-      return;
-    }
     if (e.key === 'Escape') {
       setMenuOpen(false);
       return;
@@ -187,13 +150,6 @@ const Select = <Item, Key extends Index>({ items, initialItem, keyExtractor, tex
   };
 
   useEffect(() => {
-    document.addEventListener('keydown', keydownDocumentHandler, true);
-    return () => {
-      document.removeEventListener('keydown', keydownDocumentHandler, true);
-    };
-  });
-
-  useEffect(() => {
     setSelectedItem(initialItem);
   }, [initialItem]);
 
@@ -209,6 +165,11 @@ const Select = <Item, Key extends Index>({ items, initialItem, keyExtractor, tex
     optionsRef.current[0]?.focus();
   }, [menuOpen]);
 
+  const iconStyle = {
+    transform: menuOpen ? 'rotate(-180deg)' : '', 
+    transition: 'transform 170ms ease'
+  };
+
   return (
     <div ref={selectRef}
       id={otherProps.id}
@@ -220,7 +181,7 @@ const Select = <Item, Key extends Index>({ items, initialItem, keyExtractor, tex
     >
       <div
         role="button"
-        title={getSelectedTitle()}
+        title={textExtractor(getSelectedItem())}
         data-testid="select__selected"
         tabIndex={0}
         onClick={toggleMenuHandler}
@@ -228,7 +189,7 @@ const Select = <Item, Key extends Index>({ items, initialItem, keyExtractor, tex
         className={`select select__selected ${styles.select__selected}`}
       >
         {renderSelectedItemHandler()}
-        <Icon icon='material-symbols:keyboard-arrow-down-rounded' rotate={menuOpen ? 2 : 0} />
+        <Icon icon='material-symbols:keyboard-arrow-down-rounded' style={iconStyle} />
       </div>
       {
         items && items.length > 0 && menuOpen && (
@@ -237,7 +198,7 @@ const Select = <Item, Key extends Index>({ items, initialItem, keyExtractor, tex
               items.map((item, index) => (
                 <div role="option"
                   key={keyExtractor(item)}
-                  ref={(ref) => optionsRef.current[index] = ref} 
+                  ref={(ref) => optionsRef.current[index] = ref}
                   tabIndex={0}
                   aria-selected={keyExtractor(item) === keyExtractor(getSelectedItem())}
                   className={`option ${styles.select__option} ${keyExtractor(item) === preselectedItem ? 'preselected' : ''}`}

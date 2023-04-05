@@ -47,7 +47,7 @@ const TodoListCategory = ({ category, displayCount = true, itemCount, initialSho
       toggleShowListHandler();
     }
 
-    if (e.key === 'Escape' || e.key === 'Esc' || e.key === 'ArrowUp') {
+    if (e.key === 'Escape' || e.key === 'ArrowUp') {
       setShowList(false);
     }
 

@@ -50,16 +50,12 @@ const UserMenu: React.FC = () => {
       toggleMenuHandler();
       return;
     }
-    if (e.key === 'Escape') {
+    if (e.key === 'Escape' || e.key === 'ArrowUp') {
       setMenuOpen(false);
       return;
     }
     if (e.key === 'ArrowDown') {
       setMenuOpen(true);
-      return;
-    }
-    if (e.key === 'ArrowUp') {
-      setMenuOpen(false);
       return;
     }
   };

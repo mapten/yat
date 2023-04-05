@@ -1,13 +1,15 @@
 import React from 'react';
 import { describe, it, vi, beforeEach, afterEach, expect } from 'vitest';
-import { render, cleanup, fireEvent, screen } from '@testing-library/react';
+import { render, cleanup, fireEvent, screen, waitFor } from '@testing-library/react';
 
 // Models
 import { Priority } from '../../../../models/priority.model';
 
+// Constants
+import { NEW_TASK_ID } from '../../../../constants/common.constants';
+
 // Components
 import TodoListItemEdit from '../../../../components/presentational/TodoList/TodoListItem/TodoListItemEdit/TodoListItemEdit';
-
 
 const mockPriorityLevelsValueGetter = vi.fn();
 vi.mock('../../../../constants/priorityLevels.constants', () => ({
@@ -57,12 +59,13 @@ describe('<TodoListItemEdit/>', () => {
   };
 
   afterEach(() => {
+    vi.clearAllMocks();
     cleanup();
   });
 
   it('should trigger onEdit when the edit button is clicked and the name is not empty', () => {
     // arrange
-    const props: Partial<Props> = { taskId: '1', initialTaskName: 'foo', initialTaskPriority: 1, taskDone: false };
+    const props: Partial<Props> = { taskId: '1', initialTaskName: 'foo', initialTaskPriority: 1, taskDone: true };
 
     renderUI(props);
     const buttonSave = screen.getByRole('button', { name: /Save/i }) as HTMLButtonElement;
@@ -85,7 +88,7 @@ describe('<TodoListItemEdit/>', () => {
       id: '1',
       displayName: 'foo modified',
       priority: 0,
-      done: false,
+      done: true,
     });
   });
 
@@ -103,6 +106,32 @@ describe('<TodoListItemEdit/>', () => {
     expect(baseProps.onSave).not.toHaveBeenCalled();
   });
 
+  it ('should trigger onEdit when creating a new task', () => {
+    // arrange
+    renderUI();
+    const buttonSave = screen.getByRole('button', { name: /Save/i }) as HTMLButtonElement;
+
+    const nameInput = screen.getByRole('textbox') as HTMLInputElement;
+    fireEvent.input(nameInput, { target: { value: 'foo created' } });
+
+    fireEvent.click(screen.getByTestId('select__selected'));
+    const option = screen.getByRole('option', { name: 'First' });
+
+    // act
+    fireEvent.click(option);
+
+    // act
+    fireEvent.click(buttonSave);
+
+    // assert
+    waitFor(() => expect(baseProps.onSave).toHaveBeenCalledWith({
+      id: NEW_TASK_ID,
+      displayName: 'foo created',
+      priority: 0,
+      done: false,
+    }));
+  });
+
   it('should trigger onCancelEdit when the edit button is clicked', () => {
     // arrange
     const props: Partial<Props> = { taskDone: false };
@@ -115,5 +144,33 @@ describe('<TodoListItemEdit/>', () => {
 
     // assert
     expect(baseProps.onCancelEdit).toHaveBeenCalledTimes(1);
+  });
+
+  describe('keyboard events', () => {
+    it('should trigger onCancelEdit when Escape is pressed', () => {
+      // arrange
+      const props: Partial<Props> = { taskDone: false };
+
+      renderUI(props);
+
+      // act
+      fireEvent.keyDown(screen.getByRole('textbox'), { key: 'Escape', code: 'Escape' });
+
+      // assert
+      expect(baseProps.onCancelEdit).toHaveBeenCalledTimes(1);
+    });
+
+    it('should trigger onSave when Enter is pressed', () => {
+      // arrange
+      const props: Partial<Props> = { taskDone: false };
+
+      renderUI(props);
+
+      // act
+      fireEvent.keyDown(screen.getByRole('textbox'), { key: 'Enter', code: 'Enter' });
+
+      // assert
+      expect(baseProps.onSave).toHaveBeenCalledTimes(1);
+    });
   });
 });
