@@ -7,9 +7,9 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "build": "if-env TYPE=server && (cd server && pnpm install) || (cd client && pnpm install)",
-    "server": "cd server && pnpm start",
-    "client": "cd client && pnpm start",
+    "build": "if-env TYPE=server && (cd server && npm install) || (cd client && npm install)",
+    "server": "cd server && npm start",
+    "client": "cd client && npm start",
     "runall": "npm-run-all --parallel server client"
   },
   "devDependencies": {
