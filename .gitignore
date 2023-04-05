@@ -3,7 +3,4 @@
 **/build
 **/dist
 
-client/.vscode
-server/.vscode
-
 .env

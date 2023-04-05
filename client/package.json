@@ -4,13 +4,12 @@
     "name": "Marcos Prieto",
     "email": "marcosprietosi@gmail.com"
   },
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
   "dependencies": {
     "@iconify/react": "^4.1.0",
     "@testing-library/react": "^14.0.0",
     "@testing-library/user-event": "^14.4.3",
-    "@vitejs/plugin-basic-ssl": "^1.0.1",
     "axios": "^1.3.4",
     "axios-retry": "^3.4.0",
     "react": "^18.2.0",
