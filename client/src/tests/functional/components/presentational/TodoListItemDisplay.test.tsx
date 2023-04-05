@@ -15,7 +15,7 @@ describe(`<TodoListItemDisplay/>`, () => {
       taskId: '1',
       taskName: 'Paint the wall',
       taskPriorityColor: 'red',
-      taskDone: false,
+      initialTaskDone: false,
       onTaskChangeStatus: vi.fn(),
       onSetEdit: vi.fn(),
       onDelete: vi.fn()
@@ -32,7 +32,7 @@ describe(`<TodoListItemDisplay/>`, () => {
 
   it(`should trigger onTaskChangeStatus when the checkbox changes`, () => {
     // arrange
-    const props: Partial<Props> = { taskDone: false };
+    const props: Partial<Props> = { initialTaskDone: false };
 
     renderUI(props);
     const checkbox = screen.getByRole('checkbox') as HTMLInputElement;

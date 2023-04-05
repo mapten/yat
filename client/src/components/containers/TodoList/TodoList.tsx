@@ -56,7 +56,7 @@ const TodoList: React.FC = () => {
             : <TodoListItemDisplay
               taskId={task.id}
               taskName={task.displayName}
-              taskDone={task.done}
+              initialTaskDone={task.done}
               taskPriorityColor={done ? undefined : priorityColor}
               onTaskChangeStatus={changeTaskStatus}
               onSetEdit={setEditTaskId}
