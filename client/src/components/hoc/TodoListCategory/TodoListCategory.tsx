@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import  { Icon } from '@iconify/react';
 
 // Styles
@@ -23,15 +23,11 @@ type StateCounterProps = {
 type Props = StateProps & (StateNoCounterProps | StateCounterProps);
 
 const TodoListCategory = ({ category, displayCount = true, itemCount, initialShowList = true, children }: Props) => {
-  const [showList, setShowList] = useState<boolean>(true);
+  const [showList, setShowList] = useState<boolean>(initialShowList);
 
   const capitalizeCategory = () => {
     return category.charAt(0).toUpperCase() + category.slice(1);
   };
-
-  useEffect(() => {
-    setShowList(initialShowList);
-  }, [initialShowList]);
 
   const toggleShowListHandler = () => {
     if (itemCount === 0) return;

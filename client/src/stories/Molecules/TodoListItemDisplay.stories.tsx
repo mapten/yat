@@ -9,7 +9,7 @@ import TodoListItemDisplay from '../../components/presentational/TodoList/TodoLi
 export default {
   title: 'Molecules/Todo list item display',
   component: TodoListItemDisplay,
-  decorators: [ ThemeDecorator ]
+  decorators: [ThemeDecorator]
 } as Meta;
 
 type Props = React.ComponentProps<typeof TodoListItemDisplay>;
@@ -21,5 +21,5 @@ TodoListItemDisplayDefault.args = {
   taskId: '1',
   taskName: 'Paint the wall',
   taskPriorityColor: 'red',
-  taskDone: false,
+  initialTaskDone: false,
 };

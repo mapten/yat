@@ -24,7 +24,7 @@ const CheckBoxCrossed: React.FC<Props> = ({initialChecked, text, color, onChange
 
   useEffect(() => {
     setIcon(checked ? iconValue.checked : iconValue.unchecked);
-  }, [checked]);
+  }, [checked, iconValue.checked, iconValue.unchecked]);
 
   const checkedHandler = () => {
     setChecked(!checked);
