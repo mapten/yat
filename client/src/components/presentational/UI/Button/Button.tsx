@@ -28,7 +28,7 @@ type StateIconButtonProps = {
 }
 
 type StateButtonProps = {
-  buttonType?: 'button';
+  buttonType?: 'solid';
   iconName?: string;
 }
 
@@ -43,7 +43,16 @@ type DispatchProps = {
 
 type Props = (StateIconButtonProps | StateButtonProps | StateLinkTypeButtonProps) & CommonProps & DispatchProps;
 
-const Button: React.FC<Props> = ({displayText, buttonStyle, size = 'medium', buttonType = 'button', iconName, tooltip, className, onClick}: Props) => {
+const Button: React.FC<Props> = ({
+  displayText,
+  buttonStyle,
+  size = 'medium',
+  buttonType = 'solid',
+  iconName,
+  tooltip,
+  className,
+  onClick
+}: Props) => {
 
   const getTooltip = () => {
     if (tooltip) {
@@ -55,27 +64,12 @@ const Button: React.FC<Props> = ({displayText, buttonStyle, size = 'medium', but
     return '';
   };
 
-  const getClassNames = () => {
-    let style = '';
-
-    if (buttonType === 'icon') {
-      style += 'button--icon';
-    } else if (buttonType === 'link') {
-      style += 'button--link';
-    } else {
-      style += `button--${buttonStyle}`;
-    }
-
-    style += ` button--${size}`;
-
-    style += ` ${className}`;
-
-    return style;
-  };
-
   return (
-    <button title={getTooltip()} className={getClassNames()} onClick={onClick}>
-      { (buttonType === 'button' || buttonType === 'link') && (
+    <button
+      title={getTooltip()}
+      className={`button button--${buttonType} button--${buttonStyle} button--${size}${className ? ' ' + className : ''}`}
+      onClick={onClick}>
+      { (buttonType === 'solid' || buttonType === 'link') && (
         <span>{displayText}</span>
       )}
       {iconName && <Icon role="img" icon={iconName} />}
