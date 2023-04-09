@@ -16,11 +16,9 @@ export const useStore = () => {
 
   useOnlineStatus(setConnectionMode);
 
-  useEffect(() => {
-    useTaskStore.persist.onFinishHydration(() => {
-      setIsTaskStoreHydrated(true);
-    });
-  }, []);
+  useTaskStore.persist.onFinishHydration(() => {
+    setIsTaskStoreHydrated(true);
+  });
 
   useEffect(() => {
     /**
