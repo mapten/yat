@@ -9,6 +9,7 @@ import { STORE_MODE } from '../typings/common.types';
 
 // Store
 import { useTokenStore } from './token.store';
+import { useConfigurationStore } from './configuration.store';
 
 // Middleware
 import { interceptor } from './middleware/interceptor.middleware';
@@ -83,6 +84,11 @@ export const useAuthStore = create<AuthState>()(
     }
   }))), {
     name: 'auth-storage',
-    storage: createJSONStorage(() => sessionStorage)
+    storage: createJSONStorage(() => sessionStorage),
+    onRehydrateStorage: (state) => {
+      if (!state.user || useTokenStore.getState().getAuthToken() === null) {
+        useConfigurationStore.getState().setStoreMode('offline');
+      }
+    }
   })
 );
