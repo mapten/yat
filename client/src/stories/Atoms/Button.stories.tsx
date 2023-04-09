@@ -23,11 +23,3 @@ ButtonDefault.args = {
   buttonStyle: 'add',
   iconName: 'material-symbols:save',
 };
-
-export const ButtonIcon = Template.bind({});
-ButtonIcon.args = {
-  buttonStyle: 'add',
-  buttonType: 'icon',
-  iconName: 'material-symbols:save',
-  displayText: 'Save',
-};

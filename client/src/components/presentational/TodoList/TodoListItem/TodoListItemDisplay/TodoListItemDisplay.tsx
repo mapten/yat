@@ -42,8 +42,8 @@ const TodoListItemDisplay: React.FC<Props> = ({taskId, taskName, initialTaskDone
     <div data-testid="todoItemDisplay" className={`themeWrapper themeHover task ${styles.itemDisplay}`}>
       <CheckBoxCrossed onChange={checkboxChangeHandler} text={taskName} initialChecked={taskDone} color={taskPriorityColor} />
       <div className={styles.itemDisplay__buttonGroup}>
-        <Button size="big" displayText="Edit" buttonStyle="default" onClick={editTaskHandler} buttonType="icon" iconName="material-symbols:edit" />
-        <Button size="big" displayText="Delete" buttonStyle="default" onClick={deleteTaskHandler} buttonType="icon" iconName="mdi:trash-can-outline" />
+        <Button size="big" displayText="Edit" buttonStyle="disabled" onClick={editTaskHandler} buttonType="icon" iconName="material-symbols:edit" />
+        <Button size="big" displayText="Delete" buttonStyle="disabled" onClick={deleteTaskHandler} buttonType="icon" iconName="mdi:trash-can-outline" />
       </div>
     </div>
   );

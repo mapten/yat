@@ -75,12 +75,12 @@ describe('<Button/>', () => {
     expect(onClick).toHaveBeenCalledTimes(1);
   });
 
-  it('should display the displayText when props.buttonType is button', () => {
+  it('should display the displayText when props.buttonType is solid', () => {
     // arrange, act
     render(
       <Button
         buttonStyle='add'
-        buttonType='button'
+        buttonType='solid'
         displayText='Test'
         size='small'
         onClick={vi.fn()} />
@@ -134,7 +134,7 @@ describe('<Button/>', () => {
     render(
       <Button
         buttonStyle='add'
-        buttonType='button'
+        buttonType='solid'
         iconName='material-symbols:save'
         displayText='foo'
         tooltip='Test'
@@ -153,7 +153,7 @@ describe('<Button/>', () => {
     render(
       <Button
         buttonStyle='add'
-        buttonType='button'
+        buttonType='solid'
         iconName='material-symbols:save'
         displayText='foo'
         size='small'

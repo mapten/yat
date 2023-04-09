@@ -31,7 +31,7 @@
 
   .themeHover {
     &:hover {
-      background-color: lighten($black, 5%);
+      background-color: lighten($black, 3%);
     }
   }
 
@@ -87,7 +87,7 @@
 
   .themeHover {
     &:hover {
-      background-color: lighten($gray-light, 5%);
+      background-color: darken($white, 3%);
     }
   }
 
