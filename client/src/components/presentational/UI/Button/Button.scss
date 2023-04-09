@@ -4,7 +4,6 @@
   background-color: $color;
   border-style: solid;
   border-color: darken($color, 10%);
-  border-radius: 1.5rem;
 
   &:hover, &:focus-visible {
     background-color: darken($color, 10%);
@@ -46,6 +45,7 @@
   font-size: 1rem * $percent;
   padding: 0.4rem * $percent 1rem * $percent;
   gap: 0.5rem * $percent;
+  border-radius: 1.5rem * $percent;
 }
 
 .button {
