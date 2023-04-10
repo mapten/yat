@@ -1,5 +1,5 @@
 declare global {
   interface Window {
-    Cypress: unknown;
+    Cypress?: Cypress.Cypress;
   }
 }

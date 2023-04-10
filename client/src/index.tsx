@@ -6,11 +6,17 @@ import './index.scss';
 
 const FAKE_API = import.meta.env.VITE_APP_FAKE_API;
 
+// Services
+import { windowReferenceService } from './services/system/windowsReference.service';
+
 // Components
 import App from './App';
 import ThemeProvider from './components/hoc/ThemeProvider/ThemeProvider';
 
 const prepare = async (): Promise<void> => {
+  if (windowReferenceService().Cypress) {
+    return;
+  }
   if (import.meta.env.DEV && FAKE_API === 'true') {
     const { worker } = await import('./mocks/browser');
     worker.start();

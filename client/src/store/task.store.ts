@@ -2,7 +2,6 @@ import { create } from 'zustand';
 import { createJSONStorage, devtools, persist } from 'zustand/middleware';
 import { toast } from 'react-hot-toast';
 import { v4 as uuidv4 } from 'uuid';
-import merge from 'ts-deepmerge';
 
 // Models
 import { Task } from '../models/task.model';

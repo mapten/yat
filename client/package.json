@@ -28,7 +28,7 @@
     "test": "vitest",
     "coverage": "vitest run --coverage",
     "cy:open": "cross-env CYPRESS_REMOTE_DEBUGGING_PORT=9222 cypress open",
-    "cy:e2e:run": "cypress run --config defaultCommandTimeout=30000 --spec 'cypress/integration/**/*'",
+    "cy:e2e:run": "cypress run --config defaultCommandTimeout=30000 --spec 'cypress/e2e/**/*'",
     "e2e:open": "npm-run-all --parallel start cy:open",
     "e2e:run": "npm-run-all --parallel start cy:e2e:run",
     "storybook": "start-storybook -p 6006 -s public",
