@@ -29,7 +29,7 @@ Yat is a complete todolist application React.js + Node.js (`client` and `server`
 
 - Specify your MongoDB connection in the backend (.env file).
 - Run this command:
-  `npm run runall`
+  `pnpm run runall`
 
   This command runs frontend and backend at the same time (A frontend reload might be needed if no data is displayed).
 
