@@ -94,7 +94,7 @@ In the `server` directory, you can run:
 
 #### `start`
 
-To start the Node.js, running (by default) in [http://localhost:3001](http://localhost:3001).
+To start Node.js, running (by default) in [http://localhost:3001](http://localhost:3001).
 
 ## Architecture
 
