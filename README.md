@@ -1,29 +1,51 @@
 # YAT (Yes, Another Todolist)
 
-Yat is a complete todolist application React.js + Node.js (`client` and `server` folders).
+Yat is a complete, fully accessible, todolist application, done with React.js + Node.js (`client` and `server` folders).
 
 ## Technologies
 
 ### Frontend
 
-- React.js.
-- Typescript.
-- Vite.
-- Vitest.
-- Cypress.
-- Storybook.
-- SASS.
-- Zustand.
-- ESLint.
-- msw.
-- JsDoc.
+- React.js
+- Typescript
+- Vite
+- Vitest
+- Cypress
+- Storybook
+- SASS
+- Zustand
+- ESLint
+- msw
+- JsDoc
 
 ### Backend
 
-- Node.js.
-- Typescript.
-- Express.
-- MongoDB.
+- Node.js
+- Typescript
+- Express
+- MongoDB
+
+### Looking for code examples?
+
+Here you are:
+
+- React
+  - [Custom hook (with useSyncExternalStore)](https://github.com/mapten/yat/blob/main/client/src/hooks/useDimensions.ts)
+  - [Hoc](https://github.com/mapten/yat/blob/main/client/src/components/hoc/TodoListCategory/TodoListCategory.tsx)
+  - [Generic component](https://github.com/mapten/yat/blob/9bf5bcb78768953c4f9b579ac7267c6b83d215dc/client/src/components/presentational/UI/Select/Select.tsx)
+  - [Context provider](https://github.com/mapten/yat/blob/main/client/src/components/hoc/ThemeProvider/ThemeProvider.tsx) and [use it](https://github.com/mapten/yat/blob/9bf5bcb78768953c4f9b579ac7267c6b83d215dc/client/src/components/presentational/ThemeToggleButton/ThemeToggleButton.tsx#L10)
+   - useImperativeHandle: [here](https://github.com/mapten/yat/blob/9bf5bcb78768953c4f9b579ac7267c6b83d215dc/client/src/components/presentational/TodoList/TodoListItem/TodoListItemEdit/TodoListItemEdit.tsx#L55) and [here](https://github.com/mapten/yat/blob/9bf5bcb78768953c4f9b579ac7267c6b83d215dc/client/src/components/presentational/TodoList/TodoListCreate/TodoListCreate.tsx#L23)
+- CSS
+  - Passing variables to CSS: [here](https://github.com/mapten/yat/blob/9bf5bcb78768953c4f9b579ac7267c6b83d215dc/client/src/components/presentational/UI/Spinner/Spinner.tsx#L25) and [here](https://github.com/mapten/yat/blob/9bf5bcb78768953c4f9b579ac7267c6b83d215dc/client/src/components/presentational/UI/Spinner/Spinner.module.scss#L11)
+- msw: [here](https://github.com/mapten/yat/blob/9bf5bcb78768953c4f9b579ac7267c6b83d215dc/client/src/mocks/handlers.ts) and [here](https://github.com/mapten/yat/blob/9bf5bcb78768953c4f9b579ac7267c6b83d215dc/client/src/index.tsx#L21)
+- [Zustand](https://github.com/mapten/yat/tree/main/client/src/store)
+  - [Store sample](https://github.com/mapten/yat/blob/main/client/src/store/token.store.ts)
+  - [Custom storage](https://github.com/mapten/yat/blob/main/client/src/store/customStorage/cookies.storage.ts)
+  - [Middleware](https://github.com/mapten/yat/blob/main/client/src/store/middleware/interceptor.middleware.ts)
+  - [Side effects](https://github.com/mapten/yat/blob/main/client/src/store/sideEffects/configuration.store.sideeffects.ts)
+- Axios
+  - [Configuration](https://github.com/mapten/yat/blob/9bf5bcb78768953c4f9b579ac7267c6b83d215dc/client/src/services/axios.service.ts)
+  - [CRUD](https://github.com/mapten/yat/blob/9bf5bcb78768953c4f9b579ac7267c6b83d215dc/client/src/services/tasks.service.ts)
 
 ## How to run it
 
