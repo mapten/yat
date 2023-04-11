@@ -44,7 +44,6 @@ export const updateTask = async (req: Request, res: Response) => {
     return res.status(422).send('Another task already exists with the same name');
   }
 
-  // remove MongoDB _id from the object, if not it would throw an error
   const taskToUpdate = (({ _id, syncStatus, deleted, ...o }) => o)(taskFromRequest);
 
   const updateResult = await taskQueries.updateTask(taskToUpdate);
@@ -90,7 +89,7 @@ export const syncTasks = async (req: Request, res: Response) => {
         if (taskInRequest.deleted) {
           await taskQueries.deleteTask(taskInRequest.id);
         } else {
-          await taskQueries.updateTask({ ...tasksInDatabase, ...taskInRequest });
+          await taskQueries.updateTask({ ...taskInDatabase, ...taskInRequest });
         }
       } else {
         if (!taskInRequest.deleted) {

@@ -27,6 +27,7 @@ export const login = async (req: Request, res: Response) => {
     return res.status(401).send('Invalid credentials');
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const responseUser = (({ _id, ...o }) => o)(loggedInUser);
 
   return res.status(200).send({ ...responseUser, token: createAuthToken(loggedInUser) });
