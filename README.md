@@ -38,14 +38,48 @@ Here you are:
 - CSS
   - Passing variables to CSS: [here](https://github.com/mapten/yat/blob/9bf5bcb78768953c4f9b579ac7267c6b83d215dc/client/src/components/presentational/UI/Spinner/Spinner.tsx#L25) and [here](https://github.com/mapten/yat/blob/9bf5bcb78768953c4f9b579ac7267c6b83d215dc/client/src/components/presentational/UI/Spinner/Spinner.module.scss#L11)
 - msw: [here](https://github.com/mapten/yat/blob/9bf5bcb78768953c4f9b579ac7267c6b83d215dc/client/src/mocks/handlers.ts) and [here](https://github.com/mapten/yat/blob/9bf5bcb78768953c4f9b579ac7267c6b83d215dc/client/src/index.tsx#L21)
-- [Zustand](https://github.com/mapten/yat/tree/main/client/src/store)
+- Zustand
   - [Store sample](https://github.com/mapten/yat/blob/main/client/src/store/token.store.ts)
   - [Custom storage](https://github.com/mapten/yat/blob/main/client/src/store/customStorage/cookies.storage.ts)
   - [Middleware](https://github.com/mapten/yat/blob/main/client/src/store/middleware/interceptor.middleware.ts)
   - [Side effects](https://github.com/mapten/yat/blob/main/client/src/store/sideEffects/configuration.store.sideeffects.ts)
+- Storybook
+  - [Decorator](https://github.com/mapten/yat/blob/c3c30a10cd60a7fb39c2a2373e814391b3e70ded/server/src/tests/controllers/task.controller.test.ts)
+  - [Story](https://github.com/mapten/yat/blob/c3c30a10cd60a7fb39c2a2373e814391b3e70ded/client/src/stories/Atoms/Button.stories.tsx)
 - Axios
   - [Configuration](https://github.com/mapten/yat/blob/9bf5bcb78768953c4f9b579ac7267c6b83d215dc/client/src/services/axios.service.ts)
   - [CRUD](https://github.com/mapten/yat/blob/9bf5bcb78768953c4f9b579ac7267c6b83d215dc/client/src/services/tasks.service.ts)
+- Express
+  - [Configuration](https://github.com/mapten/yat/blob/c3c30a10cd60a7fb39c2a2373e814391b3e70ded/server/src/main.ts)
+  - [Routes](https://github.com/mapten/yat/blob/c3c30a10cd60a7fb39c2a2373e814391b3e70ded/server/src/routes/task.routes.ts)
+  - [Controller](https://github.com/mapten/yat/blob/c3c30a10cd60a7fb39c2a2373e814391b3e70ded/server/src/controllers/task.controller.ts)
+- Auth token
+  - [Create](https://github.com/mapten/yat/blob/c3c30a10cd60a7fb39c2a2373e814391b3e70ded/server/src/services/token.service.ts#L10)
+  - [Verification](https://github.com/mapten/yat/blob/c3c30a10cd60a7fb39c2a2373e814391b3e70ded/server/src/controllers/token.controller.ts#L10)
+  - [Apply to paths](https://github.com/mapten/yat/blob/c3c30a10cd60a7fb39c2a2373e814391b3e70ded/server/src/main.ts#L61)
+  - [With Axios](https://github.com/mapten/yat/blob/c3c30a10cd60a7fb39c2a2373e814391b3e70ded/client/src/services/axios.service.ts#L16)
+- CSRF token
+  - Create: [here](https://github.com/mapten/yat/blob/c3c30a10cd60a7fb39c2a2373e814391b3e70ded/server/src/services/token.service.ts#L19) and [here](https://github.com/mapten/yat/blob/c3c30a10cd60a7fb39c2a2373e814391b3e70ded/server/src/controllers/token.controller.ts#L39)
+  - [Verification](https://github.com/mapten/yat/blob/c3c30a10cd60a7fb39c2a2373e814391b3e70ded/server/src/controllers/token.controller.ts#L26)
+  - [Apply to paths](https://github.com/mapten/yat/blob/c3c30a10cd60a7fb39c2a2373e814391b3e70ded/server/src/main.ts#L61)
+  - [With Axios](https://github.com/mapten/yat/blob/c3c30a10cd60a7fb39c2a2373e814391b3e70ded/client/src/services/axios.service.ts#L23)
+  - Retrieve token: [here](https://github.com/mapten/yat/blob/c3c30a10cd60a7fb39c2a2373e814391b3e70ded/client/src/services/token.service.ts) and [here](https://github.com/mapten/yat/blob/c3c30a10cd60a7fb39c2a2373e814391b3e70ded/client/src/store/token.store.ts#L40)
+- Mongo DB
+  - [Connector](https://github.com/mapten/yat/blob/c3c30a10cd60a7fb39c2a2373e814391b3e70ded/server/src/dal/connector.ts)
+  - [Query (CRUD)](https://github.com/mapten/yat/blob/c3c30a10cd60a7fb39c2a2373e814391b3e70ded/server/src/dal/queries/auth.query.ts)
+  - Encryption:
+    - Configuration: [here](https://github.com/mapten/yat/blob/c3c30a10cd60a7fb39c2a2373e814391b3e70ded/server/src/dal/connector.ts#L17) and [here](https://github.com/mapten/yat/blob/c3c30a10cd60a7fb39c2a2373e814391b3e70ded/server/src/dal/connector.ts#L36)
+    - [Create data key](https://github.com/mapten/yat/blob/c3c30a10cd60a7fb39c2a2373e814391b3e70ded/server/src/dal/queries/keyvault.query.ts#L28)
+    - [Encrypt helper](https://github.com/mapten/yat/blob/c3c30a10cd60a7fb39c2a2373e814391b3e70ded/server/src/services/mongodb.encrypt.ts)
+    - [Encrypt data](https://github.com/mapten/yat/blob/c3c30a10cd60a7fb39c2a2373e814391b3e70ded/server/src/dal/queries/task.query.ts#L37)
+- Testing
+  - [E2E with Cypress](https://github.com/mapten/yat/blob/c3c30a10cd60a7fb39c2a2373e814391b3e70ded/client/cypress/e2e/todolist.cy.ts)
+  - [Frontend functional testd with React Testing Library](https://github.com/mapten/yat/blob/c3c30a10cd60a7fb39c2a2373e814391b3e70ded/client/src/tests/functional/components/presentational/TodoListCreate.test.tsx)
+  - [Frontend unit test with Vitest](https://github.com/mapten/yat/blob/c3c30a10cd60a7fb39c2a2373e814391b3e70ded/client/src/tests/services/tasks.service.test.ts)
+  - [Backend integration test](https://github.com/mapten/yat/blob/c3c30a10cd60a7fb39c2a2373e814391b3e70ded/server/src/tests/integration/integration.test.ts)
+  - [Backend unit test component](https://github.com/mapten/yat/blob/c3c30a10cd60a7fb39c2a2373e814391b3e70ded/server/src/tests/controllers/task.controller.test.ts)
+
+
 
 ## How to run it
 
