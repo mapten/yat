@@ -85,7 +85,7 @@ Here you are:
 
 - Specify your MongoDB connection in the backend (.env file).
 - Run this command:
-  `pnpm run runall`
+  `npm run runall`
 
   This command runs frontend and backend at the same time (A frontend reload might be needed if no data is displayed).
 
