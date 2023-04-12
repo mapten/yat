@@ -20,6 +20,13 @@ export const fetchUserTasks = async (req: Request, res: Response) => {
 export const createTask = async (req: Request, res: Response) => {
   const taskFromRequest: Task = req.body;
 
+  if (!taskFromRequest.displayName) {
+    return res.status(400).send('Task name is required');
+  }
+  if (taskFromRequest.priority == null) {
+    return res.status(400).send('Task priority is required');
+  }
+
   const existingTask = await taskQueries.findTaskByNameAndUserId(taskFromRequest.displayName, taskFromRequest.userId);
   if (existingTask) {
     return res.status(422).send('Task already exists');
@@ -38,6 +45,13 @@ export const createTask = async (req: Request, res: Response) => {
 
 export const updateTask = async (req: Request, res: Response) => {
   const taskFromRequest: Task = req.body;
+
+  if (!taskFromRequest.displayName) {
+    return res.status(400).send('Task name is required');
+  }
+  if (taskFromRequest.priority == null) {
+    return res.status(400).send('Task priority is required');
+  }
 
   const existingAnotherTask = await taskQueries.findAnotherTaskByNameAndUserId(taskFromRequest.displayName, taskFromRequest.id, taskFromRequest.userId);
   if (existingAnotherTask !== null) {

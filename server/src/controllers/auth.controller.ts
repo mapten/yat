@@ -15,6 +15,13 @@ import { createAuthToken } from '../services/token.service';
 export const login = async (req: Request, res: Response) => {
   const { email, password } = req.body;
 
+  if (!email) {
+    return res.status(400).send('Email is required');
+  }
+  if (!password) {
+    return res.status(400).send('Password is required');
+  }
+
   const loggedInUser = await authQueries.getUserByEmail(email);
 
   if (!loggedInUser) {
@@ -35,6 +42,16 @@ export const login = async (req: Request, res: Response) => {
 
 export const signIn = async (req: Request, res: Response) => {
   const { email, password, name } = req.body;
+
+  if (!email) {
+    return res.status(400).send('Email is required');
+  }
+  if (!password) {
+    return res.status(400).send('Password is required');
+  }
+  if (!name) {
+    return res.status(400).send('Name is required');
+  }
 
   const hashedPassword = bcrypt.hashSync(password, 12);
 
