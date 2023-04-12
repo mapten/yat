@@ -45,6 +45,30 @@ describe('auth controller', () => {
       expect(mockSend).toHaveBeenCalledWith(expect.objectContaining({ token: 'newToken' }));
     });
 
+    it('should return a 400 when the email is empty', async () => {
+      // arrange
+      const req = { body: { email: '', password: 'test' } } as unknown as Request;
+
+      // act
+      await authController.login(req, res);
+
+      // assert
+      expect(mockStatus).toHaveBeenCalledWith(400);
+      expect(mockSend).toHaveBeenCalledWith('Email is required');
+    });
+
+    it('should return a 400 when the password is empty', async () => {
+      // arrange
+      const req = { body: { email: 'test@test.com', password: '' } } as unknown as Request;
+
+      // act
+      await authController.login(req, res);
+
+      // assert
+      expect(mockStatus).toHaveBeenCalledWith(400);
+      expect(mockSend).toHaveBeenCalledWith('Password is required');
+    });
+
     it('should return a 401 when the user does not exist in the database', async () => {
       vi.spyOn(authQueries, 'getUserByEmail').mockResolvedValue(null);
       const req = { body: { email: 'test@test.com', password: 'test' } } as unknown as Request;
@@ -96,6 +120,42 @@ describe('auth controller', () => {
       expect(mockStatus).toHaveBeenCalledWith(201);
       expect(mockSend).toHaveBeenCalledWith(expect.not.objectContaining({ _id: '1' }));
       expect(mockSend).toHaveBeenCalledWith(expect.objectContaining({ token: 'newToken' }));
+    });
+
+    it('should return a 400 when the email is empty', async () => {
+      // arrange
+      const req = { body: { email: '', password: 'test', name: 'Test' } } as unknown as Request;
+
+      // act
+      await authController.signIn(req, res);
+
+      // assert
+      expect(mockStatus).toHaveBeenCalledWith(400);
+      expect(mockSend).toHaveBeenCalledWith('Email is required');
+    });
+
+    it('should return a 400 when the password is empty', async () => {
+      // arrange
+      const req = { body: { email: 'test@test.com', password: undefined, name: 'Test' } } as unknown as Request;
+
+      // act
+      await authController.signIn(req, res);
+
+      // assert
+      expect(mockStatus).toHaveBeenCalledWith(400);
+      expect(mockSend).toHaveBeenCalledWith('Password is required');
+    });
+
+    it('should return a 400 when the name is empty', async () => {
+      // arrange
+      const req = { body: { email: 'test@test.com', password: '11111111', name: null } } as unknown as Request;
+
+      // act
+      await authController.signIn(req, res);
+
+      // assert
+      expect(mockStatus).toHaveBeenCalledWith(400);
+      expect(mockSend).toHaveBeenCalledWith('Name is required');
     });
 
     it('should return a 409 when the user exists in the database', async () => {

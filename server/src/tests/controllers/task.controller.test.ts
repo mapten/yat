@@ -57,6 +57,38 @@ describe('task controller', () => {
       expect(mockSend).toHaveBeenCalledWith({id: '1', displayName: 'task 1', userId: '1', priority: 1, done: false});
     });
 
+    it('should return a 400 when displayName is empty', async () => {
+      // arrange
+      const req = {
+        body: {
+          _id: '1', syncStatus: 'unsync', id: '1', displayName: null, userId: '1', priority: 1, done: false
+        } as unknown as Task
+      } as unknown as Request;
+
+      // act
+      await createTask(req, res);
+
+      // assert
+      expect(mockStatus).toHaveBeenCalledWith(400);
+      expect(mockSend).toHaveBeenCalledWith('Task name is required');
+    });
+
+    it('should return a 400 when priority is empty', async () => {
+      // arrange
+      const req = {
+        body: {
+          _id: '1', syncStatus: 'unsync', id: '1', displayName: 'test', userId: '1', priority: null, done: false
+        } as unknown as Task
+      } as unknown as Request;
+
+      // act
+      await createTask(req, res);
+
+      // assert
+      expect(mockStatus).toHaveBeenCalledWith(400);
+      expect(mockSend).toHaveBeenCalledWith('Task priority is required');
+    });
+
     it('should return a 422 status code when the task name already exists in the database', async () => {
       // arrange
       vi.spyOn(taskQueries, 'findTaskByNameAndUserId').mockResolvedValue({ _id: '2', id: '2', displayName: 'task 1', userId: '2', priority: 3, done: true });
@@ -105,6 +137,38 @@ describe('task controller', () => {
       expect(taskQueries.findAnotherTaskByNameAndUserId).toHaveBeenCalledWith('task 1', '1', '1');
       expect(taskQueries.updateTask).toHaveBeenCalled();
       expect(mockSend).toHaveBeenCalledWith({id: '1', displayName: 'task 1', userId: '1', priority: 1, done: false});
+    });
+
+    it('should return a 400 when displayName is empty', async () => {
+      // arrange
+      const req = {
+        body: {
+          _id: '1', syncStatus: 'unsync', id: '1', displayName: null, userId: '1', priority: 1, done: false
+        } as unknown as Task
+      } as unknown as Request;
+
+      // act
+      await updateTask(req, res);
+
+      // assert
+      expect(mockStatus).toHaveBeenCalledWith(400);
+      expect(mockSend).toHaveBeenCalledWith('Task name is required');
+    });
+
+    it('should return a 400 when priority is empty', async () => {
+      // arrange
+      const req = {
+        body: {
+          _id: '1', syncStatus: 'unsync', id: '1', displayName: 'test', userId: '1', priority: null, done: false
+        } as unknown as Task
+      } as unknown as Request;
+
+      // act
+      await updateTask(req, res);
+
+      // assert
+      expect(mockStatus).toHaveBeenCalledWith(400);
+      expect(mockSend).toHaveBeenCalledWith('Task priority is required');
     });
 
     it('should return a 422 status code when there is another task with the same name in the database', async () => {
