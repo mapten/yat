@@ -74,10 +74,10 @@ Here you are:
     - [Encrypt data](https://github.com/mapten/yat/blob/c3c30a10cd60a7fb39c2a2373e814391b3e70ded/server/src/dal/queries/task.query.ts#L37)
 - Testing
   - [E2E with Cypress](https://github.com/mapten/yat/blob/c3c30a10cd60a7fb39c2a2373e814391b3e70ded/client/cypress/e2e/todolist.cy.ts)
-  - [Frontend functional testd with React Testing Library](https://github.com/mapten/yat/blob/c3c30a10cd60a7fb39c2a2373e814391b3e70ded/client/src/tests/functional/components/presentational/TodoListCreate.test.tsx)
+  - [Frontend functional test with React Testing Library](https://github.com/mapten/yat/blob/c3c30a10cd60a7fb39c2a2373e814391b3e70ded/client/src/tests/functional/components/presentational/TodoListCreate.test.tsx)
   - [Frontend unit test with Vitest](https://github.com/mapten/yat/blob/c3c30a10cd60a7fb39c2a2373e814391b3e70ded/client/src/tests/services/tasks.service.test.ts)
   - [Backend integration test](https://github.com/mapten/yat/blob/c3c30a10cd60a7fb39c2a2373e814391b3e70ded/server/src/tests/integration/integration.test.ts)
-  - [Backend unit test component](https://github.com/mapten/yat/blob/c3c30a10cd60a7fb39c2a2373e814391b3e70ded/server/src/tests/controllers/task.controller.test.ts)
+  - [Backend unit test](https://github.com/mapten/yat/blob/c3c30a10cd60a7fb39c2a2373e814391b3e70ded/server/src/tests/controllers/task.controller.test.ts)
 
 
 
@@ -95,7 +95,7 @@ Here you are:
 
 In the `client` directory, you can run:
 
-#### `pnpm start`
+#### `npm start`
 
 Runs the app in the development mode, using `Vite`.
 
@@ -106,41 +106,41 @@ You will also see any lint errors in the console.
 
 NOTE: it is not needed to run a service to test the application, because internally, it uses a local fake API (it is configured to run in development mode)
 
-#### `pnpm run test`
+#### `npm run test`
 
 Launches the test runner. Uses `Vitest`.
 
-#### `pnpm run coverage`
+#### `npm run coverage`
 
 Launches the test runner, displays the test coverage and generates some extra information in `coverage` folder.
 
-#### `pnpm run build`
+#### `npm run build`
 
 Builds the app for production to the `build` folder.
 
 It correctly bundles React in production mode and optimizes the build for the best performance.
 
-#### `pnpm run cy:open`
+#### `npm run cy:open`
 
 Opens the Cypress interface. Also enables port 9222 for debugging.
 
-#### `pnpm run cy:e2e:run`
+#### `npm run cy:e2e:run`
 
 Runs the Cypress E2E tests in the console mode (no visual interface).
 
-#### `pnpm run e2e:open`
+#### `npm run e2e:open`
 
 Runs the application in debug mode and opens the Cypress interface.
 
-#### `pnpm run e2e:run`
+#### `npm run e2e:run`
 
 Runs the application in debug mode and runs the Cypress E2E tests.
 
-#### `pnpm run storybook`
+#### `npm run storybook`
 
 Opens Storybook page.
 
-#### `pnpm run lint`
+#### `npm run lint`
 
 Lints the code, both with eslint and stylelint.
 
@@ -148,7 +148,7 @@ Lints the code, both with eslint and stylelint.
 
 In the `server` directory, you can run:
 
-#### `start`
+#### `npm run start`
 
 To start Node.js, running (by default) in [http://localhost:3001](http://localhost:3001).
 
@@ -210,7 +210,7 @@ Zustand is used as the store manager. Most of Yat's business logic is in Zustand
 
 - [typescript](https://www.typescriptlang.org/): typed superset of Javascript that compiles to plain Javascript.
 
-##### unit and functional tests
+#### unit and functional tests
 
 - [vitest](https://vitest.dev/): testing tool.
 
