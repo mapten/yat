@@ -32,7 +32,14 @@ export const createTask = async (req: Request, res: Response) => {
     return res.status(422).send('Task already exists');
   }
 
-  const taskToCreate = (({ _id, syncStatus, deleted, ...o }) => o)(taskFromRequest);
+  // Specify the fields to be inserted to avoid inserting unwanted fields
+  const taskToCreate: Task = {
+    id: taskFromRequest.id,
+    userId: taskFromRequest.userId,
+    displayName: taskFromRequest.displayName,
+    priority: taskFromRequest.priority,
+    done: taskFromRequest.done,
+  };
 
   const inserResult = await taskQueries.createTask(taskToCreate);
 
@@ -58,7 +65,14 @@ export const updateTask = async (req: Request, res: Response) => {
     return res.status(422).send('Another task already exists with the same name');
   }
 
-  const taskToUpdate = (({ _id, syncStatus, deleted, ...o }) => o)(taskFromRequest);
+  // Specify the fields to be updated to avoid inserting unwanted fields
+  const taskToUpdate: Task = {
+    id: taskFromRequest.id,
+    userId: taskFromRequest.userId,
+    displayName: taskFromRequest.displayName,
+    priority: taskFromRequest.priority,
+    done: taskFromRequest.done,
+  };
 
   const updateResult = await taskQueries.updateTask(taskToUpdate);
 

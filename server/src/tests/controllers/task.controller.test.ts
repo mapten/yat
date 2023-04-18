@@ -46,7 +46,7 @@ describe('task controller', () => {
       vi.spyOn(taskQueries, 'findTaskByNameAndUserId').mockResolvedValue(null);
       vi.spyOn(taskQueries, 'createTask').mockResolvedValue({ acknowledged: true, insertedId: '1' });
 
-      const req = { body: {_id: '1', syncStatus: 'unsync', id: '1', displayName: 'task 1', userId: '1', priority: 1, done: false} as Task }as unknown as Request;
+      const req = { body: {_id: '1', unwantedField: 'do not', syncStatus: 'unsync', id: '1', displayName: 'task 1', userId: '1', priority: 1, done: false} as Task }as unknown as Request;
 
       // act
       await createTask(req, res);
@@ -128,7 +128,7 @@ describe('task controller', () => {
       vi.spyOn(taskQueries, 'findAnotherTaskByNameAndUserId').mockResolvedValue(null);
       vi.spyOn(taskQueries, 'updateTask').mockResolvedValue({ acknowledged: true } as UpdateResult);
 
-      const req = { body: {_id: '1', syncStatus: 'unsync', id: '1', displayName: 'task 1', userId: '1', priority: 1, done: false} as Task }as unknown as Request;
+      const req = { body: {_id: '1', unwantedField: 'do not', syncStatus: 'unsync', id: '1', displayName: 'task 1', userId: '1', priority: 1, done: false} as Task }as unknown as Request;
 
       // act
       await updateTask(req, res);
