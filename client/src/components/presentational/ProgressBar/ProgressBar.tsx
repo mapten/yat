@@ -12,7 +12,7 @@ const ProgressBar: React.FC<Props> = ({ ...otherProps }: Props) => {
   
   const progress = useTaskStore(getPercentageCompletedTasks);
 
-  const number = useSpring({
+  const progressBarValue = useSpring({
     from: { number: 0 },
     number: progress,
     delay: 50
@@ -31,7 +31,7 @@ const ProgressBar: React.FC<Props> = ({ ...otherProps }: Props) => {
         <animated.span
           className={`${progress < 5 ? 'themeText' : ''} ${styles.progressBar__text}`} style={{ marginRight: progress < 5 ? '-2.5rem' : '0'}}
         >
-          {number.number.to((n: number) => `${n.toFixed(0)} %`)}
+          {progressBarValue.number.to((n: number) => `${Math.floor(n)} %`)}
         </animated.span>
       </div>
     </div>

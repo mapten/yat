@@ -7,7 +7,7 @@ export default defineConfig({
     environment: 'happy-dom',
     css: true,
     coverage: {
-      provider: 'c8',
+      provider: 'v8',
       reporter: ['text', 'json', 'html']
     }
   },

@@ -3,3 +3,7 @@ declare global {
     Cypress?: Cypress.Cypress;
   }
 }
+
+declare module "react/jsx-runtime" {
+  export default any;
+}
