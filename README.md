@@ -160,7 +160,7 @@ The frontend application uses [msw](https://mswjs.io/) to work with an in-memory
 
 ### Atomic Design Principles
 
-The frontend project is built based in the [atomic design principles](https://bradfrost.com/blog/post/atomic-web-design/). The components are divided into different types (atoms, particles, molecules, etc). Each component is atomic, with no dependencies (except the components connected to Redux). Each component can be visualized and manually tested with Storybook.
+The frontend project is built based in the [atomic design principles](https://bradfrost.com/blog/post/atomic-web-design/). The components are divided into different types (atoms, particles, molecules, etc). Each component is atomic, with no dependencies (except the components connected to Zustand). Each component can be visualized and manually tested with Storybook.
 
 ### Zustand as the brain
 
