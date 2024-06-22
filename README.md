@@ -24,25 +24,6 @@ Yat is a complete, fully accessible, todolist application, done with React.js + 
 - Typescript.
 - Express.
 - MongoDB.
-=======
-- React.js
-- Typescript
-- Vite
-- Vitest
-- Cypress
-- Storybook
-- SASS
-- Zustand
-- ESLint
-- msw
-- JsDoc
-
-### Backend
-
-- Node.js
-- Typescript
-- Express
-- MongoDB
 
 ## Looking for code examples?
 
