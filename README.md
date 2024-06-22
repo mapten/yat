@@ -6,6 +6,25 @@ Yat is a complete, fully accessible, todolist application, done with React.js + 
 
 ### Frontend
 
+- React.js.
+- Typescript.
+- Vite.
+- Vitest.
+- Cypress.
+- Storybook.
+- SASS.
+- Redux + Redux Saga.
+- ESLint.
+- Mirage.js.
+- JsDoc.
+
+### Backend
+
+- Node.js.
+- Typescript.
+- Express.
+- MongoDB.
+=======
 - React.js
 - Typescript
 - Vite
@@ -78,8 +97,6 @@ Here you are:
   - [Frontend unit test with Vitest](https://github.com/mapten/yat/blob/c3c30a10cd60a7fb39c2a2373e814391b3e70ded/client/src/tests/services/tasks.service.test.ts)
   - [Backend integration test](https://github.com/mapten/yat/blob/c3c30a10cd60a7fb39c2a2373e814391b3e70ded/server/src/tests/integration/integration.test.ts)
   - [Backend unit test](https://github.com/mapten/yat/blob/c3c30a10cd60a7fb39c2a2373e814391b3e70ded/server/src/tests/controllers/task.controller.test.ts)
-
-
 
 ## How to run it
 
@@ -156,6 +173,22 @@ To start Node.js, running (by default) in [http://localhost:3001](http://localho
 
 ### Local Fake API
 
+The frontend application uses [mirage-js](https://miragejs.com/) to work with an in-memory local fake API server (but only for test purposes, as data won't persist). This is an efficient way of working with frontend applications, being agnostic from real (testing or production) API's. So you can run the frontend application alone, setting this in .env file: `VITE_APP_FAKE_API = true`.
+
+### Atomic Design Principles
+
+The frontend project is built based in the [atomic design principles](https://bradfrost.com/blog/post/atomic-web-design/). The components are divided into different types (atoms, particles, molecules, etc). Each component is atomic, with no dependencies (except the components connected to Redux). Each component can be visualized and manually tested with Storybook.
+
+### Redux as the brain
+
+Most of the business logic is done in Redux. Working in this way, allows to the component to be lighweight, and easier to test and to modify.
+
+The side effects related to Redux, is in the middleware, managed by Redux Saga. That means that for example the API calls are done there.
+
+Is Redux needed for this project? Not really ;).
+
+## 3rd party tools
+=======
 The frontend application uses [msw](https://mswjs.io/) to work with an in-memory local fake API server (but only for test purposes, as data won't persist). This is an efficient way of working with frontend applications, being agnostic from real (testing or production) API's. So you can run the frontend application alone, setting this in .env file: `VITE_APP_FAKE_API = true`.
 
 ### Atomic Design Principles
@@ -189,6 +222,24 @@ Zustand is used as the store manager. Most of Yat's business logic is in Zustand
 
 - [storybook](https://storybook.js.org/): tool for developing UI components in isolation. It is based on the atomic design principles.
 
+#### routing
+
+- [React Router](https://reactrouter.com/web/guides/quick-start): routing for React.
+
+#### typescript
+
+- [typescript](https://www.typescriptlang.org/): typed superset of Javascript that compiles to plain Javascript.
+
+#### debugging
+
+- [mirage-js](https://miragejs.com/): fake local API, used when debugging the application, to have a working API but agnostic from APIs.
+
+#### testing
+
+##### unit and functional tests
+
+- [vitest](https://vitest.dev/): testing tool.
+
 #### debugging
 
 - [msw](https://mswjs.io/): fake local API, used when debugging the application, to have a working API but agnostic from APIs.
@@ -213,7 +264,6 @@ Zustand is used as the store manager. Most of Yat's business logic is in Zustand
 #### unit and functional tests
 
 - [vitest](https://vitest.dev/): testing tool.
-
 
 
 
