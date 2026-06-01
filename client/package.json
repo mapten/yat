@@ -94,7 +94,7 @@
     "vite-plugin-compression": "^0.5.1",
     "vite-plugin-svgr": "^4.1.0",
     "vite-tsconfig-paths": "^4.2.1",
-    "vitest": "^0.34.6"
+    "vitest": "^4.1.0"
   },
   "msw": {
     "workerDirectory": "public"
