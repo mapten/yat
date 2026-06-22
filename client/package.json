@@ -55,7 +55,7 @@
     ]
   },
   "devDependencies": {
-    "@babel/core": "^7.23.3",
+    "@babel/core": "^7.29.6",
     "@mswjs/storage": "^0.1.0",
     "@storybook/addon-actions": "^7.5.3",
     "@storybook/addon-essentials": "^7.5.3",
