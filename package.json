@@ -4,6 +4,7 @@
     "name": "Marcos",
     "website": "https://www.github.com/mapten"
   },
+  "license": "MIT",
   "version": "1.0.0",
   "description": "",
   "scripts": {

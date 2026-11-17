@@ -248,3 +248,7 @@ Zustand is used as the store manager. Most of Yat's business logic is in Zustand
 
 
 
+
+## License
+
+This project is licensed under the [MIT License](LICENSE).
